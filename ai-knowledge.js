@@ -419,7 +419,7 @@ const HUSAIN_AI_KNOWLEDGE = [
    
   keys: ["gravitation", "what is gravitation"],
   answer: "Gravitation is the force of attraction between any two masses. According to Newton's law of universal gravitation, F = Gm₁m₂/r²."
-}
+},
 ];
 
 window.HUSAIN_AI_KNOWLEDGE = HUSAIN_AI_KNOWLEDGE;
