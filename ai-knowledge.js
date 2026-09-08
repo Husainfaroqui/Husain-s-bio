@@ -416,7 +416,7 @@ const HUSAIN_AI_KNOWLEDGE = [
   answer: "Power is the rate at which work is done or energy is transferred. Average power is work divided by time."
 },
 {
-   {
+   
   keys: ["gravitation", "what is gravitation"],
   answer: "Gravitation is the force of attraction between any two masses. According to Newton's law of universal gravitation, F = Gm₁m₂/r²."
 }
