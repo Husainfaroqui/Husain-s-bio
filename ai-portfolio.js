@@ -1,4 +1,4 @@
-7(() => {
+(() => {
   if (document.getElementById("husain-ai")) return;
 
   const section = document.createElement("section");
