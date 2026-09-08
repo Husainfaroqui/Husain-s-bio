@@ -1,4 +1,4 @@
-(() => {
+7(() => {
   if (document.getElementById("husain-ai")) return;
 
   const section = document.createElement("section");
@@ -351,49 +351,101 @@
     return textElement;
   }
 
-  async function askAI(question) {
-    if (!question.trim()) return;
+  function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
-    input.value = "";
-    addMessage(question, "user");
+function findKnowledgeAnswer(question) {
+  const database = window.HUSAIN_AI_KNOWLEDGE || [];
 
-    messages.push({
-      role: "user",
-      content: question
-    });
+  if (!database.length) {
+    return "My knowledge base is not loaded yet. Please refresh the page and try again.";
+  }
 
-    const loading = addMessage("Thinking...", "assistant");
+  const q = normalizeText(question);
 
-    try {
-      const response = await fetch("/.netlify/functions/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ messages })
-      });
+  let bestMatch = null;
+  let bestScore = 0;
 
-      const data = await response.json();
+  for (const item of database) {
+    for (const key of item.keys) {
+      const k = normalizeText(key);
 
-      if (!response.ok) {
-        throw new Error(data.error || "AI request failed.");
+      if (q === k) {
+        return item.answer;
       }
 
-      loading.textContent = data.reply || "I couldn't generate a response.";
+      if (q.includes(k)) {
+        const score = 100 + k.length;
 
-      messages.push({
-        role: "assistant",
-        content: data.reply
-      });
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = item;
+        }
 
-    } catch (error) {
-      loading.textContent =
-        "AI is not configured yet. Please try again after the Netlify AI setup is complete.";
-      console.error(error);
+        continue;
+      }
+
+      const questionWords = q.split(" ").filter(word => word.length >= 2);
+      const keyWords = k.split(" ").filter(word => word.length >= 2);
+
+      let matchedWords = 0;
+
+      for (const word of keyWords) {
+        if (questionWords.includes(word)) {
+          matchedWords++;
+        }
+      }
+
+      if (matchedWords > 0) {
+        const score =
+          (matchedWords / keyWords.length) * 80 +
+          matchedWords * 5;
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = item;
+        }
+      }
     }
+  }
+
+  if (bestMatch && bestScore >= 35) {
+    return bestMatch.answer;
+  }
+
+  return "I don't have a prepared answer for that question yet. Try asking me about Biology, Chemistry, Physics, Medicine, AI, Technology, Research, or Husain.";
+}
+
+function askAI(question) {
+  if (!question.trim()) return;
+
+  input.value = "";
+
+  addMessage(question, "user");
+
+  messages.push({
+    role: "user",
+    content: question
+  });
+
+  const answer = findKnowledgeAnswer(question);
+
+  setTimeout(() => {
+    addMessage(answer, "assistant");
+
+    messages.push({
+      role: "assistant",
+      content: answer
+    });
 
     messageBox.scrollTop = messageBox.scrollHeight;
-  }
+  }, 350);
+}
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
