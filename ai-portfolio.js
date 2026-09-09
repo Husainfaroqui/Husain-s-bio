@@ -514,7 +514,7 @@ function askAI(question) {
     #floating-ai-button {
       position: fixed;
       right: 24px;
-      bottom: 24px;
+      bottom: 90px;
       z-index: 9996;
       display: flex;
       align-items: center;
@@ -568,7 +568,7 @@ function askAI(question) {
     @media (max-width: 600px) {
       #floating-ai-button {
         right: 15px;
-        bottom: 15px;
+        bottom: 80px;
         padding: 10px;
       }
 
