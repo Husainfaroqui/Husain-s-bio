@@ -35,8 +35,10 @@
         <div class="hp-ai-suggestions">
           <button type="button">Explain DNA replication</button>
           <button type="button">How does the human heart work?</button>
-          <button type="button">What is artificial intelligence?</button>
-          <button type="button">How can AI help medicine?</button>
+          <button type="button">what is Gravitation?</button>
+          <button type="button">what are acidic solution?</button>
+          <button type="button">what are electrons?</button>
+          <button type="button">What are Enzymes?</button>
         </div>
 
         <form id="hp-ai-form" class="hp-ai-input">
