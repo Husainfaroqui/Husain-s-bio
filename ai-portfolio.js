@@ -310,11 +310,11 @@
   document.head.appendChild(style);
 
   const target =
-    document.querySelector("#projects") ||
+    document.querySelector("#about") ||
     document.querySelector("main") ||
     document.body;
 
-  target.appendChild(section);
+target.parentNode.insertBefore(section, target);
 
   const messages = [];
   const messageBox = document.getElementById("hp-ai-messages");
