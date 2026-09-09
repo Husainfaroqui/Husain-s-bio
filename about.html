@@ -7,6 +7,22 @@
 <title>About — Husain Farooqui</title>
 
 <style>
+  /* PAGE TRANSITION */
+body{
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .45s ease, transform .45s ease;
+}
+
+body.page-loaded{
+  opacity:1;
+  transform:translateY(0);
+}
+
+body.page-exit{
+  opacity:0;
+  transform:translateY(-8px);
+}
 :root{
   --bg:#05070d;
   --text:#eef3ff;
