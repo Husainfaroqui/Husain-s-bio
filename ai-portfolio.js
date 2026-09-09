@@ -499,3 +499,101 @@ function askAI(question) {
     mic.style.display = "none";
   }
 })();
+(() => {
+  const aiButton = document.createElement("button");
+
+  aiButton.id = "floating-ai-button";
+  aiButton.innerHTML = `
+    <span class="floating-ai-icon">✦</span>
+    <span class="floating-ai-label">Ask a Doubt</span>
+  `;
+
+  const style = document.createElement("style");
+
+  style.textContent = `
+    #floating-ai-button {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 9996;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      border: 1px solid rgba(0,229,255,.35);
+      border-radius: 999px;
+      background: rgba(5,10,18,.88);
+      backdrop-filter: blur(18px);
+      color: #00e5ff;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(0,229,255,.12);
+      transition: all .35s ease;
+      font-family: var(--font-ui, sans-serif);
+    }
+
+    .floating-ai-icon {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg,#7b6cff,#00e5ff);
+      color: white;
+      font-size: 16px;
+      box-shadow: 0 0 18px rgba(0,229,255,.3);
+    }
+
+    .floating-ai-label {
+      max-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      opacity: 0;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: all .35s ease;
+    }
+
+    #floating-ai-button:hover .floating-ai-label {
+      max-width: 110px;
+      opacity: 1;
+    }
+
+    #floating-ai-button:hover {
+      transform: translateY(-4px);
+      border-color: #00e5ff;
+      box-shadow: 0 0 35px rgba(0,229,255,.25);
+    }
+
+    @media (max-width: 600px) {
+      #floating-ai-button {
+        right: 15px;
+        bottom: 15px;
+        padding: 10px;
+      }
+
+      .floating-ai-label {
+        display: none;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+  document.body.appendChild(aiButton);
+
+  aiButton.addEventListener("click", () => {
+    const aiSection = document.getElementById("husain-ai");
+
+    if (aiSection) {
+      aiSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+      setTimeout(() => {
+        const input = document.getElementById("hp-ai-text");
+        if (input) input.focus();
+      }, 700);
+    }
+  });
+})();
