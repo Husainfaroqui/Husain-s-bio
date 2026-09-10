@@ -10,12 +10,26 @@
 <meta name="robots" content="max-image-preview:large">
 <meta property="og:image" content="https://husainfaroqui.github.io/Husain-s-bio/profile.jpg">
 <meta property="og:image:alt" content="Husain Farooqui">
-<title> Mohd Husain Farooqui — Researcher · Future Doctor · Lifelong Learner</title>
+<title>Husain Farooqui — Web developer · Future Doctor · Learner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Josefin+Sans:wght@100;200;300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="favicon.png">
 <style>
+  /* PAGE FADE TRANSITION */
+
+body{
+  opacity:0;
+  transition:opacity .5s ease;
+}
+
+body.page-loaded{
+  opacity:1;
+}
+
+body.page-exit{
+  opacity:0;
+}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;font-size:16px}
 :root{
@@ -104,36 +118,171 @@ section{position:relative;z-index:1}
 .interest-link{font-family:var(--font-mono);font-size:.55rem;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;margin-top:1rem;display:inline-block;opacity:0;transition:opacity .3s}
 .interest-card:hover .interest-link{opacity:.8}
 /* MICROSCOPY */
-#microscopy{padding:120px 0;background:linear-gradient(180deg,transparent,rgba(0,229,255,.02) 50%,transparent)}
-.microscopy-header{text-align:center;margin-bottom:3rem}
-.microscopy-subtitle{font-family:var(--font-display);font-style:italic;font-size:1.1rem;color:var(--text-secondary);margin-top:-1rem}
-.micro-tabs{display:flex;gap:.8rem;justify-content:center;margin-bottom:2.5rem;flex-wrap:wrap}
-.micro-tab{padding:.6rem 1.6rem;border:1px solid var(--glass-border);background:transparent;color:var(--text-muted);font-family:var(--font-ui);font-size:.62rem;font-weight:300;letter-spacing:.18em;text-transform:uppercase;transition:all .3s}
-.micro-tab.active,.micro-tab:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.05)}
-.micro-panel{display:none}
-.micro-panel.active{display:block}
-.micro-detail-row{display:grid;grid-template-columns:1fr 1.1fr;gap:2rem;align-items:start}
-.micro-visual-box{background:var(--glass);border:1px solid var(--glass-border);overflow:hidden}
-.micro-visual-box svg{width:100%;height:auto;display:block}
-.micro-detail-text{padding:1.5rem 0}
-.micro-detail-text h3{font-family:var(--font-display);font-size:1.8rem;font-weight:300;color:var(--text-primary);margin-bottom:1rem}
-.micro-detail-text p{font-size:.78rem;font-weight:300;color:var(--text-secondary);line-height:1.9;margin-bottom:.8rem}
-.micro-detail-text ul{list-style:none;margin-top:.8rem}
-.micro-detail-text li{font-size:.72rem;color:var(--text-muted);line-height:1.9;padding-left:1.2rem;position:relative}
-.micro-detail-text li::before{content:'→';position:absolute;left:0;color:var(--cyan);font-size:.6rem}
-.micro-grid-3col{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-.micro-card{position:relative;background:var(--glass);border:1px solid var(--glass-border);overflow:hidden;transition:all .5s cubic-bezier(.23,1,.32,1)}
-.micro-card:hover{border-color:rgba(0,229,255,.3);box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(0,229,255,.12)}
-.micro-card svg{width:100%;display:block}
-.micro-info{padding:1.2rem 1.4rem}
-.micro-tag{font-family:var(--font-mono);font-size:.55rem;letter-spacing:.25em;color:var(--cyan);text-transform:uppercase;opacity:.8}
-.micro-title{font-family:var(--font-display);font-size:1.15rem;font-weight:400;color:var(--text-primary);margin-top:.3rem}
-.micro-body{font-size:.7rem;font-weight:300;color:var(--text-muted);line-height:1.7;margin-top:.4rem}
-.obs-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-top:1.5rem}
-.obs-card{padding:1.5rem;background:rgba(0,229,255,.03);border:1px solid rgba(0,229,255,.1);text-align:center;transition:all .4s}
-.obs-card:hover{background:rgba(0,229,255,.06);border-color:rgba(0,229,255,.25)}
-.obs-icon{font-size:1.5rem;display:block;margin-bottom:.6rem}
-.obs-label{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-secondary)}
+/* MICROSCOPY PAGE CARD */
+
+.micro-page-link{
+  max-width:1200px;
+  margin:90px auto;
+  padding:70px 65px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:50px;
+
+  position:relative;
+  overflow:hidden;
+
+  border:1px solid rgba(0,229,255,.12);
+  border-radius:28px;
+
+  background:
+    radial-gradient(
+      circle at 85% 50%,
+      rgba(0,229,255,.08),
+      transparent 35%
+    ),
+    rgba(255,255,255,.018);
+}
+
+.micro-page-link-content{
+  position:relative;
+  z-index:2;
+  max-width:650px;
+}
+
+.micro-page-label{
+  color:var(--cyan);
+  font-size:.65rem;
+  letter-spacing:.25em;
+  font-weight:700;
+}
+
+.micro-page-link h2{
+  margin:18px 0;
+
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:1;
+  letter-spacing:-.05em;
+}
+
+.micro-page-link h2 span{
+  color:var(--cyan);
+}
+
+.micro-page-link p{
+  max-width:550px;
+
+  color:rgba(255,255,255,.55);
+
+  line-height:1.8;
+
+  margin-bottom:30px;
+}
+
+.micro-page-button{
+  display:inline-flex;
+
+  padding:14px 22px;
+
+  border:1px solid rgba(0,229,255,.4);
+  border-radius:999px;
+
+  color:#fff;
+  text-decoration:none;
+
+  font-size:.68rem;
+  letter-spacing:.12em;
+
+  transition:.3s;
+}
+
+.micro-page-button:hover{
+  background:rgba(0,229,255,.08);
+  transform:translateY(-3px);
+}
+
+
+/* SCIENTIFIC ORB */
+
+.micro-page-orb{
+  width:270px;
+  height:270px;
+
+  flex-shrink:0;
+
+  display:grid;
+  place-items:center;
+
+  position:relative;
+}
+
+.micro-page-orb::before,
+.micro-page-orb::after{
+  content:"";
+
+  position:absolute;
+
+  width:240px;
+  height:80px;
+
+  border:1px solid rgba(0,229,255,.25);
+
+  border-radius:50%;
+}
+
+.micro-page-orb::before{
+  transform:rotate(25deg);
+}
+
+.micro-page-orb::after{
+  transform:rotate(-25deg);
+
+  border-color:rgba(123,108,255,.25);
+}
+
+.micro-orb-core{
+  width:115px;
+  height:115px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle at 30% 28%,
+      #dfffff,
+      #29cfe3 18%,
+      #07566b 48%,
+      #020b10 78%
+    );
+
+  box-shadow:
+    0 0 35px rgba(0,229,255,.3),
+    0 0 90px rgba(0,229,255,.12);
+
+  position:relative;
+  z-index:2;
+}
+
+
+@media(max-width:700px){
+
+  .micro-page-link{
+    margin:60px 18px;
+    padding:45px 28px;
+
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .micro-page-orb{
+    width:220px;
+    height:220px;
+
+    align-self:center;
+  }
+
+}
 /* ANATOMY */
 #anatomy{padding:120px 0;background:linear-gradient(180deg,transparent,rgba(123,108,255,.02) 50%,transparent)}
 .anatomy-tabs{display:flex;gap:.8rem;justify-content:center;margin-bottom:3rem;flex-wrap:wrap}
@@ -242,7 +391,7 @@ footer{position:relative;z-index:1;overflow:hidden}
 .footer-top{position:relative;background:linear-gradient(135deg,rgba(7,11,18,1) 0%,rgba(12,18,32,1) 100%);padding:4rem 6vw 3rem}
 .footer-top::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple),var(--cyan),var(--blue),transparent)}
 .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.2fr 1fr 1fr;align-items:start;gap:3rem}
-.footer-brand{}
+
 .footer-name-big{font-family:var(--font-display);font-size:2.4rem;font-weight:300;color:var(--text-primary);letter-spacing:.04em;line-height:1}
 .footer-name-big em{font-style:italic;color:var(--cyan)}
 .footer-tagline{font-family:var(--font-mono);font-size:.55rem;color:var(--text-muted);letter-spacing:.25em;text-transform:uppercase;margin-top:.5rem;display:block}
@@ -320,6 +469,7 @@ footer{position:relative;z-index:1;overflow:hidden}
     <li><a href="#interests">Interests</a></li>
     <li><a href="#husain-ai">HUSAIN'S AI</a></li>
     <li><a href="about.html">About</a></li>
+     <li><a href="web-development.html">WEB DEVELOPMENT</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-socials">
@@ -424,417 +574,37 @@ footer{position:relative;z-index:1;overflow:hidden}
   </div>
 </section>
 <!-- MICROSCOPY -->
-<section id="microscopy">
-  <div class="container">
-    <div class="microscopy-header">
-      <span class="section-eyebrow reveal">Microscopic Discoveries</span>
-      <h2 class="section-title reveal delay-1">Life at the <em>Smallest Scale</em></h2>
-      <p class="microscopy-subtitle reveal delay-2">Observing life beyond the limits of the naked eye.</p>
-    </div>
-    <div class="micro-tabs reveal delay-2">
-      <button class="micro-tab active" onclick="showMicroTab('cell-membrane')">Cell Membrane</button>
-      <button class="micro-tab" onclick="showMicroTab('mitochondria')">Mitochondria</button>
-      <button class="micro-tab" onclick="showMicroTab('golgi')">Golgi Apparatus</button>
-      <button class="micro-tab" onclick="showMicroTab('tissues')">Tissue Samples</button>
-    </div>
+<!-- MICROSCOPY PAGE LINK -->
 
-    <!-- CELL MEMBRANE -->
-    <div class="micro-panel active" id="panel-cell-membrane">
-      <div class="micro-detail-row reveal">
-        <div class="micro-visual-box">
-          <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
-            <defs><radialGradient id="cmBg" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#00e5ff" stop-opacity="0.07"/><stop offset="100%" stop-color="#030508" stop-opacity="1"/></radialGradient></defs>
-            <rect width="500" height="340" fill="#070b12"/><rect width="500" height="340" fill="url(#cmBg)"/>
-            <text x="14" y="88" font-family="monospace" font-size="7" fill="rgba(0,229,255,0.5)" letter-spacing="1">EXTRACELLULAR SPACE</text>
-            <text x="14" y="270" font-family="monospace" font-size="7" fill="rgba(123,108,255,0.5)" letter-spacing="1">INTRACELLULAR SPACE</text>
-            <!-- Outer phospholipid heads -->
-            <g fill="rgba(0,229,255,0.7)" stroke="rgba(0,229,255,0.4)" stroke-width="0.8">
-              <circle cx="46" cy="126" r="9"/><circle cx="68" cy="126" r="9"/><circle cx="90" cy="126" r="9"/>
-              <circle cx="112" cy="126" r="9"/><circle cx="134" cy="126" r="9"/><circle cx="156" cy="126" r="9"/>
-              <circle cx="178" cy="126" r="9"/><circle cx="200" cy="126" r="9"/><circle cx="222" cy="126" r="9"/>
-              <circle cx="244" cy="126" r="9"/><circle cx="266" cy="126" r="9"/><circle cx="288" cy="126" r="9"/>
-              <circle cx="310" cy="126" r="9"/><circle cx="332" cy="126" r="9"/><circle cx="354" cy="126" r="9"/>
-              <circle cx="376" cy="126" r="9"/><circle cx="398" cy="126" r="9"/><circle cx="420" cy="126" r="9"/>
-              <circle cx="442" cy="126" r="9"/><circle cx="464" cy="126" r="9"/>
-            </g>
-            <!-- Outer tails down -->
-            <g stroke="rgba(74,158,255,0.5)" stroke-width="1.5" fill="none">
-              <line x1="43" y1="135" x2="40" y2="172"/><line x1="49" y1="135" x2="52" y2="172"/>
-              <line x1="65" y1="135" x2="62" y2="172"/><line x1="71" y1="135" x2="74" y2="172"/>
-              <line x1="87" y1="135" x2="84" y2="172"/><line x1="93" y1="135" x2="96" y2="172"/>
-              <line x1="109" y1="135" x2="106" y2="172"/><line x1="115" y1="135" x2="118" y2="172"/>
-              <line x1="131" y1="135" x2="128" y2="172"/><line x1="137" y1="135" x2="140" y2="172"/>
-              <line x1="153" y1="135" x2="150" y2="172"/><line x1="159" y1="135" x2="162" y2="172"/>
-              <line x1="175" y1="135" x2="172" y2="172"/><line x1="181" y1="135" x2="184" y2="172"/>
-              <line x1="197" y1="135" x2="194" y2="172"/><line x1="203" y1="135" x2="206" y2="172"/>
-              <line x1="219" y1="135" x2="216" y2="172"/><line x1="225" y1="135" x2="228" y2="172"/>
-              <line x1="241" y1="135" x2="238" y2="172"/><line x1="247" y1="135" x2="250" y2="172"/>
-              <line x1="263" y1="135" x2="260" y2="172"/><line x1="269" y1="135" x2="272" y2="172"/>
-              <line x1="285" y1="135" x2="282" y2="172"/><line x1="291" y1="135" x2="294" y2="172"/>
-              <line x1="307" y1="135" x2="304" y2="172"/><line x1="313" y1="135" x2="316" y2="172"/>
-              <line x1="329" y1="135" x2="326" y2="172"/><line x1="335" y1="135" x2="338" y2="172"/>
-              <line x1="351" y1="135" x2="348" y2="172"/><line x1="357" y1="135" x2="360" y2="172"/>
-              <line x1="373" y1="135" x2="370" y2="172"/><line x1="379" y1="135" x2="382" y2="172"/>
-              <line x1="395" y1="135" x2="392" y2="172"/><line x1="401" y1="135" x2="404" y2="172"/>
-              <line x1="417" y1="135" x2="414" y2="172"/><line x1="423" y1="135" x2="426" y2="172"/>
-              <line x1="439" y1="135" x2="436" y2="172"/><line x1="445" y1="135" x2="448" y2="172"/>
-              <line x1="461" y1="135" x2="458" y2="172"/><line x1="467" y1="135" x2="470" y2="172"/>
-            </g>
-            <!-- Inner heads at 224 -->
-            <g fill="rgba(123,108,255,0.7)" stroke="rgba(123,108,255,0.4)" stroke-width="0.8">
-              <circle cx="46" cy="224" r="9"/><circle cx="68" cy="224" r="9"/><circle cx="90" cy="224" r="9"/>
-              <circle cx="112" cy="224" r="9"/><circle cx="134" cy="224" r="9"/><circle cx="156" cy="224" r="9"/>
-              <circle cx="178" cy="224" r="9"/><circle cx="200" cy="224" r="9"/><circle cx="222" cy="224" r="9"/>
-              <circle cx="244" cy="224" r="9"/><circle cx="266" cy="224" r="9"/><circle cx="288" cy="224" r="9"/>
-              <circle cx="310" cy="224" r="9"/><circle cx="332" cy="224" r="9"/><circle cx="354" cy="224" r="9"/>
-              <circle cx="376" cy="224" r="9"/><circle cx="398" cy="224" r="9"/><circle cx="420" cy="224" r="9"/>
-              <circle cx="442" cy="224" r="9"/><circle cx="464" cy="224" r="9"/>
-            </g>
-            <!-- Inner tails up -->
-            <g stroke="rgba(74,158,255,0.5)" stroke-width="1.5" fill="none">
-              <line x1="43" y1="215" x2="40" y2="178"/><line x1="49" y1="215" x2="52" y2="178"/>
-              <line x1="65" y1="215" x2="62" y2="178"/><line x1="71" y1="215" x2="74" y2="178"/>
-              <line x1="87" y1="215" x2="84" y2="178"/><line x1="93" y1="215" x2="96" y2="178"/>
-              <line x1="131" y1="215" x2="128" y2="178"/><line x1="137" y1="215" x2="140" y2="178"/>
-              <line x1="175" y1="215" x2="172" y2="178"/><line x1="181" y1="215" x2="184" y2="178"/>
-              <line x1="219" y1="215" x2="216" y2="178"/><line x1="225" y1="215" x2="228" y2="178"/>
-              <line x1="263" y1="215" x2="260" y2="178"/><line x1="269" y1="215" x2="272" y2="178"/>
-              <line x1="307" y1="215" x2="304" y2="178"/><line x1="313" y1="215" x2="316" y2="178"/>
-              <line x1="351" y1="215" x2="348" y2="178"/><line x1="357" y1="215" x2="360" y2="178"/>
-              <line x1="395" y1="215" x2="392" y2="178"/><line x1="401" y1="215" x2="404" y2="178"/>
-              <line x1="439" y1="215" x2="436" y2="178"/><line x1="445" y1="215" x2="448" y2="178"/>
-              <line x1="461" y1="215" x2="458" y2="178"/><line x1="467" y1="215" x2="470" y2="178"/>
-            </g>
-            <!-- Transmembrane protein -->
-            <ellipse cx="112" cy="175" rx="13" ry="52" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.5)" stroke-width="1.2"/>
-            <rect x="103" y="160" width="18" height="30" rx="5" fill="rgba(0,229,255,0.18)" stroke="rgba(0,229,255,0.5)" stroke-width="1"/>
-            <text x="112" y="179" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(0,229,255,0.9)">P</text>
-            <!-- Channel protein -->
-            <ellipse cx="332" cy="175" rx="12" ry="50" fill="rgba(74,158,255,0.08)" stroke="rgba(74,158,255,0.45)" stroke-width="1.2"/>
-            <line x1="332" y1="150" x2="332" y2="200" stroke="rgba(74,158,255,0.7)" stroke-width="2" stroke-dasharray="3,2"/>
-            <!-- Cholesterol -->
-            <ellipse cx="200" cy="175" rx="5" ry="26" fill="rgba(123,108,255,0.35)" stroke="rgba(123,108,255,0.65)" stroke-width="0.8"/>
-            <text x="208" y="178" font-family="monospace" font-size="5.5" fill="rgba(123,108,255,0.6)">Cholesterol</text>
-            <text x="65" y="114" font-family="monospace" font-size="6.5" fill="rgba(0,229,255,0.7)">● Hydrophilic Heads</text>
-            <text x="65" y="238" font-family="monospace" font-size="6.5" fill="rgba(123,108,255,0.7)">● Hydrophilic Heads</text>
-            <text x="94" y="108" font-family="monospace" font-size="6" fill="rgba(0,229,255,0.5)">Protein</text>
-            <text x="320" y="108" font-family="monospace" font-size="6" fill="rgba(74,158,255,0.5)">Channel</text>
-          </svg>
-        </div>
-        <div class="micro-detail-text">
-          <h3>Cell Membrane</h3>
-          <p>The plasma membrane is a selectively permeable bilayer separating the cell's interior from its environment. It is composed of phospholipids, proteins, and cholesterol.</p>
-          <p>Each phospholipid has a hydrophilic (water-loving) head and two hydrophobic fatty acid tails. The bilayer arranges so heads face outward while tails form a hydrophobic core — a fluid mosaic model.</p>
-          <ul>
-            <li>Phospholipid bilayer forms the structural backbone</li>
-            <li>Integral proteins span the full membrane thickness</li>
-            <li>Peripheral proteins attach to one surface only</li>
-            <li>Cholesterol stabilizes membrane fluidity in temperature changes</li>
-            <li>Selective permeability controls what enters and exits the cell</li>
-            <li>Glycoproteins serve as cell-identity and signaling markers</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+<section class="micro-page-link">
 
-    <!-- MITOCHONDRIA -->
-    <div class="micro-panel" id="panel-mitochondria">
-      <div class="micro-detail-row reveal">
-        <div class="micro-visual-box">
-          <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="mitoBg" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#7b6cff" stop-opacity="0.1"/><stop offset="100%" stop-color="#030508" stop-opacity="1"/></radialGradient>
-              <radialGradient id="mitoBody" cx="40%" cy="35%" r="65%"><stop offset="0%" stop-color="#7b6cff" stop-opacity="0.25"/><stop offset="100%" stop-color="#3a2fa0" stop-opacity="0.08"/></radialGradient>
-            </defs>
-            <rect width="500" height="340" fill="#070b12"/><rect width="500" height="340" fill="url(#mitoBg)"/>
-            <!-- Outer membrane -->
-            <ellipse cx="250" cy="170" rx="200" ry="120" fill="none" stroke="rgba(123,108,255,0.55)" stroke-width="2.5"/>
-            <!-- Intermembrane space fill -->
-            <ellipse cx="250" cy="170" rx="183" ry="104" fill="rgba(123,108,255,0.03)"/>
-            <!-- Inner membrane -->
-            <ellipse cx="250" cy="170" rx="183" ry="104" fill="none" stroke="rgba(0,229,255,0.35)" stroke-width="1.5"/>
-            <!-- Matrix -->
-            <ellipse cx="250" cy="170" rx="163" ry="86" fill="url(#mitoBody)"/>
-            <!-- Cristae folds -->
-            <path d="M 90 170 Q 115 128 140 170 Q 165 212 190 170" fill="none" stroke="rgba(0,229,255,0.6)" stroke-width="2.2"/>
-            <path d="M 145 170 Q 170 126 195 170 Q 220 214 245 170" fill="none" stroke="rgba(0,229,255,0.55)" stroke-width="2.2"/>
-            <path d="M 200 170 Q 225 128 250 170 Q 275 212 300 170" fill="none" stroke="rgba(0,229,255,0.6)" stroke-width="2.2"/>
-            <path d="M 255 170 Q 280 128 305 170 Q 330 212 355 170" fill="none" stroke="rgba(0,229,255,0.55)" stroke-width="2.2"/>
-            <path d="M 305 170 Q 328 130 350 170 Q 372 210 395 170" fill="none" stroke="rgba(0,229,255,0.5)" stroke-width="2.2"/>
-            <!-- ATP Synthase dots -->
-            <g fill="rgba(0,229,255,0.85)">
-              <circle cx="140" cy="157" r="4.5"/><circle cx="163" cy="184" r="4.5"/>
-              <circle cx="195" cy="155" r="4.5"/><circle cx="218" cy="185" r="4.5"/>
-              <circle cx="250" cy="156" r="4.5"/><circle cx="272" cy="184" r="4.5"/>
-              <circle cx="305" cy="156" r="4.5"/><circle cx="328" cy="183" r="4.5"/>
-              <circle cx="350" cy="158" r="4.5"/>
-            </g>
-            <!-- mtDNA loop -->
-            <ellipse cx="250" cy="170" rx="32" ry="20" fill="none" stroke="rgba(74,158,255,0.55)" stroke-width="1.8" stroke-dasharray="5,3"/>
-            <!-- Ribosomes -->
-            <circle cx="215" cy="148" r="4" fill="rgba(74,158,255,0.65)"/>
-            <circle cx="282" cy="148" r="4" fill="rgba(74,158,255,0.65)"/>
-            <circle cx="218" cy="196" r="4" fill="rgba(74,158,255,0.55)"/>
-            <circle cx="280" cy="198" r="4" fill="rgba(74,158,255,0.55)"/>
-            <!-- Labels -->
-            <text x="22" y="72" font-family="monospace" font-size="7.5" fill="rgba(123,108,255,0.8)">Outer Membrane</text>
-            <text x="22" y="100" font-family="monospace" font-size="7.5" fill="rgba(0,229,255,0.8)">Inner Membrane</text>
-            <text x="22" y="120" font-family="monospace" font-size="7.5" fill="rgba(0,229,255,0.65)">Cristae →</text>
-            <text x="380" y="95" font-family="monospace" font-size="7" fill="rgba(0,229,255,0.65)">ATP Synthase</text>
-            <text x="215" y="320" font-family="monospace" font-size="7" fill="rgba(74,158,255,0.55)">mtDNA Loop</text>
-            <text x="120" y="325" font-family="monospace" font-size="8" fill="rgba(123,108,255,0.45)" letter-spacing="2">THE POWERHOUSE OF THE CELL</text>
-          </svg>
-        </div>
-        <div class="micro-detail-text">
-          <h3>Mitochondria</h3>
-          <p>Mitochondria are the energy-producing organelles of the cell, generating ATP through cellular respiration. They contain their own circular DNA, evidence of their ancient bacterial ancestry (endosymbiotic theory).</p>
-          <p>The inner membrane is extensively folded into cristae — dramatically increasing surface area for oxidative phosphorylation where ATP synthase molecules act as molecular motors to produce ATP.</p>
-          <ul>
-            <li>Outer membrane: smooth, permeable to small molecules</li>
-            <li>Inner membrane: highly folded cristae, electron transport chain</li>
-            <li>Matrix: site of Krebs (TCA) cycle, contains mtDNA + ribosomes</li>
-            <li>ATP Synthase (F₁F₀): rotary molecular motor, produces ATP</li>
-            <li>Proton gradient drives ATP production (chemiosmosis)</li>
-            <li>~36 ATP molecules produced per glucose molecule oxidized</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+  <div class="micro-page-link-content">
 
-    <!-- GOLGI -->
-    <div class="micro-panel" id="panel-golgi">
-      <div class="micro-detail-row reveal">
-        <div class="micro-visual-box">
-          <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
-            <defs><radialGradient id="golgiBg" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#4a9eff" stop-opacity="0.08"/><stop offset="100%" stop-color="#030508" stop-opacity="1"/></radialGradient></defs>
-            <rect width="500" height="340" fill="#070b12"/><rect width="500" height="340" fill="url(#golgiBg)"/>
-            <!-- Cisternae stack -->
-            <ellipse cx="250" cy="105" rx="140" ry="15" fill="rgba(74,158,255,0.12)" stroke="rgba(74,158,255,0.65)" stroke-width="2"/>
-            <ellipse cx="250" cy="130" rx="125" ry="14" fill="rgba(74,158,255,0.1)" stroke="rgba(74,158,255,0.55)" stroke-width="1.8"/>
-            <ellipse cx="250" cy="154" rx="112" ry="13" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.5)" stroke-width="1.6"/>
-            <ellipse cx="250" cy="177" rx="125" ry="14" fill="rgba(123,108,255,0.1)" stroke="rgba(123,108,255,0.55)" stroke-width="1.8"/>
-            <ellipse cx="250" cy="202" rx="140" ry="15" fill="rgba(123,108,255,0.12)" stroke="rgba(123,108,255,0.65)" stroke-width="2"/>
-            <!-- ER vesicles arriving at cis -->
-            <circle cx="94" cy="95" r="16" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.5)" stroke-width="1.2"/>
-            <circle cx="94" cy="95" r="7" fill="rgba(74,158,255,0.5)"/>
-            <line x1="110" y1="97" x2="120" y2="100" stroke="rgba(74,158,255,0.4)" stroke-width="1" stroke-dasharray="3,2"/>
-            <circle cx="400" cy="95" r="14" fill="rgba(74,158,255,0.15)" stroke="rgba(74,158,255,0.5)" stroke-width="1.2"/>
-            <circle cx="400" cy="95" r="6" fill="rgba(74,158,255,0.5)"/>
-            <line x1="386" y1="97" x2="375" y2="101" stroke="rgba(74,158,255,0.4)" stroke-width="1" stroke-dasharray="3,2"/>
-            <!-- Trans vesicles -->
-            <circle cx="90" cy="230" r="18" fill="rgba(123,108,255,0.15)" stroke="rgba(123,108,255,0.55)" stroke-width="1.2"/>
-            <circle cx="90" cy="230" r="7" fill="rgba(123,108,255,0.55)"/>
-            <line x1="108" y1="222" x2="118" y2="216" stroke="rgba(123,108,255,0.45)" stroke-width="1" stroke-dasharray="3,2"/>
-            <circle cx="402" cy="226" r="15" fill="rgba(123,108,255,0.15)" stroke="rgba(123,108,255,0.5)" stroke-width="1.2"/>
-            <circle cx="402" cy="226" r="6" fill="rgba(123,108,255,0.5)"/>
-            <line x1="387" y1="218" x2="376" y2="213" stroke="rgba(123,108,255,0.4)" stroke-width="1" stroke-dasharray="3,2"/>
-            <!-- Large secretory vesicle -->
-            <circle cx="250" cy="278" r="24" fill="rgba(123,108,255,0.12)" stroke="rgba(123,108,255,0.6)" stroke-width="1.5"/>
-            <circle cx="250" cy="278" r="11" fill="rgba(123,108,255,0.35)"/>
-            <line x1="250" y1="254" x2="250" y2="217" stroke="rgba(123,108,255,0.4)" stroke-width="1.2" stroke-dasharray="3,2"/>
-            <!-- Labels -->
-            <text x="14" y="108" font-family="monospace" font-size="7.5" fill="rgba(74,158,255,0.8)">CIS Face</text>
-            <text x="14" y="118" font-family="monospace" font-size="6" fill="rgba(74,158,255,0.4)">(receiving)</text>
-            <text x="14" y="207" font-family="monospace" font-size="7.5" fill="rgba(123,108,255,0.8)">TRANS Face</text>
-            <text x="14" y="217" font-family="monospace" font-size="6" fill="rgba(123,108,255,0.4)">(shipping)</text>
-            <text x="68" y="82" font-family="monospace" font-size="6.5" fill="rgba(74,158,255,0.55)">ER Vesicle</text>
-            <text x="368" y="82" font-family="monospace" font-size="6.5" fill="rgba(74,158,255,0.55)">ER Vesicle</text>
-            <text x="60" y="250" font-family="monospace" font-size="6" fill="rgba(123,108,255,0.55)">Lysosome</text>
-            <text x="235" y="312" font-family="monospace" font-size="6.5" fill="rgba(123,108,255,0.55)">Secretory Vesicle</text>
-            <text x="152" y="156" font-family="monospace" font-size="8" fill="rgba(0,229,255,0.35)" letter-spacing="1">MEDIAL CISTERNAE</text>
-          </svg>
-        </div>
-        <div class="micro-detail-text">
-          <h3>Golgi Apparatus</h3>
-          <p>The Golgi apparatus is the cell's "post office," receiving proteins from the endoplasmic reticulum, modifying them, sorting them, and shipping them to their final destinations inside or outside the cell.</p>
-          <p>It consists of flattened cisternae stacked in 4–8 layers. The cis face receives incoming ER vesicles; proteins are processed as they move through the stack; the trans face dispatches finished vesicles.</p>
-          <ul>
-            <li>Receives unmodified proteins and lipids from rough ER</li>
-            <li>Adds and modifies carbohydrate chains (glycosylation)</li>
-            <li>Phosphorylates proteins and adds targeting signals</li>
-            <li>Sorts cargo by signal sequences for correct destination</li>
-            <li>Produces lysosomes containing digestive enzymes</li>
-            <li>Critical for secretion of hormones, enzymes, and antibodies</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <span class="micro-page-label">
+      MICROSCOPY
+    </span>
 
-    <!-- TISSUES -->
-    <div class="micro-panel" id="panel-tissues">
-      <div class="micro-grid-3col reveal">
-        <div class="micro-card">
-          <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg">
-            <defs><radialGradient id="t1" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#00e5ff" stop-opacity="0.1"/><stop offset="100%" stop-color="#030508" stop-opacity="1"/></radialGradient></defs>
-            <rect width="380" height="220" fill="#070b12"/><rect width="380" height="220" fill="url(#t1)"/>
-            <circle cx="190" cy="108" r="72" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="1.5"/>
-            <circle cx="190" cy="108" r="52" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.15)"/>
-            <circle cx="190" cy="108" r="24" fill="rgba(123,108,255,0.15)" stroke="rgba(123,108,255,0.5)" stroke-width="1.5"/>
-            <circle cx="190" cy="108" r="9" fill="rgba(123,108,255,0.45)"/>
-            <ellipse cx="155" cy="93" rx="13" ry="7" fill="none" stroke="rgba(74,158,255,0.45)" stroke-width="0.9"/>
-            <ellipse cx="225" cy="120" rx="11" ry="6" fill="none" stroke="rgba(74,158,255,0.45)" stroke-width="0.9"/>
-            <circle cx="210" cy="82" r="3.5" fill="rgba(0,229,255,0.4)"/>
-            <circle cx="172" cy="138" r="3" fill="rgba(0,229,255,0.35)"/>
-            <circle cx="220" cy="96" r="3" fill="rgba(0,229,255,0.3)"/>
-            <text x="190" y="206" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(0,229,255,0.5)">×400 — EUKARYOTIC CELL</text>
-          </svg>
-          <div class="micro-info"><span class="micro-tag">Animal Tissue</span><div class="micro-title">Cell Structures</div><p class="micro-body">Eukaryotic cell showing nucleus, organelles, and cytoskeleton.</p></div>
-        </div>
-        <div class="micro-card">
-          <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg">
-            <defs><radialGradient id="t2" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#7b6cff" stop-opacity="0.1"/><stop offset="100%" stop-color="#030508" stop-opacity="1"/></radialGradient></defs>
-            <rect width="380" height="220" fill="#070b12"/><rect width="380" height="220" fill="url(#t2)"/>
-            <g stroke-width="1">
-              <rect x="40" y="40" width="65" height="60" fill="rgba(123,108,255,0.06)" stroke="rgba(123,108,255,0.45)"/>
-              <rect x="105" y="40" width="65" height="60" fill="rgba(0,229,255,0.07)" stroke="rgba(0,229,255,0.4)"/>
-              <rect x="170" y="40" width="65" height="60" fill="rgba(123,108,255,0.05)" stroke="rgba(123,108,255,0.4)"/>
-              <rect x="235" y="40" width="65" height="60" fill="rgba(123,108,255,0.07)" stroke="rgba(123,108,255,0.45)"/>
-              <rect x="300" y="40" width="65" height="60" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.35)"/>
-              <rect x="40" y="100" width="65" height="60" fill="rgba(0,229,255,0.07)" stroke="rgba(0,229,255,0.4)"/>
-              <rect x="105" y="100" width="65" height="60" fill="rgba(123,108,255,0.05)" stroke="rgba(123,108,255,0.4)"/>
-              <rect x="170" y="100" width="65" height="60" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.45)"/>
-              <rect x="235" y="100" width="65" height="60" fill="rgba(123,108,255,0.06)" stroke="rgba(123,108,255,0.4)"/>
-              <rect x="300" y="100" width="65" height="60" fill="rgba(123,108,255,0.05)" stroke="rgba(123,108,255,0.35)"/>
-              <rect x="40" y="160" width="65" height="45" fill="rgba(123,108,255,0.05)" stroke="rgba(123,108,255,0.35)"/>
-              <rect x="105" y="160" width="65" height="45" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.3)"/>
-              <rect x="170" y="160" width="65" height="45" fill="rgba(123,108,255,0.06)" stroke="rgba(123,108,255,0.38)"/>
-              <rect x="235" y="160" width="65" height="45" fill="rgba(0,229,255,0.05)" stroke="rgba(0,229,255,0.3)"/>
-            </g>
-            <g fill="rgba(123,108,255,0.55)">
-              <circle cx="72" cy="70" r="7"/><circle cx="137" cy="130" r="7"/><circle cx="202" cy="70" r="7"/>
-              <circle cx="267" cy="130" r="7"/><circle cx="332" cy="70" r="7"/><circle cx="72" cy="130" r="7"/>
-              <circle cx="202" cy="130" r="7"/><circle cx="137" cy="70" r="7" fill="rgba(0,229,255,0.6)"/>
-            </g>
-            <text x="190" y="213" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(123,108,255,0.5)">×200 — PLANT PARENCHYMA</text>
-          </svg>
-          <div class="micro-info"><span class="micro-tag">Plant Tissue</span><div class="micro-title">Plant Tissues</div><p class="micro-body">Parenchyma cross-section with large vacuoles and cell walls.</p></div>
-        </div>
-        <div class="micro-card">
-          <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg">
-            <defs><radialGradient id="t3" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#4a9eff" stop-opacity="0.1"/><stop offset="100%" stop-color="#030508" stop-opacity="1"/></radialGradient></defs>
-            <rect width="380" height="220" fill="#070b12"/><rect width="380" height="220" fill="url(#t3)"/>
-            <g fill="rgba(74,158,255,0.2)" stroke="rgba(74,158,255,0.55)" stroke-width="1.2">
-              <ellipse cx="80" cy="78" rx="26" ry="17"/>
-              <ellipse cx="155" cy="63" rx="26" ry="17"/>
-              <ellipse cx="225" cy="98" rx="26" ry="17"/>
-              <ellipse cx="120" cy="148" rx="26" ry="17"/>
-              <ellipse cx="290" cy="72" rx="26" ry="17"/>
-              <ellipse cx="55" cy="162" rx="26" ry="17"/>
-              <ellipse cx="315" cy="162" rx="26" ry="17"/>
-              <ellipse cx="190" cy="168" rx="26" ry="17"/>
-            </g>
-            <g fill="none" stroke="rgba(74,158,255,0.3)" stroke-width="0.6">
-              <ellipse cx="80" cy="78" rx="13" ry="7"/>
-              <ellipse cx="155" cy="63" rx="13" ry="7"/>
-              <ellipse cx="225" cy="98" rx="13" ry="7"/>
-            </g>
-            <circle cx="208" cy="145" r="22" fill="rgba(0,229,255,0.12)" stroke="rgba(0,229,255,0.5)" stroke-width="1.5"/>
-            <circle cx="208" cy="145" r="9" fill="rgba(0,229,255,0.25)" stroke="rgba(0,229,255,0.6)" stroke-width="1"/>
-            <ellipse cx="270" cy="152" rx="7" ry="4" fill="rgba(123,108,255,0.6)" stroke="rgba(123,108,255,0.7)" stroke-width="0.8"/>
-            <ellipse cx="150" cy="118" rx="7" ry="4" fill="rgba(123,108,255,0.55)" stroke="rgba(123,108,255,0.65)" stroke-width="0.8"/>
-            <text x="190" y="208" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(74,158,255,0.5)">×600 — BLOOD SMEAR</text>
-          </svg>
-          <div class="micro-info"><span class="micro-tag">Blood Tissue</span><div class="micro-title">Animal Tissues</div><p class="micro-body">Blood smear: erythrocytes, leukocyte (WBC), and thrombocytes.</p></div>
-        </div>
-      </div>
-    </div>
+    <h2>
+      Life at the
+      <span>smallest scale.</span>
+    </h2>
 
-    <div class="obs-cards">
-      <div class="obs-card reveal delay-1"><span class="obs-icon">🔭</span><span class="obs-label">Optical Microscopy</span></div>
-      <div class="obs-card reveal delay-2"><span class="obs-icon">⚡</span><span class="obs-label">Electron Imaging</span></div>
-      <div class="obs-card reveal delay-3"><span class="obs-icon">🌿</span><span class="obs-label">Histological Study</span></div>
-      <div class="obs-card reveal delay-4"><span class="obs-icon">📐</span><span class="obs-label">Scientific Method</span></div>
-    </div>
+    <p>
+      Explore cells, organelles and tissues through a
+      closer scientific perspective.
+    </p>
+
+    <a href="microscopy.html" class="micro-page-button">
+      EXPLORE MICROSCOPY →
+    </a>
+
   </div>
-</section>
-<!-- ANATOMY -->
-<section id="anatomy">
-  <div class="container">
-    <span class="section-eyebrow reveal">Human Anatomy</span>
-    <h2 class="section-title reveal delay-1">Inside the <em>Human Body</em></h2>
-    <div class="section-divider reveal delay-2"></div>
-    <div class="anatomy-tabs reveal delay-3">
-      <button class="anatomy-tab active" onclick="showAnatomyTab('heart')">🫀 The Heart</button>
-      <button class="anatomy-tab" onclick="showAnatomyTab('neuron')">⚡ Neurons</button>
-      <button class="anatomy-tab" onclick="showAnatomyTab('brain')">🧠 The Brain</button>
-    </div>
 
-    <!-- HEART -->
-    <div class="anatomy-panel active" id="panel-heart">
-      <div class="anatomy-layout">
-        <div class="anatomy-visual reveal-left">
-          <svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="hBg" cx="50%" cy="45%" r="60%"><stop offset="0%" stop-color="#ff4466" stop-opacity="0.08"/><stop offset="100%" stop-color="#030508" stop-opacity="1"/></radialGradient>
-              <radialGradient id="hR" cx="55%" cy="35%" r="65%"><stop offset="0%" stop-color="#cc2244" stop-opacity="0.45"/><stop offset="100%" stop-color="#330011" stop-opacity="0.1"/></radialGradient>
-              <radialGradient id="hL" cx="50%" cy="35%" r="65%"><stop offset="0%" stop-color="#4a9eff" stop-opacity="0.3"/><stop offset="100%" stop-color="#1a3a80" stop-opacity="0.08"/></radialGradient>
-            </defs>
-            <rect width="400" height="440" fill="#070b12"/><rect width="400" height="440" fill="url(#hBg)"/>
-            <g class="heart-anim" style="transform-origin:200px 220px">
-              <!-- Right side (blue) -->
-              <path d="M200 360 Q135 320 108 272 Q72 215 92 166 Q112 118 155 122 Q178 124 193 152 Q197 162 200 180" fill="url(#hL)" stroke="rgba(74,158,255,0.6)" stroke-width="2"/>
-              <!-- Left side (red) -->
-              <path d="M200 360 Q265 320 292 272 Q330 215 310 166 Q290 118 245 122 Q222 124 207 152 Q203 162 200 180" fill="url(#hR)" stroke="rgba(220,50,80,0.6)" stroke-width="2"/>
-              <!-- Septum -->
-              <line x1="200" y1="180" x2="200" y2="346" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
-              <!-- Right atrium -->
-              <ellipse cx="172" cy="148" rx="36" ry="26" fill="rgba(74,158,255,0.14)" stroke="rgba(74,158,255,0.42)" stroke-width="1.5"/>
-              <!-- Left atrium -->
-              <ellipse cx="232" cy="148" rx="36" ry="26" fill="rgba(220,50,80,0.14)" stroke="rgba(220,50,80,0.42)" stroke-width="1.5"/>
-              <!-- AV valves -->
-              <path d="M152 170 Q172 184 192 170" fill="none" stroke="rgba(74,158,255,0.6)" stroke-width="1.5"/>
-              <path d="M208 170 Q228 184 250 170" fill="none" stroke="rgba(220,50,80,0.6)" stroke-width="1.5"/>
-              <!-- Aorta -->
-              <path d="M232 125 Q238 88 272 68 Q308 50 328 74" fill="none" stroke="rgba(220,50,80,0.75)" stroke-width="5.5"/>
-              <!-- Pulmonary artery -->
-              <path d="M172 122 Q170 82 142 62 Q114 44 90 62" fill="none" stroke="rgba(74,158,255,0.75)" stroke-width="4.5"/>
-              <!-- Pulmonary veins -->
-              <path d="M96 118 Q118 128 148 133" fill="none" stroke="rgba(220,50,80,0.5)" stroke-width="2.5" stroke-dasharray="4,2"/>
-              <path d="M96 140 Q120 145 148 145" fill="none" stroke="rgba(220,50,80,0.45)" stroke-width="2.5" stroke-dasharray="4,2"/>
-              <!-- SVC / IVC -->
-              <path d="M315 108 Q296 118 264 130" fill="none" stroke="rgba(74,158,255,0.5)" stroke-width="3" stroke-dasharray="5,2"/>
-              <path d="M315 322 Q295 304 265 275" fill="none" stroke="rgba(74,158,255,0.45)" stroke-width="3" stroke-dasharray="5,2"/>
-              <!-- Coronary vessels -->
-              <path d="M200 180 Q178 218 165 262 Q156 302 170 332" fill="none" stroke="rgba(220,50,80,0.28)" stroke-width="1.5"/>
-              <path d="M200 180 Q222 218 235 258 Q244 298 232 328" fill="none" stroke="rgba(220,50,80,0.24)" stroke-width="1.2"/>
-              <!-- Flow arrows -->
-              <polygon points="178,218 174,228 184,228" fill="rgba(74,158,255,0.75)"/>
-              <polygon points="222,218 218,228 228,228" fill="rgba(220,50,80,0.75)"/>
-            </g>
-            <!-- Labels -->
-            <text x="42" y="154" font-family="monospace" font-size="6.5" fill="rgba(74,158,255,0.85)">Right Atrium</text>
-            <text x="252" y="154" font-family="monospace" font-size="6.5" fill="rgba(220,50,80,0.85)">Left Atrium</text>
-            <text x="42" y="275" font-family="monospace" font-size="6.5" fill="rgba(74,158,255,0.75)">Right Ventricle</text>
-            <text x="248" y="275" font-family="monospace" font-size="6.5" fill="rgba(220,50,80,0.75)">Left Ventricle</text>
-            <text x="284" y="62" font-family="monospace" font-size="7" fill="rgba(220,50,80,0.85)">Aorta</text>
-            <text x="48" y="58" font-family="monospace" font-size="7" fill="rgba(74,158,255,0.8)">Pulmonary A.</text>
-            <text x="316" y="114" font-family="monospace" font-size="6" fill="rgba(74,158,255,0.65)">SVC</text>
-            <text x="316" y="328" font-family="monospace" font-size="6" fill="rgba(74,158,255,0.65)">IVC</text>
-            <rect x="10" y="408" width="11" height="8" fill="rgba(74,158,255,0.5)"/>
-            <text x="25" y="416" font-family="monospace" font-size="6.5" fill="rgba(74,158,255,0.7)">Deoxygenated</text>
-            <rect x="200" y="408" width="11" height="8" fill="rgba(220,50,80,0.5)"/>
-            <text x="215" y="416" font-family="monospace" font-size="6.5" fill="rgba(220,50,80,0.7)">Oxygenated</text>
-          </svg>
-        </div>
-        <div class="anatomy-content reveal-right">
-          <h3>How the Heart Works</h3>
-          <p class="lead">The heart is a muscular pump beating ~100,000 times daily, moving blood through the entire body in a continuous closed circuit of two interconnected loops.</p>
-          <p>Four chambers — two atria (receiving) and two ventricles (pumping) — work in a precise coordinated rhythm called the cardiac cycle. The right side handles pulmonary circulation; the left side drives systemic circulation.</p>
-          <div class="fact-grid">
-            <div class="fact-box"><div class="fact-val">100K</div><div class="fact-key">Beats per day</div></div>
-            <div class="fact-box"><div class="fact-val">5 L</div><div class="fact-key">Blood pumped / min</div></div>
-            <div class="fact-box"><div class="fact-val">300 g</div><div class="fact-key">Average heart weight</div></div>
-            <div class="fact-box"><div class="fact-val">0.8 s</div><div class="fact-key">One cardiac cycle</div></div>
-          </div>
-          <div class="process-steps">
-            <div class="process-step"><div class="step-num">01</div><div class="step-text"><strong>Deoxygenated Blood Arrives</strong><span>Superior &amp; inferior vena cava deliver oxygen-depleted blood into the right atrium from the body.</span></div></div>
-            <div class="process-step"><div class="step-num">02</div><div class="step-text"><strong>Right Heart → Lungs</strong><span>Right ventricle pumps blood through the pulmonary artery to the lungs to pick up oxygen (pulmonary circulation).</span></div></div>
-            <div class="process-step"><div class="step-num">03</div><div class="step-text"><strong>Oxygenated Blood Returns</strong><span>Oxygen-rich blood flows from the lungs via four pulmonary veins into the left atrium.</span></div></div>
-            <div class="process-step"><div class="step-num">04</div><div class="step-text"><strong>Left Heart → Whole Body</strong><span>The powerful left ventricle pumps oxygenated blood through the aorta to supply the entire body (systemic circulation).</span></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="micro-page-orb">
+    <div class="micro-orb-core"></div>
+  </div>
+
+</section>
 
     <!-- NEURON -->
     <div class="anatomy-panel" id="panel-neuron">
@@ -1097,7 +867,208 @@ footer{position:relative;z-index:1;overflow:hidden}
     </div>
   </div>
 </section>
+<!-- WEB DEVELOPMENT CTA -->
+<!-- WEB DEVELOPMENT -->
+<section class="web-development-cta">
 
+  <div class="web-dev-content">
+    <span class="web-dev-label">WEB DEVELOPMENT</span>
+
+    <h2>
+      Have an idea?<br>
+      <span>Let's build it.</span>
+    </h2>
+
+    <p>
+      Modern, responsive and premium websites for portfolios,
+      businesses, creators and personal brands.
+    </p>
+
+    <a href="web-development.html" class="web-dev-button">
+      Explore Web Development
+      <span>→</span>
+    </a>
+  </div>
+
+  <div class="web-dev-orb">
+    <div class="orb-ring ring-one"></div>
+    <div class="orb-ring ring-two"></div>
+    <div class="orb-core"></div>
+  </div>
+
+</section>
+
+<style>
+.web-development-cta{
+  position:relative;
+  max-width:1200px;
+  min-height:380px;
+  margin:110px auto;
+  padding:70px;
+  border:1px solid rgba(0,229,255,.18);
+  border-radius:30px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  box-sizing:border-box;
+  background:
+    radial-gradient(circle at 80% 50%,rgba(0,229,255,.12),transparent 35%),
+    rgba(255,255,255,.025);
+}
+
+.web-dev-content{
+  position:relative;
+  z-index:2;
+  max-width:650px;
+}
+
+.web-dev-label{
+  display:block;
+  margin-bottom:20px;
+  color:var(--cyan,#00e5ff);
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.25em;
+}
+
+.web-dev-content h2{
+  margin:0;
+  color:var(--text-primary,#fff);
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:1.05;
+}
+
+.web-dev-content h2 span{
+  color:var(--cyan,#00e5ff);
+}
+
+.web-dev-content p{
+  max-width:570px;
+  margin:25px 0 32px;
+  color:rgba(255,255,255,.65);
+  line-height:1.8;
+}
+
+.web-dev-button{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 25px;
+  border:1px solid var(--cyan,#00e5ff);
+  border-radius:50px;
+  color:#fff;
+  text-decoration:none;
+  font-size:.78rem;
+  letter-spacing:.08em;
+  transition:.3s ease;
+}
+
+.web-dev-button span{
+  font-size:1.2rem;
+  transition:.3s ease;
+}
+
+.web-dev-button:hover{
+  background:rgba(0,229,255,.12);
+  transform:translateY(-3px);
+}
+
+.web-dev-button:hover span{
+  transform:translateX(5px);
+}
+
+/* PLANET */
+.web-dev-orb{
+  position:absolute;
+  right:90px;
+  width:230px;
+  height:230px;
+}
+
+.orb-core{
+  position:absolute;
+  width:145px;
+  height:145px;
+  top:42px;
+  left:42px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%,
+    #9ffaff 0%,
+    #168fa8 20%,
+    #063746 55%,
+    #02070b 100%);
+  box-shadow:
+    0 0 35px rgba(0,229,255,.5),
+    0 0 90px rgba(0,229,255,.18);
+}
+
+.orb-ring{
+  position:absolute;
+  border:1px solid rgba(0,229,255,.4);
+  border-radius:50%;
+}
+
+.ring-one{
+  width:230px;
+  height:75px;
+  top:77px;
+  left:0;
+  transform:rotate(-20deg);
+}
+
+.ring-two{
+  width:260px;
+  height:90px;
+  top:70px;
+  left:-15px;
+  transform:rotate(25deg);
+  border-color:rgba(255,255,255,.18);
+}
+
+@media(max-width:700px){
+
+  .web-development-cta{
+    min-height:540px;
+    margin:70px 15px;
+    padding:40px 25px;
+    align-items:flex-start;
+  }
+
+  .web-dev-content h2{
+    font-size:2.6rem;
+  }
+
+  .web-dev-orb{
+    right:50%;
+    bottom:35px;
+    transform:translateX(50%);
+    width:180px;
+    height:180px;
+  }
+
+  .orb-core{
+    width:110px;
+    height:110px;
+    top:35px;
+    left:35px;
+  }
+
+  .ring-one{
+    width:180px;
+    height:58px;
+    top:61px;
+  }
+
+  .ring-two{
+    width:205px;
+    height:70px;
+    top:55px;
+    left:-12px;
+  }
+}
+</style>
+</section>
 <!-- ABOUT -->
 <section id="about">
   <div class="container">
@@ -1314,5 +1285,38 @@ function showAnatomyTab(id){
 </script>
 <script src="ai-knowledge.js?v=20260908-2"></script>
 <script src="ai-portfolio.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  requestAnimationFrame(() => {
+    document.body.classList.add("page-loaded");
+  });
+
+  document.querySelectorAll('a[href]').forEach(link => {
+
+    const href = link.getAttribute("href");
+
+    if (
+      !href ||
+      href.startsWith("#") ||
+      href.startsWith("http") ||
+      href.startsWith("mailto:")
+    ) return;
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+
+      document.body.classList.remove("page-loaded");
+      document.body.classList.add("page-exit");
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 500);
+    });
+
+  });
+
+});
+</script>
 </body>
 </html>

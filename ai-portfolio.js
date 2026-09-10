@@ -312,9 +312,10 @@
   document.head.appendChild(style);
 
   const target =
+    document.querySelector(".web-development-link") ||
     document.querySelector("#about") ||
     document.querySelector("main") ||
-    document.body;
+    document.body; 
 
 target.parentNode.insertBefore(section, target);
 
