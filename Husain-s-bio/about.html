@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="About Husain Farooqui — Future Doctor, Researcher and Lifelong Learner.">
+<title>About — Husain Farooqui</title>
+
+<style>
+  /* PAGE TRANSITION */
+body{
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .45s ease, transform .45s ease;
+}
+
+body.page-loaded{
+  opacity:1;
+  transform:translateY(0);
+}
+
+body.page-exit{
+  opacity:0;
+  transform:translateY(-8px);
+}
+:root{
+  --bg:#05070d;
+  --text:#eef3ff;
+  --muted:#9aa7bd;
+  --cyan:#00e5ff;
+  --purple:#8b6cff;
+  --line:rgba(255,255,255,.09);
+  --card:rgba(13,18,30,.72);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 10%,rgba(139,108,255,.14),transparent 30%),
+    radial-gradient(circle at 85% 20%,rgba(0,229,255,.10),transparent 28%),
+    var(--bg);
+  line-height:1.75;
+}
+
+a{text-decoration:none;color:inherit}
+
+nav{
+  position:sticky;
+  top:0;
+  z-index:10;
+  height:70px;
+  padding:0 6%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  background:rgba(5,7,13,.82);
+  backdrop-filter:blur(18px);
+}
+
+.logo{
+  font-size:26px;
+  font-weight:800;
+}
+
+.logo span{
+  color:var(--cyan);
+}
+
+.home{
+  padding:9px 17px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  transition:.3s;
+}
+
+.home:hover{
+  color:var(--cyan);
+  border-color:var(--cyan);
+  transform:translateY(-2px);
+}
+
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:80px 24px 100px;
+}
+
+.hero{
+  text-align:center;
+  margin-bottom:75px;
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-size:12px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  font-weight:700;
+}
+
+.hero h1{
+  font-size:clamp(48px,8vw,82px);
+  line-height:1;
+  margin:16px 0;
+  letter-spacing:-.055em;
+}
+
+.hero h1 span{
+  background:linear-gradient(90deg,var(--purple),var(--cyan));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:18px;
+}
+
+.profile{
+  display:grid;
+  grid-template-columns:350px 1fr;
+  gap:55px;
+  align-items:center;
+  margin-bottom:75px;
+}
+
+.photo-wrap{
+  padding:2px;
+  border-radius:30px;
+  background:linear-gradient(145deg,var(--purple),var(--cyan));
+  box-shadow:0 0 60px rgba(0,229,255,.13);
+}
+
+.photo{
+  display:block;
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  border-radius:28px;
+  background:#111722;
+}
+
+.content h2{
+  font-size:38px;
+  line-height:1.15;
+  margin:12px 0 20px;
+  letter-spacing:-.035em;
+}
+
+.content h2 span{
+  color:var(--cyan);
+}
+
+.content p{
+  color:var(--muted);
+  font-size:16px;
+  margin-bottom:18px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+
+.card{
+  padding:28px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:var(--card);
+  backdrop-filter:blur(16px);
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(0,229,255,.28);
+}
+
+.icon{
+  font-size:24px;
+  margin-bottom:10px;
+}
+
+.card h3{
+  font-size:19px;
+  margin-bottom:8px;
+}
+
+.card p{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.wide{
+  margin-top:18px;
+  padding:32px;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:linear-gradient(
+    135deg,
+    rgba(139,108,255,.08),
+    rgba(0,229,255,.05)
+  );
+}
+
+.wide h2{
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+.wide p{
+  color:var(--muted);
+}
+
+footer{
+  text-align:center;
+  color:#66738a;
+  font-size:12px;
+  border-top:1px solid var(--line);
+  margin-top:75px;
+  padding-top:40px;
+}
+
+@media(max-width:760px){
+
+  nav{
+    height:64px;
+    padding:0 18px;
+  }
+
+  main{
+    padding:55px 18px 80px;
+  }
+
+  .profile{
+    grid-template-columns:1fr;
+    gap:35px;
+  }
+
+  .photo-wrap{
+    max-width:330px;
+    margin:auto;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .content h2{
+    font-size:31px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a class="logo" href="index.html">H<span>.</span></a>
+  <a class="home" href="index.html">← Home</a>
+</nav>
+
+<main>
+
+<header class="hero">
+  <div class="eyebrow">Personal Profile</div>
+  <h1>About <span>Husain</span></h1>
+  <p>Researcher • Future Doctor • Lifelong Learner</p>
+</header>
+
+<section class="profile">
+
+  <div class="photo-wrap">
+    <img
+      class="photo"
+      src="profile.jpg"
+      alt="Husain Farooqui">
+  </div>
+
+  <div class="content">
+
+    <div class="eyebrow">Who I Am</div>
+
+    <h2>
+      Curious by nature.<br>
+      <span>Driven by discovery.</span>
+    </h2>
+
+    <p>
+      I am Husain Farooqui, a student with a strong interest in
+      science, medicine, technology and research. I enjoy understanding
+      how things work and turning that curiosity into learning and
+      practical projects.
+    </p>
+
+    <p>
+      My academic journey is focused on building a strong foundation
+      for medicine and preparing for NEET. Alongside academics, I explore
+      programming, artificial intelligence, web development and scientific
+      concepts beyond the classroom.
+    </p>
+
+    <p>
+      I believe learning should never stop — every question is an
+      opportunity to understand something better.
+    </p>
+
+  </div>
+
+</section>
+
+<section class="grid">
+
+  <article class="card">
+    <div class="icon">🧬</div>
+    <h3>Medicine & Biology</h3>
+    <p>
+      Building a strong foundation in biology, anatomy, physiology
+      and medical science with the long-term goal of becoming a doctor.
+    </p>
+  </article>
+
+  <article class="card">
+    <div class="icon">🔬</div>
+    <h3>Research</h3>
+    <p>
+      Interested in scientific thinking, evidence, meaningful questions
+      and the process of turning knowledge into useful discoveries.
+    </p>
+  </article>
+
+  <article class="card">
+    <div class="icon">🤖</div>
+    <h3>AI & Technology</h3>
+    <p>
+      Exploring artificial intelligence and digital tools, especially
+      their potential to improve productivity, learning and healthcare.
+    </p>
+  </article>
+
+  <article class="card">
+    <div class="icon">💻</div>
+    <h3>Building & Learning</h3>
+    <p>
+      Learning Python, HTML, CSS and JavaScript while building projects
+      and experimenting with new ideas.
+    </p>
+  </article>
+
+</section>
+
+<section class="wide">
+  <h2>My Journey</h2>
+  <p>
+    My current focus is becoming academically strong, developing
+    disciplined learning habits and preparing for the path toward
+    medicine while continuously building technology skills.
+  </p>
+</section>
+
+<section class="wide">
+  <h2>Future Vision</h2>
+  <p>
+    I want to explore the intersection of medicine, artificial
+    intelligence, research and innovation, and eventually build useful
+    solutions that can make healthcare and scientific work more effective.
+  </p>
+</section>
+
+<section class="wide">
+  <h2>Current Focus</h2>
+  <p>
+    Science and medical foundations • NEET preparation • Python •
+    Web development • Artificial Intelligence • Research-oriented
+    thinking • Digital productivity.
+  </p>
+</section>
+
+<footer>
+  © 2026 Husain Farooqui • Built with curiosity, science and code.
+</footer>
+
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  requestAnimationFrame(() => {
+    document.body.classList.add("page-loaded");
+  });
+
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute("href");
+
+    if (
+      !href ||
+      href.startsWith("#") ||
+      href.startsWith("http") ||
+      href.startsWith("mailto:")
+    ) return;
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+
+      document.body.classList.remove("page-loaded");
+      document.body.classList.add("page-exit");
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 450);
+    });
+  });
+});
+</script>
+</body>
+</html>
