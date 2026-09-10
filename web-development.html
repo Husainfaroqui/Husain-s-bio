@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Web Development — Mohd Husain Farooqui</title>
+
+<meta name="description"
+content="Modern, responsive and premium websites by Mohd Husain Farooqui. Portfolio websites, business websites, landing pages and custom web projects.">
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<style>
+
+:root{
+  --bg:#020509;
+  --bg-soft:#071017;
+  --cyan:#00e5ff;
+  --cyan-soft:rgba(0,229,255,.12);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.62);
+  --border:rgba(0,229,255,.16);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:
+    radial-gradient(circle at 70% 20%,rgba(0,229,255,.07),transparent 30%),
+    radial-gradient(circle at 20% 80%,rgba(0,100,255,.05),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
+  opacity:0;
+  transition:opacity .5s ease;
+}
+
+body.page-loaded{
+  opacity:1;
+}
+
+body.page-exit{
+  opacity:0;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* STARS */
+
+.space{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:-1;
+}
+
+.space::before,
+.space::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1px),
+    radial-gradient(circle,rgba(0,229,255,.5) 1px,transparent 1px);
+  background-size:120px 120px,190px 190px;
+  background-position:20px 30px,80px 100px;
+  opacity:.25;
+}
+
+/* NAVBAR */
+
+nav{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 6%;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  background:rgba(2,5,9,.72);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  z-index:100;
+}
+
+.logo{
+  font-size:1.5rem;
+  font-weight:500;
+  letter-spacing:.05em;
+}
+
+.logo span{
+  color:var(--cyan);
+}
+
+.nav-links{
+  display:flex;
+  gap:30px;
+  list-style:none;
+}
+
+.nav-links a{
+  font-size:.68rem;
+  letter-spacing:.16em;
+  color:rgba(255,255,255,.68);
+  transition:.3s ease;
+}
+
+.nav-links a:hover{
+  color:var(--cyan);
+}
+
+/* HERO */
+
+.hero{
+  min-height:100vh;
+  padding:150px 8% 90px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:60px;
+  max-width:1450px;
+  margin:auto;
+}
+
+.hero-content{
+  max-width:680px;
+  position:relative;
+  z-index:2;
+}
+
+.eyebrow{
+  display:inline-block;
+  margin-bottom:25px;
+  color:var(--cyan);
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.28em;
+}
+
+.hero h1{
+  font-size:clamp(3.2rem,7vw,6.5rem);
+  line-height:.98;
+  letter-spacing:-.045em;
+  font-weight:500;
+}
+
+.hero h1 span{
+  color:var(--cyan);
+}
+
+.hero p{
+  max-width:600px;
+  margin:30px 0 38px;
+  color:var(--muted);
+  line-height:1.9;
+  font-size:1rem;
+}
+
+.hero-button{
+  display:inline-flex;
+  align-items:center;
+  gap:15px;
+  padding:16px 26px;
+  border:1px solid var(--cyan);
+  border-radius:50px;
+  color:#fff;
+  font-size:.72rem;
+  letter-spacing:.1em;
+  transition:.3s ease;
+}
+
+.hero-button:hover{
+  background:var(--cyan-soft);
+  transform:translateY(-3px);
+}
+
+.hero-button span{
+  font-size:1.2rem;
+  transition:.3s ease;
+}
+
+.hero-button:hover span{
+  transform:translateX(6px);
+}
+
+/* PLANET */
+
+.planet-area{
+  width:430px;
+  height:430px;
+  position:relative;
+  flex-shrink:0;
+}
+
+.planet-glow{
+  position:absolute;
+  width:310px;
+  height:310px;
+  left:60px;
+  top:60px;
+  border-radius:50%;
+  background:rgba(0,229,255,.09);
+  filter:blur(50px);
+}
+
+.planet{
+  position:absolute;
+  width:260px;
+  height:260px;
+  left:85px;
+  top:85px;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle at 32% 28%,
+      #b5fbff 0%,
+      #249bb2 12%,
+      #0b5367 35%,
+      #05212b 65%,
+      #010508 100%
+    );
+  box-shadow:
+    inset -35px -25px 55px rgba(0,0,0,.8),
+    inset 20px 15px 30px rgba(150,250,255,.15),
+    0 0 45px rgba(0,229,255,.35),
+    0 0 120px rgba(0,229,255,.12);
+}
+
+.planet::before{
+  content:"";
+  position:absolute;
+  width:110px;
+  height:40px;
+  left:55px;
+  top:75px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  transform:rotate(-25deg);
+  filter:blur(4px);
+}
+
+.planet::after{
+  content:"";
+  position:absolute;
+  width:75px;
+  height:75px;
+  right:38px;
+  bottom:45px;
+  border-radius:50%;
+  background:rgba(0,0,0,.22);
+  filter:blur(8px);
+}
+
+.planet-ring{
+  position:absolute;
+  width:410px;
+  height:125px;
+  left:10px;
+  top:155px;
+  border:1px solid rgba(0,229,255,.48);
+  border-radius:50%;
+  transform:rotate(-20deg);
+}
+
+.planet-ring.two{
+  width:455px;
+  height:145px;
+  left:-12px;
+  top:145px;
+  transform:rotate(22deg);
+  border-color:rgba(255,255,255,.16);
+}
+
+.planet-ring.three{
+  width:350px;
+  height:100px;
+  left:40px;
+  top:168px;
+  transform:rotate(-20deg);
+  border-color:rgba(0,229,255,.2);
+}
+
+/* STATS */
+
+.stats{
+  max-width:1200px;
+  margin:-30px auto 110px;
+  padding:0 30px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.stat{
+  padding:30px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:rgba(255,255,255,.025);
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:1.8rem;
+  font-weight:500;
+  color:var(--cyan);
+  margin-bottom:8px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:.7rem;
+  letter-spacing:.12em;
+}
+
+/* SECTION */
+
+.section{
+  max-width:1200px;
+  margin:0 auto 120px;
+  padding:0 30px;
+}
+
+.section-label{
+  color:var(--cyan);
+  font-size:.68rem;
+  letter-spacing:.25em;
+  font-weight:700;
+  margin-bottom:18px;
+}
+
+.section-title{
+  font-size:clamp(2.3rem,5vw,4rem);
+  font-weight:500;
+  letter-spacing:-.04em;
+  margin-bottom:20px;
+}
+
+.section-description{
+  max-width:650px;
+  color:var(--muted);
+  line-height:1.8;
+}
+
+/* SERVICES */
+
+.services{
+  margin-top:50px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+
+.service{
+  position:relative;
+  padding:42px;
+  min-height:230px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(0,229,255,.08),transparent 35%),
+    rgba(255,255,255,.025);
+  overflow:hidden;
+  transition:.35s ease;
+}
+
+.service:hover{
+  transform:translateY(-7px);
+  border-color:rgba(0,229,255,.35);
+}
+
+.service-number{
+  color:rgba(0,229,255,.5);
+  font-size:.7rem;
+  letter-spacing:.2em;
+  margin-bottom:35px;
+}
+
+.service h3{
+  font-size:1.5rem;
+  font-weight:500;
+  margin-bottom:15px;
+}
+
+.service p{
+  color:var(--muted);
+  line-height:1.7;
+  font-size:.9rem;
+}
+
+/* TECHNOLOGIES */
+
+.tech-wrap{
+  margin-top:45px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.tech{
+  padding:13px 20px;
+  border:1px solid rgba(0,229,255,.18);
+  border-radius:50px;
+  background:rgba(0,229,255,.04);
+  color:rgba(255,255,255,.78);
+  font-size:.72rem;
+  letter-spacing:.08em;
+  transition:.3s ease;
+}
+
+.tech:hover{
+  border-color:var(--cyan);
+  color:var(--cyan);
+  background:rgba(0,229,255,.08);
+}
+
+/* PROCESS */
+
+.process{
+  margin-top:50px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.process-card{
+  padding:28px;
+  border-left:1px solid rgba(0,229,255,.35);
+  background:rgba(255,255,255,.02);
+}
+
+.process-card strong{
+  display:block;
+  color:var(--cyan);
+  font-size:.7rem;
+  letter-spacing:.15em;
+  margin-bottom:18px;
+}
+
+.process-card h3{
+  font-size:1.05rem;
+  font-weight:500;
+  margin-bottom:12px;
+}
+
+.process-card p{
+  color:var(--muted);
+  line-height:1.6;
+  font-size:.82rem;
+}
+
+/* FINAL CTA */
+
+.final-cta{
+  max-width:1200px;
+  min-height:400px;
+  margin:0 auto 100px;
+  padding:70px;
+  border:1px solid var(--border);
+  border-radius:30px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(circle at 80% 50%,rgba(0,229,255,.12),transparent 35%),
+    rgba(255,255,255,.025);
+}
+
+.final-content{
+  position:relative;
+  z-index:2;
+  max-width:650px;
+}
+
+.final-content h2{
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:1.05;
+  font-weight:500;
+  letter-spacing:-.04em;
+}
+
+.final-content h2 span{
+  color:var(--cyan);
+}
+
+.final-content p{
+  color:var(--muted);
+  line-height:1.8;
+  margin:25px 0 30px;
+}
+
+.cta-button{
+  display:inline-flex;
+  padding:15px 25px;
+  border:1px solid var(--cyan);
+  border-radius:50px;
+  color:#fff;
+  font-size:.72rem;
+  letter-spacing:.1em;
+  transition:.3s ease;
+}
+
+.cta-button:hover{
+  background:var(--cyan-soft);
+  transform:translateY(-3px);
+}
+
+.cta-orb{
+  position:absolute;
+  right:70px;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%,
+    #b5fbff 0%,
+    #168fa8 20%,
+    #063746 55%,
+    #02070b 100%);
+  box-shadow:
+    0 0 40px rgba(0,229,255,.35),
+    0 0 100px rgba(0,229,255,.12);
+}
+
+.cta-orb::before,
+.cta-orb::after{
+  content:"";
+  position:absolute;
+  border:1px solid rgba(0,229,255,.35);
+  border-radius:50%;
+}
+
+.cta-orb::before{
+  width:330px;
+  height:90px;
+  left:-55px;
+  top:65px;
+  transform:rotate(-20deg);
+}
+
+.cta-orb::after{
+  width:280px;
+  height:75px;
+  left:-30px;
+  top:72px;
+  transform:rotate(25deg);
+  border-color:rgba(255,255,255,.15);
+}
+
+/* FOOTER */
+
+footer{
+  padding:40px 6%;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:rgba(255,255,255,.4);
+  font-size:.65rem;
+  letter-spacing:.1em;
+}
+
+footer span{
+  color:var(--cyan);
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+  nav{
+    padding:0 22px;
+  }
+
+  .nav-links{
+    gap:15px;
+  }
+
+  .nav-links a{
+    font-size:.55rem;
+  }
+
+  .hero{
+    min-height:auto;
+    padding:130px 25px 60px;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .hero h1{
+    font-size:3.4rem;
+  }
+
+  .planet-area{
+    width:320px;
+    height:320px;
+    align-self:center;
+    transform:scale(.82);
+    margin-top:-20px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+    margin:0 15px 80px;
+    padding:0;
+  }
+
+  .section{
+    padding:0 20px;
+    margin-bottom:90px;
+  }
+
+  .services{
+    grid-template-columns:1fr;
+  }
+
+  .service{
+    padding:30px;
+  }
+
+  .process{
+    grid-template-columns:1fr;
+  }
+
+  .final-cta{
+    margin:0 15px 70px;
+    min-height:580px;
+    padding:40px 25px;
+    align-items:flex-start;
+  }
+
+  .cta-orb{
+    right:50%;
+    bottom:40px;
+    transform:translateX(50%);
+    width:180px;
+    height:180px;
+  }
+
+  .cta-orb::before{
+    width:270px;
+    height:75px;
+    left:-45px;
+    top:52px;
+  }
+
+  .cta-orb::after{
+    width:230px;
+    height:65px;
+    left:-25px;
+    top:58px;
+  }
+
+  footer{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="space"></div>
+
+<!-- NAVIGATION -->
+
+<nav>
+
+  <a href="index.html" class="logo">
+    H<span>.</span>
+  </a>
+
+  <ul class="nav-links">
+
+    <li>
+      <a href="index.html">HOME</a>
+    </li>
+
+    <li>
+      <a href="web-development.html">WEB DEVELOPMENT</a>
+    </li>
+
+    <li>
+      <a href="about.html">ABOUT</a>
+    </li>
+
+  </ul>
+
+</nav>
+
+
+<!-- HERO -->
+
+<main>
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <span class="eyebrow">WEB DEVELOPMENT</span>
+
+    <h1>
+      Have an idea?<br>
+      <span>Let's build it.</span>
+    </h1>
+
+    <p>
+      Modern, responsive and premium websites designed for
+      portfolios, businesses, creators, personal brands and
+      ambitious projects.
+    </p>
+
+    <a href="index.html#contact" class="hero-button">
+      Let's Work Together
+      <span>→</span>
+    </a>
+
+  </div>
+
+
+  <!-- PLANET -->
+
+  <div class="planet-area">
+
+    <div class="planet-glow"></div>
+
+    <div class="planet"></div>
+
+    <div class="planet-ring"></div>
+    <div class="planet-ring two"></div>
+    <div class="planet-ring three"></div>
+
+  </div>
+
+</section>
+
+
+<!-- STATS -->
+
+<section class="stats">
+
+  <div class="stat">
+    <strong>04+</strong>
+    <span>SERVICE TYPES</span>
+  </div>
+
+  <div class="stat">
+    <strong>100%</strong>
+    <span>RESPONSIVE DESIGN</span>
+  </div>
+
+  <div class="stat">
+    <strong>MODERN</strong>
+    <span>WEB TECHNOLOGY</span>
+  </div>
+
+</section>
+
+
+<!-- SERVICES -->
+
+<section class="section">
+
+  <div class="section-label">
+    WHAT I BUILD
+  </div>
+
+  <h2 class="section-title">
+    Websites built<br>
+    <span>for your purpose.</span>
+  </h2>
+
+  <p class="section-description">
+    Whether you need a professional identity online, a website
+    for your business or a focused landing page, I can build a
+    clean and modern experience around your idea.
+  </p>
+
+
+  <div class="services">
+
+    <article class="service">
+
+      <div class="service-number">01 / PORTFOLIO</div>
+
+      <h3>Personal Portfolio</h3>
+
+      <p>
+        A premium personal website to showcase your skills,
+        projects, achievements, experience and personal brand.
+      </p>
+
+    </article>
+
+
+    <article class="service">
+
+      <div class="service-number">02 / BUSINESS</div>
+
+      <h3>Business Website</h3>
+
+      <p>
+        A professional online presence for businesses,
+        startups, services and growing brands.
+      </p>
+
+    </article>
+
+
+    <article class="service">
+
+      <div class="service-number">03 / LANDING PAGE</div>
+
+      <h3>Landing Page</h3>
+
+      <p>
+        Focused and visually strong pages designed to present
+        a product, service, project or campaign.
+      </p>
+
+    </article>
+
+
+    <article class="service">
+
+      <div class="service-number">04 / CUSTOM</div>
+
+      <h3>Custom Website</h3>
+
+      <p>
+        A website built around your specific idea, requirements,
+        content and visual identity.
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- TECHNOLOGY -->
+
+<section class="section">
+
+  <div class="section-label">
+    TECHNOLOGY
+  </div>
+
+  <h2 class="section-title">
+    Built with modern<br>
+    <span>web technologies.</span>
+  </h2>
+
+  <p class="section-description">
+    Clean code, responsive layouts and modern interface
+    techniques come together to create fast and polished
+    websites.
+  </p>
+
+
+  <div class="tech-wrap">
+
+    <div class="tech">HTML</div>
+    <div class="tech">CSS</div>
+    <div class="tech">JavaScript</div>
+    <div class="tech">Responsive Design</div>
+    <div class="tech">UI / UX</div>
+    <div class="tech">GitHub</div>
+    <div class="tech">GitHub Pages</div>
+
+  </div>
+
+</section>
+
+
+<!-- PROCESS -->
+
+<section class="section">
+
+  <div class="section-label">
+    THE PROCESS
+  </div>
+
+  <h2 class="section-title">
+    From idea to<br>
+    <span>online.</span>
+  </h2>
+
+
+  <div class="process">
+
+    <div class="process-card">
+
+      <strong>01</strong>
+
+      <h3>Understand</h3>
+
+      <p>
+        Understand your idea, goals and requirements.
+      </p>
+
+    </div>
+
+
+    <div class="process-card">
+
+      <strong>02</strong>
+
+      <h3>Design</h3>
+
+      <p>
+        Create a clean visual direction and structure.
+      </p>
+
+    </div>
+
+
+    <div class="process-card">
+
+      <strong>03</strong>
+
+      <h3>Build</h3>
+
+      <p>
+        Develop the website with responsive layouts.
+      </p>
+
+    </div>
+
+
+    <div class="process-card">
+
+      <strong>04</strong>
+
+      <h3>Launch</h3>
+
+      <p>
+        Test, refine and make the website ready to go live.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FINAL CTA -->
+
+<section class="final-cta">
+
+  <div class="final-content">
+
+    <div class="section-label">
+      YOUR NEXT PROJECT
+    </div>
+
+    <h2>
+      Your idea.<br>
+      <span>Your website.</span>
+    </h2>
+
+    <p>
+      Have a project in mind? Let's turn your idea into a
+      modern digital experience.
+    </p>
+
+    <a href="index.html#contact" class="cta-button">
+      Contact for Web Development →
+    </a>
+
+  </div>
+
+
+  <div class="cta-orb"></div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+  <div>
+    © 2026 <span>Mohd Husain Farooqui</span>
+  </div>
+
+  <div>
+    WEB DEVELOPMENT
+  </div>
+
+</footer>
+
+
+<!-- PAGE TRANSITION -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  requestAnimationFrame(() => {
+    document.body.classList.add("page-loaded");
+  });
+
+
+  document.querySelectorAll('a[href]').forEach(link => {
+
+    const href = link.getAttribute("href");
+
+    if(
+      !href ||
+      href.startsWith("#") ||
+      href.startsWith("http") ||
+      href.startsWith("mailto:") ||
+      link.target === "_blank"
+    ){
+      return;
+    }
+
+
+    link.addEventListener("click", e => {
+
+      e.preventDefault();
+
+      document.body.classList.remove("page-loaded");
+      document.body.classList.add("page-exit");
+
+      setTimeout(() => {
+        window.location.href = href;
+      },500);
+
+    });
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Microscopy — Mohd Husain Farooqui</title>
+
+<meta name="description"
+content="Exploring life at the smallest scale — microscopy, cells, tissues, microstructures and the science of seeing the invisible.">
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<style>
+
+:root{
+  --bg:#020508;
+  --cyan:#00e5ff;
+  --cyan-soft:rgba(0,229,255,.12);
+  --white:#fff;
+  --muted:rgba(255,255,255,.62);
+  --border:rgba(0,229,255,.16);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:
+    radial-gradient(circle at 70% 20%,rgba(0,229,255,.08),transparent 30%),
+    radial-gradient(circle at 20% 80%,rgba(0,100,255,.06),transparent 35%),
+    var(--bg);
+  color:var(--white);
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
+  opacity:0;
+  transition:opacity .5s ease;
+}
+
+body.page-loaded{
+  opacity:1;
+}
+
+body.page-exit{
+  opacity:0;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* STARS */
+
+.space{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.space::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1px),
+    radial-gradient(circle,rgba(0,229,255,.5) 1px,transparent 1px);
+  background-size:120px 120px,200px 200px;
+  background-position:20px 30px,80px 100px;
+  opacity:.22;
+}
+
+/* NAV */
+
+nav{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:76px;
+  padding:0 6%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(2,5,8,.72);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  z-index:100;
+}
+
+.logo{
+  font-size:1.5rem;
+  font-weight:500;
+}
+
+.logo span{
+  color:var(--cyan);
+}
+
+.nav-links{
+  display:flex;
+  gap:30px;
+  list-style:none;
+}
+
+.nav-links a{
+  color:rgba(255,255,255,.65);
+  font-size:.66rem;
+  letter-spacing:.16em;
+  transition:.3s ease;
+}
+
+.nav-links a:hover{
+  color:var(--cyan);
+}
+
+/* HERO */
+
+.hero{
+  min-height:100vh;
+  max-width:1400px;
+  margin:auto;
+  padding:150px 8% 90px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:70px;
+}
+
+.hero-content{
+  max-width:720px;
+  position:relative;
+  z-index:2;
+}
+
+.eyebrow{
+  display:block;
+  color:var(--cyan);
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.3em;
+  margin-bottom:25px;
+}
+
+.hero h1{
+  font-size:clamp(3.5rem,7vw,7rem);
+  line-height:.95;
+  letter-spacing:-.055em;
+  font-weight:500;
+}
+
+.hero h1 span{
+  color:var(--cyan);
+}
+
+.hero p{
+  max-width:620px;
+  margin:30px 0 35px;
+  color:var(--muted);
+  line-height:1.9;
+  font-size:1rem;
+}
+
+.hero-button{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 25px;
+  border:1px solid var(--cyan);
+  border-radius:50px;
+  font-size:.7rem;
+  letter-spacing:.1em;
+  transition:.3s ease;
+}
+
+.hero-button:hover{
+  background:var(--cyan-soft);
+  transform:translateY(-3px);
+}
+
+.hero-button span{
+  font-size:1.2rem;
+  transition:.3s ease;
+}
+
+.hero-button:hover span{
+  transform:translateX(5px);
+}
+
+/* CELL VISUAL */
+
+.cell-area{
+  width:430px;
+  height:430px;
+  position:relative;
+  flex-shrink:0;
+}
+
+.cell-glow{
+  position:absolute;
+  width:300px;
+  height:300px;
+  left:65px;
+  top:65px;
+  border-radius:50%;
+  background:rgba(0,229,255,.12);
+  filter:blur(55px);
+}
+
+.cell{
+  position:absolute;
+  width:270px;
+  height:270px;
+  left:80px;
+  top:80px;
+  border-radius:50%;
+  border:1px solid rgba(0,229,255,.5);
+  background:
+    radial-gradient(circle at 35% 30%,
+      rgba(170,250,255,.65),
+      rgba(0,130,160,.3) 25%,
+      rgba(2,35,45,.7) 65%,
+      rgba(0,5,8,.95));
+  box-shadow:
+    inset 0 0 50px rgba(0,229,255,.18),
+    0 0 40px rgba(0,229,255,.25),
+    0 0 100px rgba(0,229,255,.08);
+}
+
+.nucleus{
+  position:absolute;
+  width:90px;
+  height:90px;
+  left:90px;
+  top:88px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle,
+      #b8fbff,
+      #1598ad 35%,
+      #063846 75%,
+      #021014);
+  box-shadow:
+    0 0 25px rgba(0,229,255,.5);
+}
+
+.cell-ring{
+  position:absolute;
+  border:1px solid rgba(0,229,255,.3);
+  border-radius:50%;
+}
+
+.cell-ring.one{
+  width:390px;
+  height:145px;
+  left:20px;
+  top:145px;
+  transform:rotate(-25deg);
+}
+
+.cell-ring.two{
+  width:440px;
+  height:160px;
+  left:-5px;
+  top:135px;
+  transform:rotate(23deg);
+  border-color:rgba(255,255,255,.13);
+}
+
+.cell-ring.three{
+  width:340px;
+  height:120px;
+  left:45px;
+  top:155px;
+  transform:rotate(-8deg);
+  border-color:rgba(0,229,255,.2);
+}
+
+/* SECTION */
+
+.section{
+  max-width:1200px;
+  margin:0 auto 130px;
+  padding:0 30px;
+}
+
+.label{
+  color:var(--cyan);
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.27em;
+  margin-bottom:18px;
+}
+
+.title{
+  font-size:clamp(2.4rem,5vw,4.5rem);
+  line-height:1.05;
+  letter-spacing:-.045em;
+  font-weight:500;
+  margin-bottom:22px;
+}
+
+.title span{
+  color:var(--cyan);
+}
+
+.description{
+  max-width:700px;
+  color:var(--muted);
+  line-height:1.85;
+}
+
+/* CARDS */
+
+.cards{
+  margin-top:50px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.card{
+  min-height:250px;
+  padding:35px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(0,229,255,.08),transparent 35%),
+    rgba(255,255,255,.025);
+  transition:.35s ease;
+}
+
+.card:hover{
+  transform:translateY(-7px);
+  border-color:rgba(0,229,255,.35);
+}
+
+.card-number{
+  color:rgba(0,229,255,.55);
+  font-size:.68rem;
+  letter-spacing:.2em;
+  margin-bottom:40px;
+}
+
+.card h3{
+  font-size:1.35rem;
+  font-weight:500;
+  margin-bottom:15px;
+}
+
+.card p{
+  color:var(--muted);
+  line-height:1.7;
+  font-size:.87rem;
+}
+
+/* MICROSCOPY TYPES */
+
+.microscopy-types{
+  margin-top:50px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+}
+
+.type{
+  padding:40px;
+  min-height:220px;
+  border:1px solid var(--border);
+  border-radius:25px;
+  background:rgba(255,255,255,.025);
+  transition:.35s ease;
+}
+
+.type:hover{
+  border-color:rgba(0,229,255,.4);
+  transform:translateY(-5px);
+}
+
+.type h3{
+  font-size:1.5rem;
+  font-weight:500;
+  margin-bottom:14px;
+}
+
+.type p{
+  color:var(--muted);
+  line-height:1.75;
+}
+
+/* FEATURE */
+
+.feature{
+  min-height:360px;
+  padding:65px;
+  border:1px solid var(--border);
+  border-radius:30px;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(circle at 80% 50%,rgba(0,229,255,.1),transparent 35%),
+    rgba(255,255,255,.025);
+  position:relative;
+  overflow:hidden;
+}
+
+.feature-content{
+  max-width:700px;
+  position:relative;
+  z-index:2;
+}
+
+.feature h2{
+  font-size:clamp(2.2rem,5vw,4rem);
+  line-height:1.05;
+  font-weight:500;
+  margin-bottom:20px;
+}
+
+.feature h2 span{
+  color:var(--cyan);
+}
+
+.feature p{
+  color:var(--muted);
+  line-height:1.8;
+}
+
+/* MINI CELL */
+
+.mini-cell{
+  position:absolute;
+  right:100px;
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  border:1px solid rgba(0,229,255,.4);
+  background:
+    radial-gradient(circle at 35% 30%,
+    rgba(180,250,255,.6),
+    rgba(0,120,150,.3) 30%,
+    rgba(0,15,22,.9) 70%);
+  box-shadow:0 0 60px rgba(0,229,255,.18);
+}
+
+.mini-cell::before{
+  content:"";
+  position:absolute;
+  width:60px;
+  height:60px;
+  left:65px;
+  top:65px;
+  border-radius:50%;
+  background:#07576a;
+  box-shadow:0 0 25px rgba(0,229,255,.5);
+}
+
+/* QUOTE */
+
+.quote{
+  max-width:900px;
+  margin:0 auto 130px;
+  padding:0 30px;
+  text-align:center;
+}
+
+.quote-line{
+  width:70px;
+  height:1px;
+  margin:0 auto 35px;
+  background:var(--cyan);
+}
+
+.quote h2{
+  font-size:clamp(2rem,4vw,3.5rem);
+  font-weight:400;
+  line-height:1.25;
+  letter-spacing:-.03em;
+}
+
+.quote h2 span{
+  color:var(--cyan);
+}
+
+/* CTA */
+
+.cta{
+  max-width:1200px;
+  margin:0 auto 100px;
+  padding:70px;
+  min-height:350px;
+  border:1px solid var(--border);
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 80% 50%,rgba(0,229,255,.1),transparent 35%),
+    rgba(255,255,255,.025);
+}
+
+.cta h2{
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:1;
+  font-weight:500;
+}
+
+.cta h2 span{
+  color:var(--cyan);
+}
+
+.cta p{
+  color:var(--muted);
+  max-width:600px;
+  margin:25px 0 30px;
+  line-height:1.8;
+}
+
+.cta-button{
+  display:inline-flex;
+  padding:15px 25px;
+  border:1px solid var(--cyan);
+  border-radius:50px;
+  font-size:.7rem;
+  letter-spacing:.1em;
+  transition:.3s ease;
+}
+
+.cta-button:hover{
+  background:var(--cyan-soft);
+  transform:translateY(-3px);
+}
+
+/* FOOTER */
+
+footer{
+  padding:40px 6%;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  color:rgba(255,255,255,.4);
+  font-size:.65rem;
+  letter-spacing:.1em;
+}
+
+footer span{
+  color:var(--cyan);
+}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+  nav{
+    padding:0 20px;
+  }
+
+  .nav-links{
+    gap:14px;
+  }
+
+  .nav-links a{
+    font-size:.52rem;
+  }
+
+  .hero{
+    min-height:auto;
+    padding:130px 25px 60px;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .hero h1{
+    font-size:3.5rem;
+  }
+
+  .cell-area{
+    width:330px;
+    height:330px;
+    align-self:center;
+    transform:scale(.82);
+    margin-top:-10px;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .microscopy-types{
+    grid-template-columns:1fr;
+  }
+
+  .section{
+    padding:0 20px;
+    margin-bottom:90px;
+  }
+
+  .feature{
+    min-height:560px;
+    padding:40px 25px;
+    align-items:flex-start;
+  }
+
+  .mini-cell{
+    right:50%;
+    bottom:55px;
+    transform:translateX(50%);
+    width:170px;
+    height:170px;
+  }
+
+  .mini-cell::before{
+    left:55px;
+    top:55px;
+  }
+
+  .quote{
+    margin-bottom:90px;
+  }
+
+  .cta{
+    margin:0 15px 70px;
+    padding:45px 25px;
+    min-height:430px;
+  }
+
+  footer{
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="space"></div>
+
+<!-- NAVIGATION -->
+
+<nav>
+
+  <a href="index.html" class="logo">
+    H<span>.</span>
+  </a>
+
+  <ul class="nav-links">
+
+    <li>
+      <a href="index.html">HOME</a>
+    </li>
+
+    <li>
+      <a href="web-development.html">WEB DEVELOPMENT</a>
+    </li>
+
+    <li>
+      <a href="about.html">ABOUT</a>
+    </li>
+
+  </ul>
+
+</nav>
+
+
+<!-- HERO -->
+
+<main>
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <span class="eyebrow">
+      MICROSCOPY · SCIENCE · LIFE
+    </span>
+
+    <h1>
+      Life at the<br>
+      <span>smallest scale.</span>
+    </h1>
+
+    <p>
+      Microscopy opens a window into worlds that cannot be seen
+      with the naked eye — from cells and tissues to microscopic
+      structures that reveal the complexity of life.
+    </p>
+
+    <a href="#explore" class="hero-button">
+      Explore Microscopy
+      <span>↓</span>
+    </a>
+
+  </div>
+
+
+  <!-- CELL VISUAL -->
+
+  <div class="cell-area">
+
+    <div class="cell-glow"></div>
+
+    <div class="cell">
+      <div class="nucleus"></div>
+    </div>
+
+    <div class="cell-ring one"></div>
+    <div class="cell-ring two"></div>
+    <div class="cell-ring three"></div>
+
+  </div>
+
+</section>
+
+
+<!-- INTRO -->
+
+<section class="section" id="explore">
+
+  <div class="label">
+    EXPLORING THE INVISIBLE
+  </div>
+
+  <h2 class="title">
+    Look closer.<br>
+    <span>See more.</span>
+  </h2>
+
+  <p class="description">
+    Microscopy allows scientists to investigate structures far
+    smaller than the human eye can resolve. It connects what we
+    observe at the visible scale with the hidden architecture
+    of biological systems.
+  </p>
+
+
+  <div class="cards">
+
+    <article class="card">
+
+      <div class="card-number">01 / CELLS</div>
+
+      <h3>Cells</h3>
+
+      <p>
+        The fundamental units of life. Microscopy reveals their
+        shapes, internal structures and interactions.
+      </p>
+
+    </article>
+
+
+    <article class="card">
+
+      <div class="card-number">02 / TISSUES</div>
+
+      <h3>Tissues</h3>
+
+      <p>
+        Groups of specialized cells organized together to perform
+        specific functions in living organisms.
+      </p>
+
+    </article>
+
+
+    <article class="card">
+
+      <div class="card-number">03 / MICROSTRUCTURES</div>
+
+      <h3>Microstructures</h3>
+
+      <p>
+        Tiny biological structures can reveal patterns and
+        relationships invisible at ordinary scale.
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- TYPES -->
+
+<section class="section">
+
+  <div class="label">
+    SEEING THE UNSEEN
+  </div>
+
+  <h2 class="title">
+    Different tools.<br>
+    <span>Different worlds.</span>
+  </h2>
+
+  <p class="description">
+    Different microscopy techniques allow scientists to observe
+    different properties of matter and biological structures.
+  </p>
+
+
+  <div class="microscopy-types">
+
+    <article class="type">
+
+      <h3>Light Microscopy</h3>
+
+      <p>
+        Uses visible light and lenses to magnify specimens.
+        It is widely used for observing cells, tissues and
+        microorganisms.
+      </p>
+
+    </article>
+
+
+    <article class="type">
+
+      <h3>Electron Microscopy</h3>
+
+      <p>
+        Uses electrons instead of visible light to achieve
+        much higher resolution and reveal extremely small
+        structures.
+      </p>
+
+    </article>
+
+
+    <article class="type">
+
+      <h3>Fluorescence Microscopy</h3>
+
+      <p>
+        Uses fluorescent molecules to highlight selected
+        structures, making specific components easier to study.
+      </p>
+
+    </article>
+
+
+    <article class="type">
+
+      <h3>Microscopy & Medicine</h3>
+
+      <p>
+        Microscopy supports medical research, pathology,
+        microbiology and the study of disease at the cellular
+        level.
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- FEATURE -->
+
+<section class="section">
+
+  <div class="feature">
+
+    <div class="feature-content">
+
+      <div class="label">
+        THE CELLULAR WORLD
+      </div>
+
+      <h2>
+        A tiny structure can tell<br>
+        <span>a huge story.</span>
+      </h2>
+
+      <p>
+        From the organization of cells to the architecture of
+        tissues, microscopy helps us understand how biological
+        systems are structured and how their components work
+        together.
+      </p>
+
+    </div>
+
+    <div class="mini-cell"></div>
+
+  </div>
+
+</section>
+
+
+<!-- QUOTE -->
+
+<section class="quote">
+
+  <div class="quote-line"></div>
+
+  <h2>
+    “To understand life,<br>
+    <span>look closer.</span>”
+  </h2>
+
+</section>
+
+
+<!-- FINAL CTA -->
+
+<section class="cta">
+
+  <div class="label">
+    KEEP EXPLORING
+  </div>
+
+  <h2>
+    The smaller<br>
+    <span>the world,</span><br>
+    the deeper the questions.
+  </h2>
+
+  <p>
+    Microscopy is more than magnification. It is a way of
+    asking better questions about the structure, organization
+    and complexity of life.
+  </p>
+
+  <a href="index.html" class="cta-button">
+    Back to Main Portfolio →
+  </a>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+  <div>
+    © 2026 <span>Mohd Husain Farooqui</span>
+  </div>
+
+  <div>
+    MICROSCOPY · SCIENCE
+  </div>
+
+</footer>
+
+
+<!-- PAGE TRANSITION -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  requestAnimationFrame(() => {
+    document.body.classList.add("page-loaded");
+  });
+
+  document.querySelectorAll('a[href]').forEach(link => {
+
+    const href = link.getAttribute("href");
+
+    if(
+      !href ||
+      href.startsWith("#") ||
+      href.startsWith("http") ||
+      href.startsWith("mailto:") ||
+      link.target === "_blank"
+    ){
+      return;
+    }
+
+    link.addEventListener("click", e => {
+
+      e.preventDefault();
+
+      document.body.classList.remove("page-loaded");
+      document.body.classList.add("page-exit");
+
+      setTimeout(() => {
+        window.location.href = href;
+      },500);
+
+    });
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
