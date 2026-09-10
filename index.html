@@ -1069,6 +1069,148 @@ footer{position:relative;z-index:1;overflow:hidden}
 }
 </style>
 </section>
+  <!-- ABOUT CTA -->
+<section class="about-cta">
+
+  <div class="about-cta-content">
+
+    <span class="about-cta-label">ABOUT MYSELF</span>
+
+    <h2>
+      Know the person<br>
+      <span>behind the work.</span>
+    </h2>
+
+    <p>
+      Explore my journey, interests, goals and the ideas
+      shaping my path as a researcher and future doctor.
+    </p>
+
+    <a href="about.html" class="about-cta-button">
+      Explore About Myself
+      <span>→</span>
+    </a>
+
+  </div>
+
+</section>
+
+<style>
+.about-cta{
+  max-width:1200px;
+  min-height:360px;
+  margin:110px auto;
+  padding:70px;
+  border:1px solid rgba(0,229,255,.18);
+  border-radius:30px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(
+      circle at 85% 50%,
+      rgba(0,229,255,.12),
+      transparent 35%
+    ),
+    rgba(255,255,255,.025);
+}
+
+.about-cta::after{
+  content:"H.";
+  position:absolute;
+  right:90px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:12rem;
+  font-weight:500;
+  color:rgba(0,229,255,.035);
+  pointer-events:none;
+}
+
+.about-cta-content{
+  position:relative;
+  z-index:2;
+  max-width:680px;
+}
+
+.about-cta-label{
+  display:block;
+  margin-bottom:20px;
+  color:var(--cyan,#00e5ff);
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.25em;
+}
+
+.about-cta h2{
+  margin:0;
+  color:var(--text-primary,#fff);
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  line-height:1.05;
+  letter-spacing:-.04em;
+  font-weight:500;
+}
+
+.about-cta h2 span{
+  color:var(--cyan,#00e5ff);
+}
+
+.about-cta p{
+  max-width:600px;
+  margin:25px 0 32px;
+  color:rgba(255,255,255,.62);
+  line-height:1.8;
+}
+
+.about-cta-button{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 25px;
+  border:1px solid var(--cyan,#00e5ff);
+  border-radius:50px;
+  color:#fff;
+  text-decoration:none;
+  font-size:.72rem;
+  letter-spacing:.08em;
+  transition:.3s ease;
+}
+
+.about-cta-button:hover{
+  background:rgba(0,229,255,.12);
+  transform:translateY(-3px);
+}
+
+.about-cta-button span{
+  font-size:1.2rem;
+  transition:.3s ease;
+}
+
+.about-cta-button:hover span{
+  transform:translateX(5px);
+}
+
+@media(max-width:700px){
+
+  .about-cta{
+    min-height:440px;
+    margin:70px 15px;
+    padding:45px 25px;
+  }
+
+  .about-cta h2{
+    font-size:2.6rem;
+  }
+
+  .about-cta::after{
+    right:-10px;
+    top:65%;
+    font-size:9rem;
+  }
+
+}
+</style>
 <!-- ABOUT -->
 <section id="about">
   <div class="container">
