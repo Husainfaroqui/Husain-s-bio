@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Anatomy Atlas — Husain Farooqui</title>
+<meta name="description" content="An interactive human anatomy learning atlas covering the nervous, skeletal, cardiovascular, respiratory, digestive, urinary, endocrine, lymphatic, reproductive and integumentary systems, with regional anatomy, clinical correlations and a self-test quiz.">
+ 
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Josefin+Sans:wght@100;200;300;400&display=swap");
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root{
+  --bg:            #0c0f11;
+  --bg-raised:     #12161a;
+  --bg-panel:      #161b1f;
+  --bg-panel-2:    #1b2126;
+  --line:          rgba(210,220,225,0.10);
+  --line-strong:   rgba(210,220,225,0.18);
+  --ink:           #e9eef0;
+  --ink-dim:       #aeb9bd;
+  --ink-faint:     #77848a;
+  --teal:          #5fb8b0;
+  --teal-dim:      #3a8f89;
+  --teal-glow:     rgba(95,184,176,0.14);
+  --blue:          #6f96c7;
+  --clinical-red:  #b5544c;
+  --clinical-bg:   rgba(181,84,76,0.10);
+  --amber:         #c9a15a;
+  --radius-s:      3px;
+  --radius-m:      6px;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans:  "Josefin Sans", sans-serif;
+  --mono:  "DM Mono", monospace;
+  --maxw:  1200px;
+}
+ 
+@font-face{ font-family:"Source Serif 4"; src:local("Source Serif 4"); }
+@font-face{ font-family:"IBM Plex Sans"; src:local("IBM Plex Sans"); }
+ 
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; scroll-padding-top:74px; }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; }
+h1,h2,h3,h4,h5{ font-family:var(--serif); font-weight:600; margin:0 0 .5em; color:var(--ink); }
+p{ margin:0 0 1em; color:var(--ink-dim); max-width:72ch; }
+ul,ol{ color:var(--ink-dim); padding-left:1.25em; }
+li{ margin-bottom:.35em; }
+table{ border-collapse:collapse; width:100%; font-size:.92em; }
+th,td{ text-align:left; padding:.55em .7em; border-bottom:1px solid var(--line); vertical-align:top; }
+th{ color:var(--ink); font-family:var(--sans); font-weight:600; font-size:.82em; letter-spacing:.02em; }
+td{ color:var(--ink-dim); }
+button{ font-family:inherit; }
+:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+.table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius-m); margin:1em 0 1.4em; }
+.table-wrap table{ min-width:520px; margin:0; }
+.table-wrap th,.table-wrap td{ border-bottom:1px solid var(--line); }
+ 
+/* ---------- layout shells ---------- */
+.wrap{ max-width:var(--maxw); margin:0 auto; padding:0 6vw; }
+.skip-link{ position:absolute; left:-999px; top:0; background:var(--teal); color:#04201d; padding:.6em 1em; z-index:200; border-radius:var(--radius-s); }
+.skip-link:focus{ left:16px; top:16px; }
+ 
+/* ---------- top nav ---------- */
+.topnav{
+  position:sticky; top:0; z-index:100;
+  background:rgba(12,15,17,0.88); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topnav .wrap{ max-width:none; display:flex; align-items:center; justify-content:space-between; height:70px; padding:0 6vw; gap:20px; }
+.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+.brand-mark{ width:26px; height:26px; flex:0 0 auto; color:var(--teal); }
+.brand-text{ font-family:var(--serif); font-size:1.3rem; font-weight:500; color:var(--ink); line-height:1.15; }
+.brand-text small{ display:block; font-family:var(--sans); font-size:.65rem; font-weight:300; letter-spacing:.16em; color:var(--ink-faint); margin-top:2px; }
+.nav-links{ display:flex; align-items:center; gap:1.8rem; list-style:none; margin:0; padding:0; }
+.nav-links a{
+  position:relative; display:block; padding:0; text-decoration:none; color:var(--ink-dim);
+  font-family:var(--sans); font-size:.66rem; font-weight:300; letter-spacing:.16em;
+  text-transform:uppercase; transition:color .3s;
+}
+.nav-links a:hover,.nav-links a.current{ color:var(--teal); }
+.nav-links a::after{ content:""; position:absolute; bottom:-4px; left:0; right:0; height:1px; background:var(--teal); transform:scaleX(0); transition:transform .3s; }
+.nav-links a:hover::after,.nav-links a.current::after{ transform:scaleX(1); }
+.nav-toggle{
+  display:none; background:none; border:1px solid var(--line-strong); color:var(--ink);
+  width:38px; height:38px; border-radius:var(--radius-s); cursor:pointer;
+}
+.nav-toggle svg{ width:18px; height:18px; }
+ 
+/* ---------- breadcrumb ---------- */
+.breadcrumb-bar{
+  position:sticky; top:70px; z-index:90; background:var(--bg); border-bottom:1px solid var(--line);
+  font-family:var(--mono); font-size:.74rem; color:var(--ink-faint); letter-spacing:.01em;
+}
+.breadcrumb-bar .wrap{ padding-top:9px; padding-bottom:9px; display:flex; gap:6px; align-items:center; overflow-x:auto; white-space:nowrap; }
+.breadcrumb-bar span.sep{ color:var(--ink-faint); opacity:.5; }
+.breadcrumb-bar span.cur{ color:var(--teal); }
+ 
+/* ---------- hero ---------- */
+.hero{ padding:52px 0 30px; border-bottom:1px solid var(--line); }
+.hero-top{ display:flex; justify-content:space-between; gap:40px; flex-wrap:wrap; align-items:flex-end; }
+.hero h1{ font-family:var(--serif); font-size:clamp(2.2rem,5vw,3.8rem); font-weight:300; line-height:1.1; max-width:14ch; }
+.hero .lede{ font-family:var(--serif); font-size:1.1rem; font-weight:300; line-height:1.4; color:var(--ink-dim); max-width:44ch; margin-top:.3em; }
+.hero-meta{ font-family:var(--mono); font-size:.76rem; color:var(--ink-faint); text-align:right; line-height:1.8; }
+.hero-meta b{ color:var(--teal); font-weight:600; }
+ 
+.search-panel{ margin-top:30px; background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius-m); padding:18px; }
+.search-row{ display:flex; gap:10px; }
+.search-row input{
+  flex:1; background:var(--bg); border:1px solid var(--line-strong); color:var(--ink);
+  padding:.75em 1em; border-radius:var(--radius-s); font-size:.98rem; font-family:var(--sans);
+}
+.search-row input::placeholder{ color:var(--ink-faint); }
+.search-row button{
+  background:var(--teal); color:#052321; border:none; padding:0 1.3em; border-radius:var(--radius-s);
+  cursor:pointer; font-family:var(--sans); font-weight:300; font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+}
+.search-hints{ margin-top:10px; font-size:.8rem; color:var(--ink-faint); display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.search-hints button{
+  background:none; border:1px solid var(--line-strong); color:var(--ink-dim); font-size:.78rem;
+  padding:.3em .7em; border-radius:20px; cursor:pointer;
+}
+.search-hints button:hover{ border-color:var(--teal); color:var(--teal); }
+#search-results{ margin-top:14px; display:none; border-top:1px solid var(--line); padding-top:12px; }
+#search-results.active{ display:block; }
+.sr-item{ display:block; padding:.6em .5em; border-radius:var(--radius-s); text-decoration:none; }
+.sr-item:hover{ background:var(--bg-panel-2); }
+.sr-item .sr-title{ color:var(--ink); font-weight:600; font-size:.94rem; }
+.sr-item .sr-path{ color:var(--teal); font-family:var(--mono); font-size:.72rem; }
+.sr-item .sr-snip{ color:var(--ink-faint); font-size:.82rem; margin-top:2px; }
+.sr-empty{ color:var(--ink-faint); font-size:.88rem; padding:.4em; }
+ 
+/* quick-select grids */
+.quick-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; margin-top:14px; }
+.quick-card{
+  display:flex; align-items:center; gap:10px; background:var(--bg-panel); border:1px solid var(--line);
+  border-radius:var(--radius-m); padding:.8em .9em; text-decoration:none; transition:border-color .15s, transform .15s;
+}
+.quick-card:hover{ border-color:var(--teal-dim); transform:translateY(-1px); }
+.quick-card .qc-ico{ color:var(--teal); flex:0 0 auto; width:20px; height:20px; }
+.quick-card .qc-txt b{ display:block; color:var(--ink); font-size:.88rem; font-weight:600; }
+.quick-card .qc-txt span{ color:var(--ink-faint); font-size:.74rem; }
+ 
+.section-label{
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; color:var(--teal);
+  display:flex; align-items:center; gap:.6em; margin-bottom:.7em;
+}
+.section-label::after{ content:""; flex:1; height:1px; background:var(--line); }
+ 
+/* ---------- utility strip (recently viewed / DYK) ---------- */
+.strip{ padding:34px 0; border-bottom:1px solid var(--line); }
+.strip-grid{ display:grid; grid-template-columns:1.3fr 1fr; gap:26px; }
+@media(max-width:820px){ .strip-grid{ grid-template-columns:1fr; } }
+.dyk-card{ background:linear-gradient(160deg,var(--bg-panel),var(--bg-panel-2)); border:1px solid var(--line); border-radius:var(--radius-m); padding:1.2em 1.3em; }
+.dyk-card .dyk-label{ font-family:var(--mono); font-size:.7rem; color:var(--amber); letter-spacing:.04em; margin-bottom:.5em; }
+.dyk-card p{ color:var(--ink); font-size:.98rem; margin:0; }
+.recent-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
+.recent-list li a{ display:flex; justify-content:space-between; text-decoration:none; padding:.55em .1em; border-bottom:1px solid var(--line); color:var(--ink-dim); font-size:.88rem; }
+.recent-list li a:hover{ color:var(--teal); }
+.recent-empty{ color:var(--ink-faint); font-size:.85rem; }
+ 
+/* ---------- filters ---------- */
+.filter-bar{ position:sticky; top:calc(70px + 37px); z-index:80; background:var(--bg); border-bottom:1px solid var(--line); padding:14px 0; }
+.filter-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.filter-row .fr-label{ font-family:var(--mono); font-size:.72rem; color:var(--ink-faint); margin-right:4px; }
+.pill{
+  background:var(--bg-panel); border:1px solid var(--line-strong); color:var(--ink-dim);
+  font-size:.8rem; padding:.4em .85em; border-radius:20px; cursor:pointer; white-space:nowrap;
+}
+.pill[aria-pressed="true"]{ background:var(--teal-glow); border-color:var(--teal-dim); color:var(--teal); }
+ 
+/* ---------- system module ---------- */
+.system{ padding:56px 0; border-bottom:1px solid var(--line); scroll-margin-top:150px; }
+.system.hidden-by-filter{ display:none; }
+.system-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px; margin-bottom:26px; flex-wrap:wrap; }
+.system-head h2{ font-size:clamp(2.2rem,5vw,3.8rem); font-weight:300; line-height:1.1; margin-bottom:.15em; }
+.system-tags{ display:flex; gap:6px; flex-wrap:wrap; }
+.tag{ font-family:var(--mono); font-size:.68rem; color:var(--ink-faint); border:1px solid var(--line-strong); border-radius:20px; padding:.25em .7em; }
+.tag.tag-region{ color:var(--blue); border-color:rgba(111,150,199,.35); }
+.bookmark-btn{
+  background:var(--bg-panel); border:1px solid var(--line-strong); color:var(--ink-dim); border-radius:var(--radius-s);
+  padding:.5em .9em; font-size:.8rem; cursor:pointer; display:flex; align-items:center; gap:6px; height:fit-content;
+}
+.bookmark-btn[aria-pressed="true"]{ color:var(--amber); border-color:rgba(201,161,90,.5); }
+.bookmark-btn svg{ width:14px; height:14px; }
+.system-intro{ font-size:1.02rem; color:var(--ink-dim); max-width:76ch; }
+ 
+/* structure block */
+.structure{ margin-top:38px; padding-top:34px; border-top:1px dashed var(--line); scroll-margin-top:150px; }
+.structure:first-of-type{ border-top:none; padding-top:0; margin-top:26px; }
+.structure-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+.structure-head h3{ font-size:1.25rem; font-weight:400; }
+.structure-head .syn{ font-size:.82rem; color:var(--ink-faint); font-style:italic; }
+ 
+.media-grid{ display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:22px; margin-bottom:22px; }
+@media(max-width:880px){ .media-grid{ grid-template-columns:1fr; } }
+ 
+.figure{ background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius-m); overflow:hidden; }
+.figure-frame{ position:relative; background:#05070a; display:flex; align-items:center; justify-content:center; min-height:220px; }
+.figure-frame img{ width:100%; height:auto; max-height:420px; object-fit:contain; cursor:zoom-in; background:#e9e6dc; }
+.figure-frame .placeholder{
+  padding:40px 20px; text-align:center; color:var(--ink-faint); font-size:.85rem; font-family:var(--mono);
+  border:1px dashed var(--line-strong); margin:16px; border-radius:var(--radius-s); width:calc(100% - 32px);
+}
+.figure-controls{ position:absolute; top:8px; right:8px; display:flex; gap:6px; }
+.fig-btn{
+  background:rgba(10,13,15,0.75); border:1px solid var(--line-strong); color:var(--ink);
+  width:30px; height:30px; border-radius:var(--radius-s); cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.fig-btn svg{ width:15px; height:15px; }
+.figure-tabs{ display:flex; gap:4px; padding:8px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.figure-tabs button{
+  background:none; border:1px solid var(--line); color:var(--ink-faint); font-size:.72rem; padding:.35em .7em;
+  border-radius:20px; cursor:pointer;
+}
+.figure-tabs button[aria-pressed="true"]{ color:var(--teal); border-color:var(--teal-dim); background:var(--teal-glow); }
+.figure-caption{ padding:12px 14px; }
+.figure-caption .cap-text{ font-size:.86rem; color:var(--ink-dim); margin-bottom:4px; }
+.figure-caption .cap-src{ font-size:.7rem; color:var(--ink-faint); font-family:var(--mono); }
+.figure-caption .cap-src a{ color:var(--teal); text-decoration:none; }
+ 
+.id-panel{ background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius-m); padding:16px 18px; }
+.id-panel h4{ font-size:.72rem; font-family:var(--mono); letter-spacing:.05em; color:var(--ink-faint); margin-bottom:.8em; }
+.id-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; max-height:380px; overflow-y:auto; }
+.id-list li{ display:flex; gap:10px; align-items:baseline; font-size:.86rem; }
+.id-list .id-dot{ width:8px; height:8px; border-radius:50%; background:var(--teal); flex:0 0 auto; margin-top:5px; }
+.id-list b{ color:var(--ink); font-weight:600; }
+.id-list .id-desc{ color:var(--ink-faint); }
+ 
+.sub-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-top:4px; }
+@media(max-width:760px){ .sub-grid{ grid-template-columns:1fr; } }
+.subsec{ }
+.subsec h4{
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.06em; color:var(--teal);
+  text-transform:uppercase; margin-bottom:.6em;
+}
+.subsec.full{ grid-column:1/-1; }
+ 
+.callout{ border-left:3px solid var(--teal-dim); background:rgba(95,184,176,0.06); border-radius:0 var(--radius-s) var(--radius-s) 0; padding:12px 16px; margin:10px 0 20px; }
+.callout p{ margin:0; color:var(--ink-dim); font-size:.92rem; }
+.clinical{ border-left:3px solid var(--clinical-red); background:var(--clinical-bg); border-radius:0 var(--radius-s) var(--radius-s) 0; padding:14px 18px; margin:16px 0 20px; }
+.clinical h4{ color:var(--clinical-red) !important; }
+.clinical p,.clinical li{ color:var(--ink-dim); }
+.dyk{ background:rgba(201,161,90,0.07); border:1px solid rgba(201,161,90,0.25); border-radius:var(--radius-m); padding:12px 16px; margin:16px 0; }
+.dyk h4{ color:var(--amber) !important; }
+.dyk p{ margin:0; color:var(--ink-dim); font-size:.9rem; }
+.hiyield{ background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius-m); padding:14px 18px; margin-top:18px; }
+.hiyield h4{ margin-bottom:.5em; }
+.hiyield ul{ margin:0; columns:2; column-gap:24px; }
+.hiyield li{ font-size:.87rem; break-inside:avoid; }
+@media(max-width:640px){ .hiyield ul{ columns:1; } }
+ 
+details.expand{ border:1px solid var(--line); border-radius:var(--radius-m); margin-top:12px; overflow:hidden; }
+details.expand summary{
+  cursor:pointer; padding:.85em 1.1em; font-family:var(--serif); font-weight:600; color:var(--ink);
+  list-style:none; display:flex; justify-content:space-between; align-items:center; background:var(--bg-panel);
+}
+details.expand summary::-webkit-details-marker{ display:none; }
+details.expand summary::after{ content:"+"; color:var(--teal); font-size:1.2rem; }
+details.expand[open] summary::after{ content:"–"; }
+details.expand .expand-body{ padding:1em 1.1em 1.3em; }
+ 
+/* ---------- region explorer ---------- */
+.region-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; margin-top:20px; }
+.region-card{ background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius-m); padding:18px 20px; }
+.region-card h3{ font-size:1.08rem; margin-bottom:.3em; }
+.region-card .region-sub{ font-size:.76rem; color:var(--teal); font-family:var(--mono); margin-bottom:.7em; display:block; }
+.region-card ul{ margin:0; padding-left:1.1em; font-size:.86rem; }
+ 
+/* ---------- imaging ---------- */
+.imaging-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-top:18px; }
+.imaging-card{ background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius-m); overflow:hidden; }
+.imaging-card .placeholder{ min-height:150px; display:flex; align-items:center; justify-content:center; color:var(--ink-faint); font-family:var(--mono); font-size:.78rem; text-align:center; padding:16px; }
+.imaging-card .imaging-body{ padding:12px 14px; }
+.imaging-card h4{ font-size:.92rem; margin-bottom:.3em; }
+.imaging-card p{ font-size:.82rem; margin:0; }
+ 
+/* ---------- quiz ---------- */
+.quiz-shell{ background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius-m); padding:26px; margin-top:20px; }
+.quiz-progress{ font-family:var(--mono); font-size:.75rem; color:var(--ink-faint); margin-bottom:14px; display:flex; justify-content:space-between; }
+.quiz-bar{ height:3px; background:var(--line); border-radius:3px; overflow:hidden; margin-bottom:22px; }
+.quiz-bar-fill{ height:100%; background:var(--teal); width:0%; transition:width .3s; }
+.quiz-q-media{ margin-bottom:16px; border-radius:var(--radius-s); overflow:hidden; border:1px solid var(--line); background:#05070a;}
+.quiz-q-media img{ max-height:280px; margin:0 auto; }
+.quiz-question{ font-size:1.1rem; color:var(--ink); margin-bottom:16px; font-family:var(--serif); }
+.quiz-options{ display:flex; flex-direction:column; gap:8px; }
+.quiz-opt{
+  text-align:left; background:var(--bg); border:1px solid var(--line-strong); color:var(--ink-dim);
+  padding:.8em 1em; border-radius:var(--radius-s); cursor:pointer; font-size:.94rem;
+}
+.quiz-opt:hover{ border-color:var(--teal-dim); }
+.quiz-opt.correct{ border-color:var(--teal); background:rgba(95,184,176,0.12); color:var(--ink); }
+.quiz-opt.incorrect{ border-color:var(--clinical-red); background:rgba(181,84,76,0.12); color:var(--ink); }
+.quiz-opt[disabled]{ cursor:default; }
+.quiz-explain{ margin-top:16px; padding:14px 16px; background:var(--bg); border-radius:var(--radius-s); border:1px solid var(--line); display:none; }
+.quiz-explain.show{ display:block; }
+.quiz-explain b{ color:var(--teal); }
+.quiz-nav{ margin-top:18px; display:flex; justify-content:space-between; align-items:center; }
+.btn{ background:var(--teal); color:#052321; border:none; padding:.7em 1.3em; border-radius:var(--radius-s); font-weight:600; cursor:pointer; font-size:.9rem; }
+.btn:disabled{ opacity:.4; cursor:not-allowed; }
+.btn.secondary{ background:none; border:1px solid var(--line-strong); color:var(--ink-dim); }
+.quiz-score{ text-align:center; padding:20px 0; }
+.quiz-score .score-num{ font-family:var(--serif); font-size:3rem; color:var(--teal); }
+ 
+/* ---------- lightbox ---------- */
+.lightbox{ position:fixed; inset:0; background:rgba(6,8,9,0.94); z-index:300; display:none; align-items:center; justify-content:center; padding:40px 20px; }
+.lightbox.active{ display:flex; }
+.lightbox img{ max-width:100%; max-height:82vh; object-fit:contain; border-radius:var(--radius-s); background:#e9e6dc; }
+.lightbox-cap{ position:absolute; bottom:24px; left:0; right:0; text-align:center; color:var(--ink-dim); font-size:.85rem; padding:0 20px; }
+.lightbox-close{
+  position:absolute; top:20px; right:24px; background:var(--bg-panel); border:1px solid var(--line-strong);
+  color:var(--ink); width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+ 
+/* ---------- footer ---------- */
+footer{ padding:48px 0 70px; }
+.footer-grid{ display:grid; grid-template-columns:2fr 1fr; gap:40px; }
+@media(max-width:760px){ .footer-grid{ grid-template-columns:1fr; } }
+footer h4{ font-size:.82rem; font-family:var(--mono); color:var(--ink-faint); letter-spacing:.04em; margin-bottom:.7em; }
+footer p{ font-size:.85rem; }
+.attrib-list{ font-size:.78rem; color:var(--ink-faint); columns:2; column-gap:20px; }
+.attrib-list li{ break-inside:avoid; margin-bottom:.4em; }
+@media(max-width:600px){ .attrib-list{ columns:1; } }
+ 
+/* ---------- back to top ---------- */
+#back-to-top{
+  position:fixed; bottom:22px; right:22px; width:44px; height:44px; border-radius:50%;
+  background:var(--bg-panel); border:1px solid var(--line-strong); color:var(--teal); cursor:pointer;
+  display:none; align-items:center; justify-content:center; z-index:80; box-shadow:0 4px 18px rgba(0,0,0,0.4);
+}
+#back-to-top.show{ display:flex; }
+ 
+/* ---------- responsive nav ---------- */
+@media(max-width:768px){
+  .topnav .wrap{ padding:0 5vw; }
+  .nav-toggle{ display:flex; align-items:center; justify-content:center; }
+  .nav-links{
+    position:absolute; top:70px; left:0; right:0; background:var(--bg-raised); border-bottom:1px solid var(--line);
+    flex-direction:column; align-items:stretch; padding:8px; gap:0; display:none;
+  }
+  .nav-links.open{ display:flex; }
+  .nav-links a{ padding:.9em 1em; }
+  .hero-meta{ display:none; }
+  .breadcrumb-bar{ top:70px; }
+  .filter-bar{ position:static; }
+}
+@media(max-width:480px){
+  .wrap{ padding:0 6vw; }
+}
+ 
+.visually-hidden{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+</style>
+</head>
+<body>
+ 
+<a class="skip-link" href="#main">Skip to content</a>
+ 
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<header class="topnav">
+  <div class="wrap">
+    <a class="brand" href="anatomy.html">
+      <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21c-3.5-2-6-5.2-6-9.2C6 7.8 8.7 4 12 4s6 3.8 6 7.8c0 4-2.5 7.2-6 9.2Z"/><path d="M12 4v17M8.5 9.5c1 1 2.2 1.5 3.5 1.5s2.5-.5 3.5-1.5M8 14c1.2.8 2.5 1.2 4 1.2s2.8-.4 4-1.2"/></svg>
+      <span class="brand-text">Husain Farooqui<small>Anatomy Atlas</small></span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle navigation menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="microscopy.html">Microscopy</a></li>
+      <li><a href="anatomy.html" class="current" aria-current="page">Anatomy</a></li>
+    </ul>
+  </div>
+</header>
+ 
+<nav class="breadcrumb-bar" aria-label="Breadcrumb">
+  <div class="wrap">
+    <a href="anatomy.html">Atlas</a><span class="sep">/</span><span class="cur" id="breadcrumbCurrent">Overview</span>
+  </div>
+</nav>
+ 
+<main id="main">
+ 
+<!-- ============================================================
+     HERO + SEARCH
+     ============================================================ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <h1>Human Anatomy Atlas</h1>
+        <p class="lede">Explore the structure, relationships and function of the human body.</p>
+      </div>
+      <div class="hero-meta">
+        <div><b id="statStructures">—</b> indexed structures</div>
+        <div><b>12</b> organ systems · <b>7</b> body regions</div>
+        <div>Terminologia Anatomica &amp; common synonyms</div>
+      </div>
+    </div>
+ 
+    <div class="search-panel">
+      <div class="search-row">
+        <label for="atlasSearch" class="visually-hidden">Search anatomy</label>
+        <input type="text" id="atlasSearch" placeholder="Search a structure — e.g. hippocampus, femur, SA node, portal vein…" autocomplete="off">
+        <button id="searchBtn" type="button">Search</button>
+      </div>
+      <div class="search-hints">
+        <span>Try:</span>
+        <button type="button" class="qsearch">brain</button>
+        <button type="button" class="qsearch">frontal lobe</button>
+        <button type="button" class="qsearch">femur</button>
+        <button type="button" class="qsearch">SA node</button>
+        <button type="button" class="qsearch">nephron</button>
+        <button type="button" class="qsearch">portal vein</button>
+        <button type="button" class="qsearch">brachial plexus</button>
+        <button type="button" class="qsearch">diaphragm</button>
+      </div>
+      <div id="search-results" role="region" aria-live="polite"></div>
+    </div>
+ 
+    <div class="section-label" style="margin-top:30px;">SYSTEMS</div>
+    <div class="quick-grid" id="systemQuickNav"></div>
+ 
+    <div class="section-label" style="margin-top:26px;">REGIONS</div>
+    <div class="quick-grid" id="regionQuickNav"></div>
+  </div>
+</section>
+ 
+<!-- ============================================================
+     DID YOU KNOW + RECENTLY VIEWED
+     ============================================================ -->
+<section class="strip">
+  <div class="wrap strip-grid">
+    <div class="dyk-card">
+      <div class="dyk-label">DID YOU KNOW?</div>
+      <p id="dykRotator">Loading…</p>
+    </div>
+    <div>
+      <div class="dyk-card" style="background:var(--bg-panel);">
+        <div class="dyk-label" style="color:var(--teal);">RECENTLY VIEWED</div>
+        <ul class="recent-list" id="recentList"><li class="recent-empty">Structures you open will appear here.</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ============================================================
+     FILTER BAR
+     ============================================================ -->
+<div class="filter-bar">
+  <div class="wrap">
+    <div class="filter-row">
+      <span class="fr-label">FILTER</span>
+      <button class="pill" data-filter="all" aria-pressed="true">All</button>
+      <button class="pill" data-filter="system:nervous" aria-pressed="false">Nervous</button>
+      <button class="pill" data-filter="system:skeletal" aria-pressed="false">Skeletal</button>
+      <button class="pill" data-filter="system:muscular" aria-pressed="false">Muscular</button>
+      <button class="pill" data-filter="system:cardiovascular" aria-pressed="false">Cardiovascular</button>
+      <button class="pill" data-filter="system:respiratory" aria-pressed="false">Respiratory</button>
+      <button class="pill" data-filter="system:digestive" aria-pressed="false">Digestive</button>
+      <button class="pill" data-filter="system:urinary" aria-pressed="false">Urinary</button>
+      <button class="pill" data-filter="system:endocrine" aria-pressed="false">Endocrine</button>
+      <button class="pill" data-filter="system:lymphatic" aria-pressed="false">Lymphatic</button>
+      <button class="pill" data-filter="system:reproductive" aria-pressed="false">Reproductive</button>
+      <button class="pill" data-filter="system:integumentary" aria-pressed="false">Integumentary</button>
+      <button class="pill" data-filter="system:senses" aria-pressed="false">Special senses</button>
+      <button class="pill" data-filter="system:regional" aria-pressed="false">Regional</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ============================================================================================
+     NERVOUS SYSTEM — BRAIN (PRIORITY MODULE)
+     ============================================================================================ -->
+<section class="system" id="sys-nervous" data-system="nervous">
+  <div class="wrap">
+    <div class="system-head">
+      <div>
+        <h2>Nervous System — The Brain</h2>
+        <div class="system-tags"><span class="tag">CNS</span><span class="tag">Neuroanatomy</span></div>
+      </div>
+      <button class="bookmark-btn" data-bookmark="sys-nervous" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>
+        Bookmark
+      </button>
+    </div>
+    <p class="system-intro">The nervous system coordinates and regulates body activity through electrical and chemical signalling. It is divided into the <b>central nervous system</b> (brain and spinal cord) and <b>peripheral nervous system</b> (cranial nerves, spinal nerves, and their ganglia). The brain is the most information-dense structure in the body, so it anchors this atlas — the sections below move from the cerebral surface inward to the ventricles, vasculature, and meninges.</p>
+ 
+    <!-- STRUCTURE: Cerebral hemispheres & lobes -->
+    <article class="structure" id="cerebral-lobes" data-search-title="Cerebral hemispheres and lobes" data-search-terms="cerebrum cerebral cortex gyri sulci frontal parietal temporal occipital insula central sulcus lateral sulcus longitudinal fissure precentral postcentral gyrus">
+      <div class="structure-head"><h3>Cerebral Hemispheres &amp; Lobes</h3></div>
+ 
+      <div class="media-grid">
+        <figure class="figure">
+          <div class="figure-tabs" data-figure-group="lobes">
+            <button type="button" aria-pressed="true" data-view="lateral">Lateral</button>
+            <button type="button" aria-pressed="false" data-view="medial">Medial</button>
+          </div>
+          <div class="figure-frame">
+            <img data-view-img="lateral" src="https://commons.wikimedia.org/wiki/Special:FilePath/Gray728.svg" alt="Lateral view of the cerebral hemisphere showing the frontal, parietal, temporal and occipital lobes separated by the central and lateral sulci, after Gray's Anatomy plate 728." loading="lazy">
+            <img data-view-img="medial" style="display:none;" src="https://commons.wikimedia.org/wiki/Special:FilePath/Gray727.png" alt="Medial (sagittal) view of the cerebral hemisphere and brainstem, after Gray's Anatomy plate 727." loading="lazy">
+            <div class="figure-controls">
+              <button class="fig-btn" data-zoom aria-label="Zoom image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M9 11h4M11 9v4"/></svg></button>
+              <button class="fig-btn" data-fullscreen aria-label="Fullscreen image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+            </div>
+          </div>
+          <div class="figure-caption">
+            <div class="cap-text" data-cap="lateral">Principal fissures and lobes of the cerebrum, lateral view. Blue tones mark the frontal, parietal, temporal and occipital lobes.</div>
+            <div class="cap-text" data-cap="medial" style="display:none;">Medial surface of the cerebral hemisphere with the corpus callosum, cingulate gyrus and brainstem visible in sagittal section.</div>
+            <div class="cap-src">Image source: Gray's Anatomy of the Human Body (1918), 20th U.S. ed. — public domain (US copyright expired). Via Wikimedia Commons.</div>
+          </div>
+        </figure>
+ 
+        <div class="id-panel">
+          <h4>KEY LANDMARKS</h4>
+          <ul class="id-list">
+            <li><span class="id-dot"></span><div><b>Longitudinal fissure</b><div class="id-desc">Deep midline groove separating the right and left cerebral hemispheres.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Central sulcus (of Rolando)</b><div class="id-desc">Separates the frontal lobe from the parietal lobe; marks the boundary between primary motor and primary sensory cortex.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Lateral sulcus (Sylvian fissure)</b><div class="id-desc">Separates the temporal lobe below from the frontal and parietal lobes above; the insula lies buried within it.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Parieto-occipital sulcus</b><div class="id-desc">Marks the boundary between parietal and occipital lobes, best seen medially.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Precentral gyrus</b><div class="id-desc">Immediately anterior to the central sulcus; site of the primary motor cortex.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Postcentral gyrus</b><div class="id-desc">Immediately posterior to the central sulcus; site of the primary somatosensory cortex.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Insula (Island of Reil)</b><div class="id-desc">A fifth lobe hidden beneath the frontal, parietal and temporal opercula.</div></div></li>
+          </ul>
+        </div>
+      </div>
+ 
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>Each cerebral hemisphere has a convex outer surface thrown into folds — <b>gyri</b> — separated by grooves called <b>sulci</b>, an arrangement that triples cortical surface area within the confines of the skull. By convention the cortex is divided into four visible lobes named for the overlying cranial bones (frontal, parietal, temporal, occipital), plus the insula. The <b>frontal lobe</b> extends from the frontal pole to the central sulcus and is concerned with voluntary movement, executive function, expressive language (Broca's area) and personality/judgement. The <b>parietal lobe</b> lies between the central and parieto-occipital sulci and processes somatosensation, spatial orientation and sensory integration. The <b>temporal lobe</b>, inferior to the lateral sulcus, houses the primary auditory cortex, receptive language (Wernicke's area), and — on its medial surface — the hippocampus and amygdala. The <b>occipital lobe</b>, the most posterior lobe, is dominated by the primary visual cortex around the calcarine sulcus.</p>
+        </div>
+        <div class="subsec">
+          <h4>Function</h4>
+          <ul>
+            <li>Frontal — planning, voluntary motor control, expressive speech, judgement, inhibition</li>
+            <li>Parietal — touch, proprioception, spatial awareness, calculation</li>
+            <li>Temporal — hearing, language comprehension, memory encoding, emotion</li>
+            <li>Occipital — visual processing</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Important Relations</h4>
+          <ul>
+            <li><b>Superior:</b> calvarium (skull vault), covered by meninges</li>
+            <li><b>Inferior (frontal lobe):</b> orbital plate, olfactory bulb/tract</li>
+            <li><b>Inferior (temporal lobe):</b> middle cranial fossa, tentorium cerebelli</li>
+            <li><b>Medial:</b> falx cerebri separates the two hemispheres</li>
+            <li><b>Deep to lateral sulcus:</b> insula and middle cerebral artery branches</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Blood Supply</h4>
+          <p>Cortex is supplied by the three cerebral arteries arising from the Circle of Willis: the <b>anterior cerebral artery</b> (medial frontal/parietal cortex — the "leg area" of the motor/sensory homunculus), the <b>middle cerebral artery</b> (lateral surface — face and arm representation, and language areas in the dominant hemisphere), and the <b>posterior cerebral artery</b> (occipital and inferior temporal lobe).</p>
+        </div>
+        <div class="subsec">
+          <h4>Innervation</h4>
+          <p>The cortex itself does not have "innervation" in the peripheral sense; rather, it originates the corticospinal, corticobulbar and corticopontine pathways and receives thalamocortical projections relaying sensory, visual and auditory input to their respective primary cortical areas.</p>
+        </div>
+      </div>
+ 
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>Because the three cerebral arteries supply broadly predictable cortical territories, the pattern of a patient's neurological deficit after a stroke often localises the occluded vessel: contralateral leg-predominant weakness suggests an <b>anterior cerebral artery</b> territory infarct; contralateral face-and-arm weakness with aphasia (if the dominant hemisphere is involved) suggests <b>middle cerebral artery</b> territory; and a contralateral homonymous hemianopia suggests <b>posterior cerebral artery</b> territory. Damage to Broca's area (posterior inferior frontal gyrus) produces non-fluent, effortful speech with preserved comprehension, while damage to Wernicke's area (posterior superior temporal gyrus) produces fluent but nonsensical speech with poor comprehension.</p>
+      </div>
+ 
+      <div class="dyk">
+        <h4>Did You Know?</h4>
+        <p>Cortical folding is not decorative — it is a space-saving solution. If the human cerebral cortex were flattened out, it would cover roughly 2,000–2,500 cm², about the size of a large pizza, yet it fits inside a skull with an internal volume of only around 1,400 cm³ because roughly two-thirds of the cortical surface lies buried within sulci.</p>
+      </div>
+    </article>
+ 
+    <!-- STRUCTURE: Deep structures -->
+    <article class="structure" id="deep-brain-structures" data-search-title="Thalamus, hypothalamus, basal nuclei, limbic system" data-search-terms="thalamus hypothalamus epithalamus basal nuclei basal ganglia corpus callosum internal capsule hippocampus amygdala limbic system">
+      <div class="structure-head"><h3>Diencephalon, Basal Nuclei &amp; Limbic System</h3></div>
+ 
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>Deep to the cortex, the two hemispheres are interconnected by the <b>corpus callosum</b>, the largest commissure in the brain, arching over the diencephalon and lateral ventricles. The <b>diencephalon</b> comprises the <b>thalamus</b> (a paired, egg-shaped mass of grey matter that relays essentially all sensory input — except olfaction — to the cortex), the <b>hypothalamus</b> (below the thalamus, forming the floor and part of the walls of the third ventricle), and the <b>epithalamus</b> (including the pineal gland). The <b>basal nuclei</b> (caudate nucleus, putamen, globus pallidus, subthalamic nucleus and substantia nigra) form subcortical grey-matter loops that modulate movement. The <b>internal capsule</b>, a compact white-matter band between the thalamus/basal nuclei and the lentiform nucleus, carries nearly all ascending and descending fibres connecting cortex to brainstem and spinal cord — a small lesion here can cause a disproportionately large deficit. The <b>limbic system</b> — hippocampus, amygdala, cingulate gyrus, fornix and related structures — forms a functional loop governing memory, emotion and motivation.</p>
+        </div>
+        <div class="subsec">
+          <h4>Function</h4>
+          <ul>
+            <li><b>Thalamus:</b> sensory relay and gating to cortex; some motor relay</li>
+            <li><b>Hypothalamus:</b> autonomic regulation, temperature, hunger/thirst, circadian rhythm, pituitary control via the hypophyseal portal system</li>
+            <li><b>Basal nuclei:</b> initiation and smoothing of voluntary movement, procedural learning</li>
+            <li><b>Hippocampus:</b> consolidation of new declarative (episodic) memories</li>
+            <li><b>Amygdala:</b> fear processing, emotional salience, autonomic/endocrine responses to threat</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Blood Supply</h4>
+          <p>Thalamic perforating branches from the posterior cerebral and posterior communicating arteries; hypothalamus from the circle of Willis directly; basal nuclei chiefly from the lenticulostriate branches of the middle cerebral artery — small, end-artery-like vessels that are a classic site of hypertensive lacunar infarcts and haemorrhage.</p>
+        </div>
+      </div>
+ 
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>Because motor, sensory, visual and cortico-cortical fibres are tightly packed into the small cross-sectional area of the internal capsule, even a lacunar infarct only a centimetre across can produce a dense contralateral hemiparesis affecting face, arm and leg equally — unlike a cortical stroke, which tends to favour one body part over another. Damage to the hippocampus (for example in herpes encephalitis or after prolonged hypoxia) produces anterograde amnesia — an inability to form new long-term memories — while older memories, stored diffusely in cortex, are often relatively spared.</p>
+      </div>
+      <div class="dyk">
+        <h4>Did You Know?</h4>
+        <p>The hippocampus is named for its resemblance to a seahorse (Greek <i>hippokampos</i>) when dissected out of the temporal lobe — the curved shape is easiest to appreciate on a coronal section through the medial temporal lobe.</p>
+      </div>
+    </article>
+ 
+    <!-- STRUCTURE: Cerebellum and brainstem -->
+    <article class="structure" id="cerebellum-brainstem" data-search-title="Cerebellum and brainstem" data-search-terms="cerebellum brainstem midbrain pons medulla oblongata cranial nerves">
+      <div class="structure-head"><h3>Cerebellum &amp; Brainstem</h3></div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>The <b>brainstem</b> connects the cerebrum to the spinal cord and comprises, from rostral to caudal, the <b>midbrain</b> (mesencephalon), <b>pons</b>, and <b>medulla oblongata</b>. It contains the nuclei of cranial nerves III–XII, major ascending and descending tracts, and the reticular formation governing arousal, respiration and cardiovascular tone. The <b>cerebellum</b> sits in the posterior cranial fossa behind the pons and medulla, connected to the brainstem by three paired peduncles (superior, middle, inferior), and consists of two hemispheres joined by a midline vermis.</p>
+        </div>
+        <div class="subsec">
+          <h4>Function</h4>
+          <ul>
+            <li><b>Midbrain:</b> relay for vision/hearing reflexes (superior/inferior colliculi), origin of CN III and IV, contains substantia nigra</li>
+            <li><b>Pons:</b> relay between cerebrum and cerebellum, origin of CN V–VIII, respiratory centres</li>
+            <li><b>Medulla:</b> cardiovascular and respiratory control centres, decussation of pyramids, origin of CN IX–XII</li>
+            <li><b>Cerebellum:</b> coordination, balance, motor learning, fine-tuning of movement timing</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Blood Supply</h4>
+          <p>Vertebrobasilar system: vertebral arteries and their branches (posterior inferior cerebellar artery) supply the medulla; the basilar artery and its branches (anterior inferior cerebellar, superior cerebellar, pontine perforators) supply the pons, midbrain and remaining cerebellum.</p>
+        </div>
+      </div>
+      <div class="callout"><p><b>Cranial nerves overview:</b> I Olfactory · II Optic · III Oculomotor · IV Trochlear · V Trigeminal · VI Abducens · VII Facial · VIII Vestibulocochlear · IX Glossopharyngeal · X Vagus · XI Accessory · XII Hypoglossal. All except I and II attach to the brainstem.</p></div>
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>Because long tracts, cranial nerve nuclei and cerebellar connections are packed closely together in the small cross-section of the brainstem, brainstem strokes classically produce "crossed" syndromes — an ipsilateral cranial nerve deficit combined with a contralateral long-tract (motor or sensory) deficit — which localises the lesion precisely along the brainstem's rostrocaudal axis.</p>
+      </div>
+    </article>
+ 
+    <!-- STRUCTURE: Ventricles, meninges, CSF -->
+    <article class="structure" id="ventricles-meninges" data-search-title="Ventricular system, meninges and CSF circulation" data-search-terms="lateral ventricles third ventricle fourth ventricle cerebral aqueduct dura mater arachnoid mater pia mater cerebrospinal fluid CSF meninges">
+      <div class="structure-head"><h3>Ventricular System, Meninges &amp; CSF Circulation</h3></div>
+ 
+      <div class="media-grid">
+        <figure class="figure">
+          <div class="figure-frame">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gray739.png" alt="Cast of the ventricular cavities viewed from the side, showing the lateral ventricles, third ventricle and fourth ventricle, after Gray's Anatomy plate 739." loading="lazy">
+            <div class="figure-controls">
+              <button class="fig-btn" data-zoom aria-label="Zoom image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M9 11h4M11 9v4"/></svg></button>
+              <button class="fig-btn" data-fullscreen aria-label="Fullscreen image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+            </div>
+          </div>
+          <div class="figure-caption">
+            <div class="cap-text">Cast of the ventricular cavities, lateral view — the two lateral ventricles drain via the interventricular foramina into a single midline third ventricle, then through the cerebral aqueduct into the fourth ventricle.</div>
+            <div class="cap-src">Image source: Gray's Anatomy of the Human Body (1918), 20th U.S. ed. — public domain. Via Wikimedia Commons.</div>
+          </div>
+        </figure>
+        <div class="id-panel">
+          <h4>CSF PATHWAY (IN ORDER)</h4>
+          <ul class="id-list">
+            <li><span class="id-dot"></span><div><b>Lateral ventricles (×2)</b><div class="id-desc">Produced mainly by choroid plexus here.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Interventricular foramina (of Monro)</b></div></li>
+            <li><span class="id-dot"></span><div><b>Third ventricle</b></div></li>
+            <li><span class="id-dot"></span><div><b>Cerebral aqueduct (of Sylvius)</b><div class="id-desc">Narrowest point — common site of obstructive hydrocephalus.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Fourth ventricle</b></div></li>
+            <li><span class="id-dot"></span><div><b>Foramina of Luschka (×2, lateral) &amp; Magendie (midline)</b><div class="id-desc">Exit into subarachnoid space.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Subarachnoid space → arachnoid granulations → dural venous sinuses</b><div class="id-desc">Reabsorbed into venous blood.</div></div></li>
+          </ul>
+        </div>
+      </div>
+ 
+      <div class="sub-grid">
+        <div class="subsec">
+          <h4>Meninges (superficial to deep)</h4>
+          <ul>
+            <li><b>Dura mater</b> — tough outer layer; forms the falx cerebri and tentorium cerebelli; encloses the dural venous sinuses</li>
+            <li><b>Arachnoid mater</b> — delicate middle layer; subarachnoid space beneath it contains CSF and the cerebral vessels</li>
+            <li><b>Pia mater</b> — thin, vascular layer intimately applied to the brain surface, following every gyrus and sulcus</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Function</h4>
+          <p>CSF cushions the brain against mechanical injury, provides buoyancy (effectively reducing the brain's weight from ~1,400 g to about 50 g), removes metabolic waste, and helps maintain a stable chemical environment for neurons.</p>
+        </div>
+      </div>
+ 
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>Obstruction anywhere along the CSF pathway — most classically at the narrow cerebral aqueduct — causes <b>obstructive (non-communicating) hydrocephalus</b>, with dilation of the ventricles upstream of the block. Bleeding into the subarachnoid space (subarachnoid haemorrhage, often from a ruptured berry aneurysm on the Circle of Willis) presents with sudden severe headache and can be sampled at lumbar puncture, performed below the spinal cord's termination (around L1–L2 in adults) to avoid cord injury, in the subarachnoid space of the lumbar cistern.</p>
+      </div>
+    </article>
+ 
+    <!-- STRUCTURE: Cerebral circulation -->
+    <article class="structure" id="cerebral-circulation" data-search-title="Cerebral arterial circulation and venous drainage" data-search-terms="circle of willis internal carotid vertebrobasilar cerebral arteries dural venous sinuses cerebral veins">
+      <div class="structure-head"><h3>Cerebral Circulation</h3></div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Arterial Supply</h4>
+          <p>The brain receives blood from two paired systems that anastomose at the base of the brain to form the <b>Circle of Willis</b>: the <b>internal carotid</b> system anteriorly (giving the anterior and middle cerebral arteries plus the posterior communicating artery) and the <b>vertebrobasilar</b> system posteriorly (the paired vertebral arteries join to form the basilar artery, which terminates as the two posterior cerebral arteries). The circle is completed by the anterior communicating artery joining the two anterior cerebral arteries. This arrangement provides a potential collateral pathway if one feeding vessel is occluded, though the degree of anatomical completeness of the circle varies considerably between individuals.</p>
+        </div>
+        <div class="subsec">
+          <h4>Venous Drainage</h4>
+          <p>Cerebral veins are valveless and drain into a system of <b>dural venous sinuses</b> — the superior and inferior sagittal sinuses, straight sinus, transverse and sigmoid sinuses, and the cavernous sinus — which ultimately empty into the internal jugular veins.</p>
+        </div>
+        <div class="subsec">
+          <h4>High-Yield Facts</h4>
+          <ul>
+            <li>The brain receives ~15% of resting cardiac output despite being ~2% of body weight.</li>
+            <li>The middle cerebral artery is the most commonly occluded vessel in ischaemic stroke.</li>
+            <li>The cavernous sinus is traversed by the internal carotid artery and CN VI, with CN III, IV, V1 and V2 running in its lateral wall.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+ 
+    <div class="hiyield">
+      <h4>Quick Revision — Nervous System</h4>
+      <ul>
+        <li>4 visible lobes + insula per hemisphere</li>
+        <li>Central sulcus = motor/sensory boundary</li>
+        <li>ACA–leg, MCA–face/arm, PCA–vision</li>
+        <li>Thalamus = sensory relay hub</li>
+        <li>Internal capsule = dense motor/sensory bottleneck</li>
+        <li>Basal nuclei fed by lenticulostriate vessels</li>
+        <li>Hippocampus → new memory formation</li>
+        <li>CSF: lateral → 3rd → aqueduct → 4th → subarachnoid space</li>
+        <li>3 meningeal layers: dura, arachnoid, pia</li>
+        <li>Circle of Willis unites carotid + vertebrobasilar systems</li>
+      </ul>
+    </div>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     SKELETAL SYSTEM (PRIORITY MODULE)
+     ============================================================================================ -->
+<section class="system" id="sys-skeletal" data-system="skeletal">
+  <div class="wrap">
+    <div class="system-head">
+      <div>
+        <h2>Skeletal System — Osteology</h2>
+        <div class="system-tags"><span class="tag">206 bones (adult)</span><span class="tag">Osteology</span></div>
+      </div>
+      <button class="bookmark-btn" data-bookmark="sys-skeletal" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>
+        Bookmark
+      </button>
+    </div>
+    <p class="system-intro">The skeleton provides structural support, protects vital organs, enables movement through muscle attachment and lever action, stores calcium and phosphate, and houses the bone marrow responsible for haematopoiesis. An adult skeleton has 206 bones, grouped into the <b>axial skeleton</b> (skull, vertebral column, ribs, sternum) and the <b>appendicular skeleton</b> (limb bones and girdles).</p>
+ 
+    <article class="structure" id="bone-microanatomy" data-search-title="Bone structure, cells and long bone anatomy" data-search-terms="epiphysis metaphysis diaphysis medullary cavity periosteum endosteum compact bone cancellous bone trabecular bone articular cartilage epiphyseal plate osteoblast osteocyte osteoclast osteon haversian canal lamellae lacunae canaliculi">
+      <div class="structure-head"><h3>Bone Classification &amp; Long Bone Architecture</h3></div>
+ 
+      <div class="sub-grid">
+        <div class="subsec">
+          <h4>Bone Classification (by shape)</h4>
+          <ul>
+            <li><b>Long bones</b> — femur, humerus, phalanges; length &gt; width, act as levers</li>
+            <li><b>Short bones</b> — carpals, tarsals; roughly cuboidal, absorb shock</li>
+            <li><b>Flat bones</b> — sternum, skull vault, scapula; protection and broad muscle attachment</li>
+            <li><b>Irregular bones</b> — vertebrae, hip bone, facial bones; complex shapes</li>
+            <li><b>Sesamoid bones</b> — patella; embedded within a tendon, protects it from friction</li>
+            <li><b>Pneumatic bones</b> — some skull bones (frontal, maxilla, sphenoid, ethmoid) contain air-filled sinuses that lighten the skull</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Functions of the Skeleton</h4>
+          <ul>
+            <li>Mechanical support and shape</li>
+            <li>Protection of viscera (cranium, thoracic cage, pelvis)</li>
+            <li>Movement, via muscle attachment and joints acting as levers</li>
+            <li>Mineral storage and homeostasis (calcium, phosphate)</li>
+            <li>Haematopoiesis in red marrow</li>
+            <li>Fat storage in yellow marrow</li>
+          </ul>
+        </div>
+        <div class="subsec full">
+          <h4>Long Bone Architecture</h4>
+          <p>A typical long bone has a shaft, the <b>diaphysis</b>, composed of dense <b>compact (cortical) bone</b> surrounding a central <b>medullary cavity</b> that houses bone marrow. At each end lies an <b>epiphysis</b>, made largely of spongy <b>cancellous (trabecular) bone</b> covered by <b>articular cartilage</b> at the joint surface. Between diaphysis and epiphysis is the <b>metaphysis</b>, containing the <b>epiphyseal (growth) plate</b> in a growing bone — a layer of hyaline cartilage where longitudinal growth occurs through endochondral ossification until it fuses in early adulthood. The outer surface of bone (except at articular cartilage) is covered by the <b>periosteum</b>, a fibrous membrane carrying blood vessels, nerves and osteoprogenitor cells important for repair; the internal marrow cavity surface is lined by the thinner <b>endosteum</b>. A <b>nutrient artery</b> typically pierces the diaphysis obliquely to supply the medullary cavity and inner cortex.</p>
+        </div>
+        <div class="subsec">
+          <h4>Bone Cells</h4>
+          <ul>
+            <li><b>Osteoprogenitor cells</b> — mesenchymal stem cells that differentiate into osteoblasts</li>
+            <li><b>Osteoblasts</b> — synthesise osteoid (unmineralised bone matrix); line growing bone surfaces</li>
+            <li><b>Osteocytes</b> — mature osteoblasts entombed in lacunae, maintaining bone matrix and sensing mechanical strain</li>
+            <li><b>Osteoclasts</b> — large multinucleate cells of monocyte lineage that resorb bone, enabling remodelling and calcium release</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Microscopic Structure (Compact Bone)</h4>
+          <p>Compact bone is organised into cylindrical units called <b>osteons (Haversian systems)</b>, each built around a central <b>Haversian canal</b> carrying blood vessels and nerves, surrounded by concentric rings of matrix called <b>lamellae</b>. Osteocytes sit in small spaces (<b>lacunae</b>) between lamellae and communicate via thin channels (<b>canaliculi</b>). <b>Volkmann's (perforating) canals</b> run perpendicular to Haversian canals, linking them and connecting to the periosteal and medullary circulation.</p>
+        </div>
+      </div>
+ 
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>Because the epiphyseal plate is the weakest part of an immature long bone — weaker than the surrounding ligaments — traumatic injury in children more often produces a growth plate (physeal) fracture than a ligament tear, unlike in adults. Fractures through the growth plate are graded by the Salter–Harris classification, and depending on the pattern can disturb future bone growth.</p>
+      </div>
+      <div class="dyk">
+        <h4>Did You Know?</h4>
+        <p>Bone is a living, constantly remodelling tissue: an estimated 5–10% of the adult skeleton is replaced every year through the coordinated action of osteoblasts and osteoclasts, meaning the skeleton you have today is, matrix-wise, largely different from the one you had a decade ago.</p>
+      </div>
+    </article>
+ 
+    <article class="structure" id="skull" data-search-title="Skull osteology" data-search-terms="skull frontal bone parietal bone temporal bone occipital bone sphenoid ethmoid maxilla mandible foramina cranium">
+      <div class="structure-head"><h3>The Skull</h3></div>
+      <div class="media-grid">
+        <figure class="figure">
+          <div class="figure-frame">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gray1193.png" alt="Lateral view of the skull showing the surface relations of the frontal, parietal, temporal and occipital bones, after Gray's Anatomy plate 1193." loading="lazy">
+            <div class="figure-controls">
+              <button class="fig-btn" data-zoom aria-label="Zoom image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M9 11h4M11 9v4"/></svg></button>
+              <button class="fig-btn" data-fullscreen aria-label="Fullscreen image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+            </div>
+          </div>
+          <div class="figure-caption">
+            <div class="cap-text">Lateral skull, showing the pterion — the thin junction of frontal, parietal, temporal and sphenoid bones overlying the middle meningeal artery.</div>
+            <div class="cap-src">Image source: Gray's Anatomy of the Human Body (1918), 20th U.S. ed. — public domain. Via Wikimedia Commons.</div>
+          </div>
+        </figure>
+        <div class="id-panel">
+          <h4>MAJOR CRANIAL BONES</h4>
+          <ul class="id-list">
+            <li><span class="id-dot"></span><div><b>Frontal bone</b><div class="id-desc">Forehead, orbital roof, anterior cranial fossa floor.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Parietal bones (×2)</b><div class="id-desc">Form most of the cranial vault; meet at the sagittal suture.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Temporal bone</b><div class="id-desc">Houses the middle and inner ear; contains the mastoid and styloid processes.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Occipital bone</b><div class="id-desc">Contains the foramen magnum; articulates with C1 (atlas).</div></div></li>
+            <li><span class="id-dot"></span><div><b>Sphenoid bone</b><div class="id-desc">"Keystone" of the skull base; houses the sella turcica/pituitary fossa.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Ethmoid bone</b><div class="id-desc">Between orbits; forms part of the nasal septum and cribriform plate.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Maxilla</b><div class="id-desc">Upper jaw; forms the hard palate and orbital floor.</div></div></li>
+            <li><span class="id-dot"></span><div><b>Mandible</b><div class="id-desc">Lower jaw; the only mobile bone of the skull, via the temporomandibular joint.</div></div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Important Foramina</h4>
+          <div class="table-wrap">
+            <table><thead><tr><th>Foramen</th><th>Location</th><th>Transmits</th></tr></thead>
+            <tbody>
+              <tr><td>Foramen magnum</td><td>Occipital bone</td><td>Medulla/spinal cord, vertebral arteries, CN XI (spinal root)</td></tr>
+              <tr><td>Foramen ovale</td><td>Sphenoid, middle cranial fossa</td><td>Mandibular nerve (CN V3)</td></tr>
+              <tr><td>Foramen rotundum</td><td>Sphenoid</td><td>Maxillary nerve (CN V2)</td></tr>
+              <tr><td>Superior orbital fissure</td><td>Between greater/lesser sphenoid wings</td><td>CN III, IV, V1, VI; ophthalmic veins</td></tr>
+              <tr><td>Jugular foramen</td><td>Between temporal &amp; occipital bones</td><td>CN IX, X, XI; internal jugular vein</td></tr>
+              <tr><td>Internal acoustic meatus</td><td>Temporal bone</td><td>CN VII, VIII</td></tr>
+              <tr><td>Cribriform plate foramina</td><td>Ethmoid bone</td><td>Olfactory nerve (CN I) fibres</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>The <b>pterion</b>, where frontal, parietal, temporal and sphenoid bones meet on the lateral skull, is the thinnest part of the calvarium and overlies the anterior division of the middle meningeal artery. A blow to this region can fracture the bone and lacerate the artery, producing an <b>extradural (epidural) haematoma</b> — classically presenting with a lucid interval followed by rapid neurological decline as the arterial bleed strips dura from bone.</p>
+      </div>
+    </article>
+ 
+    <article class="structure" id="vertebral-column" data-search-title="Vertebral column" data-search-terms="cervical thoracic lumbar sacrum coccyx vertebrae spine intervertebral disc">
+      <div class="structure-head"><h3>Vertebral Column</h3></div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>The vertebral column consists of 33 vertebrae in the young adult: 7 <b>cervical</b> (C1–C7), 12 <b>thoracic</b> (T1–T12), 5 <b>lumbar</b> (L1–L5), 5 fused <b>sacral</b> vertebrae forming the sacrum, and 3–4 fused <b>coccygeal</b> vertebrae forming the coccyx. A typical vertebra has a body (weight-bearing, anteriorly) and a vertebral arch (formed by pedicles and laminae) enclosing the vertebral foramen, through which the spinal cord passes; the arch bears spinous and transverse processes for muscle/ligament attachment and paired articular processes forming facet joints with adjacent vertebrae. Adjacent vertebral bodies are separated by <b>intervertebral discs</b>, each with a central gelatinous <b>nucleus pulposus</b> and a surrounding fibrous <b>annulus fibrosus</b>, which absorb axial load and permit movement.</p>
+        </div>
+        <div class="subsec">
+          <h4>Regional Distinguishing Features</h4>
+          <ul>
+            <li><b>Cervical:</b> small bodies, bifid spinous processes (C3–C6), transverse foramina for vertebral vessels; C1 (atlas) has no body, C2 (axis) bears the odontoid process (dens)</li>
+            <li><b>Thoracic:</b> costal facets for rib articulation, long downward-sloping spinous processes</li>
+            <li><b>Lumbar:</b> large, kidney-shaped bodies bearing most axial load; no costal facets or transverse foramina</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Function</h4>
+          <p>Supports the trunk and head, protects the spinal cord, transmits load from the head/trunk to the pelvis, provides muscle attachment, and its curvatures (cervical and lumbar lordosis, thoracic and sacral kyphosis) absorb shock during upright locomotion.</p>
+        </div>
+      </div>
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>The spinal cord ends around the L1–L2 vertebral level as the conus medullaris, well above the end of the bony vertebral canal — this is why a <b>lumbar puncture</b> is performed lower, typically at the L3/L4 or L4/L5 interspace, where only the cauda equina (lumbar and sacral nerve roots floating in CSF) is present and the needle is unlikely to injure neural tissue. Degeneration and posterolateral herniation of the intervertebral disc — most common at L4/L5 and L5/S1 — can compress an exiting or traversing nerve root, producing radicular pain (sciatica) along its dermatomal distribution.</p>
+      </div>
+    </article>
+ 
+    <article class="structure" id="thoracic-cage" data-search-title="Thoracic cage — ribs and sternum" data-search-terms="ribs sternum thoracic cage manubrium xiphoid process costal cartilage">
+      <div class="structure-head"><h3>Thoracic Cage</h3></div>
+      <div class="sub-grid">
+        <div class="subsec">
+          <h4>Description</h4>
+          <p>Formed by 12 pairs of <b>ribs</b>, the <b>sternum</b> (manubrium, body, xiphoid process) anteriorly, and the 12 thoracic vertebrae posteriorly. Ribs 1–7 ("true ribs") attach directly to the sternum via their own costal cartilage; ribs 8–10 ("false ribs") attach indirectly via the cartilage of rib 7; ribs 11–12 ("floating ribs") have no anterior attachment.</p>
+        </div>
+        <div class="subsec">
+          <h4>Function</h4>
+          <p>Protects the heart, lungs and great vessels, and provides attachment for respiratory muscles; its compliance allows the bucket-handle and pump-handle movements that expand thoracic volume during inspiration.</p>
+        </div>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>The <b>manubriosternal joint (sternal angle/angle of Louis)</b> marks the level of the second costal cartilage, T4/T5 vertebral level, tracheal bifurcation and aortic arch borders — a key surface landmark for counting ribs and intercostal spaces.</p></div>
+    </article>
+ 
+    <article class="structure" id="upper-limb-bones" data-search-title="Upper limb bones" data-search-terms="clavicle scapula humerus radius ulna carpals metacarpals phalanges">
+      <div class="structure-head"><h3>Upper Limb Bones</h3></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Bone</th><th>Key landmarks</th><th>Major articulations</th></tr></thead>
+        <tbody>
+          <tr><td>Clavicle</td><td>S-shaped; sternal &amp; acromial ends</td><td>Sternum, acromion of scapula</td></tr>
+          <tr><td>Scapula</td><td>Spine, acromion, coracoid process, glenoid fossa</td><td>Humerus (glenohumeral), clavicle</td></tr>
+          <tr><td>Humerus</td><td>Surgical/anatomical neck, deltoid tuberosity, epicondyles, radial groove (radial nerve)</td><td>Scapula, radius, ulna</td></tr>
+          <tr><td>Radius</td><td>Head, radial tuberosity, styloid process</td><td>Humerus, ulna, carpals</td></tr>
+          <tr><td>Ulna</td><td>Olecranon, coronoid process, trochlear notch, styloid process</td><td>Humerus, radius</td></tr>
+          <tr><td>Carpals (8)</td><td>Scaphoid, lunate, triquetrum, pisiform, trapezium, trapezoid, capitate, hamate</td><td>Radius, metacarpals</td></tr>
+          <tr><td>Metacarpals (5) &amp; phalanges (14)</td><td>Base, shaft, head</td><td>Carpals, each other</td></tr>
+        </tbody></table>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>The <b>scaphoid</b> receives a retrograde blood supply entering distally, so a fracture through its waist (the commonest carpal fracture, typically from a fall on an outstretched hand) risks avascular necrosis of the proximal fragment. The <b>surgical neck</b> of the humerus is a common fracture site and lies close to the axillary nerve; the <b>radial (spiral) groove</b> carries the radial nerve, vulnerable in mid-shaft humeral fractures ("Saturday night palsy" pattern of wrist drop).</p></div>
+    </article>
+ 
+    <article class="structure" id="lower-limb-bones" data-search-title="Lower limb bones" data-search-terms="hip bone pelvis femur patella tibia fibula tarsals metatarsals phalanges">
+      <div class="structure-head"><h3>Lower Limb Bones</h3></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Bone</th><th>Key landmarks</th><th>Major articulations</th></tr></thead>
+        <tbody>
+          <tr><td>Hip bone (ilium + ischium + pubis)</td><td>Acetabulum, iliac crest, ischial tuberosity, pubic symphysis</td><td>Sacrum, femur, opposite hip bone</td></tr>
+          <tr><td>Femur</td><td>Head, neck, greater/lesser trochanters, linea aspera, medial/lateral condyles</td><td>Hip bone, tibia, patella</td></tr>
+          <tr><td>Patella</td><td>Largest sesamoid bone; within quadriceps tendon</td><td>Femur (patellofemoral joint)</td></tr>
+          <tr><td>Tibia</td><td>Medial/lateral condyles, tibial tuberosity, medial malleolus</td><td>Femur, fibula, talus</td></tr>
+          <tr><td>Fibula</td><td>Head, lateral malleolus; non-weight-bearing shaft</td><td>Tibia, talus</td></tr>
+          <tr><td>Tarsals (7)</td><td>Talus, calcaneus, navicular, cuboid, 3 cuneiforms</td><td>Tibia/fibula, metatarsals</td></tr>
+          <tr><td>Metatarsals (5) &amp; phalanges (14)</td><td>Base, shaft, head</td><td>Tarsals, each other</td></tr>
+        </tbody></table>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>The <b>femoral neck</b> is a common fracture site in elderly osteoporotic patients, especially after a fall; because its retinacular blood supply can be disrupted, displaced fractures carry a significant risk of avascular necrosis of the femoral head. The classic clinical sign is a shortened and externally rotated limb.</p></div>
+    </article>
+ 
+    <div class="hiyield">
+      <h4>Quick Revision — Skeletal System</h4>
+      <ul>
+        <li>206 bones: axial + appendicular</li>
+        <li>Long bone: epiphysis–metaphysis–diaphysis</li>
+        <li>Osteoblast builds, osteoclast resorbs</li>
+        <li>Osteon = Haversian canal + lamellae</li>
+        <li>Pterion overlies middle meningeal artery</li>
+        <li>Spinal cord ends ~L1–L2; LP done lower</li>
+        <li>Scaphoid: retrograde blood supply → AVN risk</li>
+        <li>Sternal angle = T4/5, 2nd rib level</li>
+      </ul>
+    </div>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     JOINTS
+     ============================================================================================ -->
+<section class="system" id="sys-joints" data-system="skeletal">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Joints (Arthrology)</h2><div class="system-tags"><span class="tag">Skeletal system</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-joints" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <article class="structure" id="joint-classification" data-search-title="Joint classification" data-search-terms="fibrous joint cartilaginous joint synovial joint plane hinge pivot condyloid saddle ball and socket">
+      <div class="sub-grid">
+        <div class="subsec">
+          <h4>Structural Classification</h4>
+          <ul>
+            <li><b>Fibrous</b> — bones united by dense connective tissue (sutures of the skull, interosseous membranes, gomphoses of teeth); little to no movement</li>
+            <li><b>Cartilaginous</b> — united by cartilage: <i>primary/synchondroses</i> (hyaline cartilage, e.g. epiphyseal plate) or <i>secondary/symphyses</i> (fibrocartilage, e.g. pubic symphysis, intervertebral discs)</li>
+            <li><b>Synovial</b> — bones separated by a fluid-filled joint cavity enclosed by a capsule lined with synovium; the most mobile joint type</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Synovial Joint Subtypes</h4>
+          <ul>
+            <li><b>Plane</b> — flat surfaces, gliding (intercarpal joints)</li>
+            <li><b>Hinge</b> — one-axis flexion/extension (elbow, knee)</li>
+            <li><b>Pivot</b> — rotation around a single axis (atlantoaxial joint)</li>
+            <li><b>Condyloid</b> — biaxial, ovoid surfaces (wrist/radiocarpal)</li>
+            <li><b>Saddle</b> — biaxial, reciprocally curved surfaces (first carpometacarpal/thumb)</li>
+            <li><b>Ball-and-socket</b> — multiaxial (shoulder, hip)</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+ 
+    <article class="structure" id="major-joints" data-search-title="Shoulder elbow wrist hip knee ankle joints" data-search-terms="shoulder joint glenohumeral elbow joint wrist joint hip joint knee joint ankle joint ligaments rotator cuff cruciate ligament">
+      <div class="structure-head"><h3>Major Joints — Summary</h3></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Joint</th><th>Bones</th><th>Type</th><th>Key stabilisers</th><th>Clinical note</th></tr></thead>
+        <tbody>
+          <tr><td>Shoulder (glenohumeral)</td><td>Humerus, scapula</td><td>Synovial, ball-and-socket</td><td>Rotator cuff (supraspinatus, infraspinatus, teres minor, subscapularis)</td><td>Most mobile but least stable joint — most commonly dislocated large joint, usually anteriorly</td></tr>
+          <tr><td>Elbow</td><td>Humerus, radius, ulna</td><td>Synovial, hinge (+ pivot at radioulnar)</td><td>Medial (ulnar) &amp; lateral (radial) collateral ligaments</td><td>"Nursemaid's elbow" = radial head subluxation in young children</td></tr>
+          <tr><td>Wrist (radiocarpal)</td><td>Radius, scaphoid, lunate, triquetrum</td><td>Synovial, condyloid</td><td>Extrinsic radiocarpal &amp; ulnocarpal ligaments</td><td>FOOSH injury pattern — scaphoid or distal radius fracture</td></tr>
+          <tr><td>Hip</td><td>Femur, acetabulum</td><td>Synovial, ball-and-socket</td><td>Iliofemoral, pubofemoral, ischiofemoral ligaments; deep acetabular labrum</td><td>Deep socket → inherently stable, dislocation usually needs major trauma</td></tr>
+          <tr><td>Knee</td><td>Femur, tibia, patella</td><td>Synovial, modified hinge</td><td>ACL, PCL, MCL, LCL, medial &amp; lateral menisci</td><td>ACL injury classic in pivoting sports; "unhappy triad" = ACL+MCL+medial meniscus</td></tr>
+          <tr><td>Ankle (talocrural)</td><td>Tibia, fibula, talus</td><td>Synovial, hinge</td><td>Lateral ligament complex (ATFL most often injured), deltoid ligament medially</td><td>Inversion sprain injures ATFL most commonly</td></tr>
+        </tbody></table>
+      </div>
+      <div class="dyk"><h4>Did You Know?</h4><p>The shoulder trades stability for mobility: its shallow glenoid fossa contacts only about a third of the humeral head's surface at any time, which is precisely what allows the enormous range of motion at the cost of being the most frequently dislocated major joint in the body.</p></div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     MUSCULAR SYSTEM
+     ============================================================================================ -->
+<section class="system" id="sys-muscular" data-system="muscular">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Muscular System</h2><div class="system-tags"><span class="tag">~600 skeletal muscles</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-muscular" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <p class="system-intro">Skeletal muscle produces voluntary movement by contracting across joints, acting through origin (fixed attachment), insertion (mobile attachment) and action. Below are the clinically and functionally most important muscle groups by region rather than an exhaustive list.</p>
+ 
+    <article class="structure" id="muscle-regions" data-search-title="Major regional muscles" data-search-terms="deltoid biceps triceps rotator cuff quadriceps hamstrings gastrocnemius trapezius latissimus dorsi rectus abdominis diaphragm gluteus maximus">
+      <div class="table-wrap">
+        <table><thead><tr><th>Region</th><th>Muscle</th><th>Origin → Insertion</th><th>Action</th><th>Innervation</th></tr></thead>
+        <tbody>
+          <tr><td>Shoulder</td><td>Deltoid</td><td>Clavicle/scapula → deltoid tuberosity</td><td>Arm abduction (middle fibres)</td><td>Axillary nerve (C5–C6)</td></tr>
+          <tr><td>Shoulder</td><td>Supraspinatus</td><td>Supraspinous fossa → greater tubercle</td><td>Initiates abduction (first 15°)</td><td>Suprascapular nerve</td></tr>
+          <tr><td>Arm</td><td>Biceps brachii</td><td>Scapula → radial tuberosity</td><td>Elbow flexion, forearm supination</td><td>Musculocutaneous nerve (C5–C6)</td></tr>
+          <tr><td>Arm</td><td>Triceps brachii</td><td>Scapula/humerus → olecranon</td><td>Elbow extension</td><td>Radial nerve (C6–C8)</td></tr>
+          <tr><td>Back</td><td>Trapezius</td><td>Occiput/spinous processes → clavicle/scapula</td><td>Scapular elevation, rotation, retraction</td><td>Accessory nerve (CN XI)</td></tr>
+          <tr><td>Back</td><td>Latissimus dorsi</td><td>Lower spine/ilium → humerus</td><td>Arm adduction, extension, internal rotation</td><td>Thoracodorsal nerve</td></tr>
+          <tr><td>Abdomen</td><td>Rectus abdominis</td><td>Pubic crest → xiphoid/costal cartilages</td><td>Trunk flexion, compresses abdomen</td><td>Thoracoabdominal nerves (T7–T12)</td></tr>
+          <tr><td>Thorax</td><td>Diaphragm</td><td>Xiphoid, costal margin, lumbar vertebrae → central tendon</td><td>Principal muscle of inspiration</td><td>Phrenic nerve (C3–C5)</td></tr>
+          <tr><td>Gluteal</td><td>Gluteus maximus</td><td>Ilium/sacrum → gluteal tuberosity/IT band</td><td>Hip extension, lateral rotation</td><td>Inferior gluteal nerve</td></tr>
+          <tr><td>Gluteal</td><td>Gluteus medius</td><td>Ilium → greater trochanter</td><td>Hip abduction; stabilises pelvis in stance</td><td>Superior gluteal nerve</td></tr>
+          <tr><td>Thigh</td><td>Quadriceps femoris (4 heads)</td><td>Ilium/femur → tibial tuberosity (via patella)</td><td>Knee extension</td><td>Femoral nerve</td></tr>
+          <tr><td>Thigh</td><td>Hamstrings (biceps femoris, semitendinosus, semimembranosus)</td><td>Ischial tuberosity → tibia/fibula</td><td>Knee flexion, hip extension</td><td>Sciatic nerve (tibial division)</td></tr>
+          <tr><td>Leg</td><td>Gastrocnemius/soleus (triceps surae)</td><td>Femoral condyles/tibia-fibula → calcaneus (Achilles tendon)</td><td>Ankle plantarflexion</td><td>Tibial nerve</td></tr>
+        </tbody></table>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>The rotator cuff (SITS — supraspinatus, infraspinatus, teres minor, subscapularis) dynamically stabilises the glenohumeral joint; supraspinatus tendinopathy or tear is the commonest rotator cuff injury and classically produces a painful arc of abduction. The phrenic nerve's origin from C3–C5 ("C3, 4, 5 keep the diaphragm alive") explains why high cervical spinal cord injury above this level is immediately life-threatening.</p></div>
+      <div class="dyk"><h4>Did You Know?</h4><p>The gluteus maximus is the largest single muscle in the human body by mass, an adaptation closely tied to upright bipedal walking and running — it contributes relatively little during slow walking but becomes strongly active during running, climbing and rising from a seated position.</p></div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     CARDIOVASCULAR SYSTEM — HEART (PRIORITY MODULE)
+     ============================================================================================ -->
+<section class="system" id="sys-cardiovascular" data-system="cardiovascular">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Cardiovascular System — The Heart</h2><div class="system-tags"><span class="tag">Mediastinum</span><span class="tag">~72 beats/min at rest</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-cardiovascular" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <p class="system-intro">The heart is a four-chambered muscular pump lying in the middle mediastinum, enclosed within the pericardium. It drives two circuits in series — the pulmonary circulation (right heart → lungs) and the systemic circulation (left heart → body) — and generates its own rhythmic electrical impulse independent of nervous input.</p>
+ 
+    <article class="structure" id="heart-chambers" data-search-title="Heart chambers and valves" data-search-terms="right atrium right ventricle left atrium left ventricle interatrial septum interventricular septum tricuspid valve mitral valve pulmonary valve aortic valve chordae tendineae papillary muscles">
+      <div class="structure-head"><h3>Chambers &amp; Valves</h3></div>
+      <div class="media-grid">
+        <figure class="figure">
+          <div class="figure-tabs" data-figure-group="heart">
+            <button type="button" aria-pressed="true" data-view="ra">Right chambers</button>
+            <button type="button" aria-pressed="false" data-view="la">Left chambers</button>
+            <button type="button" aria-pressed="false" data-view="surf">External surfaces</button>
+          </div>
+          <div class="figure-frame">
+            <img data-view-img="ra" src="https://commons.wikimedia.org/wiki/Special:FilePath/Gray493.png" alt="Interior of the right atrium and right ventricle, showing the tricuspid valve and chordae tendineae, after Gray's Anatomy plate 493." loading="lazy">
+            <img data-view-img="la" style="display:none;" src="https://commons.wikimedia.org/wiki/Special:FilePath/Gray496.png" alt="Interior of the left atrium and left ventricle, showing the mitral valve, after Gray's Anatomy plate 496." loading="lazy">
+            <img data-view-img="surf" style="display:none;" src="https://commons.wikimedia.org/wiki/Special:FilePath/Gray491.png" alt="External surfaces of the heart showing the great vessels, after Gray's Anatomy plate 491." loading="lazy">
+            <div class="figure-controls">
+              <button class="fig-btn" data-zoom aria-label="Zoom image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M9 11h4M11 9v4"/></svg></button>
+              <button class="fig-btn" data-fullscreen aria-label="Fullscreen image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+            </div>
+          </div>
+          <div class="figure-caption">
+            <div class="cap-text" data-cap="ra">Right atrium and ventricle opened to show the tricuspid valve, its chordae tendineae and papillary muscles.</div>
+            <div class="cap-text" data-cap="la" style="display:none;">Left atrium and ventricle opened to show the bicuspid (mitral) valve and the markedly thicker left ventricular wall.</div>
+            <div class="cap-text" data-cap="surf" style="display:none;">External view of the heart and great vessels — aorta, pulmonary trunk, and venae cavae.</div>
+            <div class="cap-src">Image source: Gray's Anatomy of the Human Body (1918), 20th U.S. ed. — public domain. Via Wikimedia Commons.</div>
+          </div>
+        </figure>
+        <div class="id-panel">
+          <h4>BLOOD FLOW — IN ORDER</h4>
+          <ul class="id-list">
+            <li><span class="id-dot"></span><div><b>1. Venae cavae → right atrium</b></div></li>
+            <li><span class="id-dot"></span><div><b>2. Tricuspid valve → right ventricle</b></div></li>
+            <li><span class="id-dot"></span><div><b>3. Pulmonary valve → pulmonary trunk → lungs</b></div></li>
+            <li><span class="id-dot"></span><div><b>4. Pulmonary veins → left atrium</b></div></li>
+            <li><span class="id-dot"></span><div><b>5. Mitral valve → left ventricle</b></div></li>
+            <li><span class="id-dot"></span><div><b>6. Aortic valve → aorta → systemic circulation</b></div></li>
+          </ul>
+        </div>
+      </div>
+ 
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>The heart has four chambers. The <b>right atrium</b> receives deoxygenated blood from the superior and inferior venae cavae and the coronary sinus, and empties through the <b>tricuspid valve</b> into the <b>right ventricle</b>, which is crescent-shaped in cross-section and has a thinner wall than the left ventricle since it only needs to generate the lower pressure of the pulmonary circuit. The right ventricle ejects blood through the <b>pulmonary valve</b> into the pulmonary trunk. Oxygenated blood returns via four pulmonary veins to the <b>left atrium</b>, passes through the <b>mitral (bicuspid) valve</b> into the <b>left ventricle</b> — the most muscular chamber, generating systemic arterial pressure — and is ejected through the <b>aortic valve</b> into the ascending aorta. The <b>interatrial septum</b> separates the two atria (marked by the fossa ovalis, the remnant of the fetal foramen ovale); the muscular <b>interventricular septum</b> separates the ventricles. The atrioventricular valves are anchored by fibrous <b>chordae tendineae</b> attached to conical <b>papillary muscles</b>, which contract during systole to prevent valve prolapse into the atria.</p>
+        </div>
+        <div class="subsec">
+          <h4>Function</h4>
+          <p>Right heart = low-pressure pump to the lungs (pulmonary circulation); left heart = high-pressure pump to the body (systemic circulation). Both sides contract synchronously and eject equal stroke volumes to keep the two circuits balanced.</p>
+        </div>
+        <div class="subsec">
+          <h4>Great Vessels</h4>
+          <ul>
+            <li><b>Superior &amp; inferior vena cava</b> → right atrium</li>
+            <li><b>Pulmonary trunk</b> → right and left pulmonary arteries</li>
+            <li><b>Pulmonary veins (×4)</b> → left atrium</li>
+            <li><b>Ascending aorta</b> → arch → descending aorta</li>
+          </ul>
+        </div>
+      </div>
+ 
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p><b>Valve surface anatomy</b> matters for auscultation: aortic (2nd right intercostal space), pulmonary (2nd left intercostal space), tricuspid (4th/5th left intercostal space near sternum) and mitral (5th left intercostal space, midclavicular line — the cardiac apex). Left ventricular hypertrophy occurs because this chamber does most of the pressure-generating work against systemic vascular resistance; chronic pressure overload (e.g. hypertension, aortic stenosis) thickens its wall further and can eventually impair filling and function.</p>
+      </div>
+    </article>
+ 
+    <article class="structure" id="coronary-circulation" data-search-title="Coronary arteries and cardiac veins" data-search-terms="coronary arteries left anterior descending circumflex right coronary artery cardiac veins coronary sinus coronary territories">
+      <div class="structure-head"><h3>Coronary Circulation</h3></div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Arterial Supply</h4>
+          <p>The heart's own blood supply arises from the <b>right</b> and <b>left coronary arteries</b>, the first branches of the ascending aorta, originating from the aortic sinuses just above the aortic valve — meaning they fill primarily during diastole, when the valve cusps are not obstructing their ostia. The <b>left coronary artery</b> divides into the <b>left anterior descending (LAD)</b> branch, supplying the anterior interventricular septum and anterior left ventricular wall, and the <b>circumflex artery</b>, supplying the lateral and posterior left ventricular wall. The <b>right coronary artery</b> supplies the right atrium, right ventricle and, in most people, the inferior wall of the left ventricle and the AV node (right-dominant circulation).</p>
+        </div>
+        <div class="subsec">
+          <h4>Venous Drainage</h4>
+          <p>Most cardiac veins (great, middle, small cardiac veins) drain into the <b>coronary sinus</b>, which empties directly into the right atrium; some anterior cardiac veins drain directly into the right atrium.</p>
+        </div>
+      </div>
+      <div class="clinical">
+        <h4>Clinical Anatomy — Coronary Territories</h4>
+        <p>Because each coronary artery supplies a relatively predictable myocardial territory, the ECG pattern of a myocardial infarction localises the culprit vessel: anterior/septal ST changes suggest LAD occlusion, inferior changes suggest right coronary artery occlusion, and lateral changes suggest circumflex occlusion. The LAD is often called the "widow-maker" because it supplies a large portion of the left ventricle including the interventricular septum, and proximal occlusion can be catastrophic.</p>
+      </div>
+    </article>
+ 
+    <article class="structure" id="conduction-system" data-search-title="Cardiac conduction system" data-search-terms="SA node sinoatrial node AV node atrioventricular node bundle of His bundle branches Purkinje fibres">
+      <div class="structure-head"><h3>Conduction System &amp; Blood Flow Sequence</h3></div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Sequence of Electrical Conduction</h4>
+          <ul>
+            <li><b>SA node (sinoatrial node)</b> — in the right atrial wall near the entry of the superior vena cava; the heart's natural pacemaker, initiating each heartbeat</li>
+            <li><b>Internodal pathways</b> spread the impulse across both atria, causing atrial contraction</li>
+            <li><b>AV node (atrioventricular node)</b> — near the interatrial septum; delays the impulse briefly, allowing the atria to finish contracting before ventricular contraction begins</li>
+            <li><b>Bundle of His (AV bundle)</b> — penetrates the fibrous skeleton of the heart, the only normal electrical connection between atria and ventricles</li>
+            <li><b>Left &amp; right bundle branches</b> — run down either side of the interventricular septum</li>
+            <li><b>Purkinje fibres</b> — spread rapidly through ventricular myocardium, producing coordinated, near-simultaneous ventricular contraction</li>
+          </ul>
+        </div>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Because the AV node is the sole normal electrical bridge between atria and ventricles, disease or injury there (including surgical trauma, as it lies near the septal leaflet of the tricuspid valve and the membranous interventricular septum) can produce <b>heart block</b>, ranging from delayed conduction to complete dissociation of atrial and ventricular rhythms requiring a pacemaker.</p></div>
+      <div class="dyk"><h4>Did You Know?</h4><p>The SA node's own cells depolarise spontaneously roughly 60–100 times a minute even with no external nerve input — this is why a transplanted, fully denervated heart still beats rhythmically; it simply loses the moment-to-moment autonomic adjustment that vagal and sympathetic input normally provide.</p></div>
+    </article>
+ 
+    <div class="hiyield">
+      <h4>Quick Revision — Heart</h4>
+      <ul>
+        <li>Right heart = pulmonary; left heart = systemic</li>
+        <li>Tricuspid (right) vs mitral/bicuspid (left) AV valves</li>
+        <li>LAD → anteroseptal wall; RCA → inferior wall + AV node (usually); circumflex → lateral wall</li>
+        <li>SA node → AV node → bundle of His → Purkinje fibres</li>
+        <li>Coronary arteries fill in diastole</li>
+        <li>Apex beat = 5th left intercostal space, midclavicular line</li>
+      </ul>
+    </div>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     RESPIRATORY SYSTEM
+     ============================================================================================ -->
+<section class="system" id="sys-respiratory" data-system="respiratory">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Respiratory System</h2><div class="system-tags"><span class="tag">Gas exchange</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-respiratory" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <p class="system-intro">The respiratory system moves air between the atmosphere and the alveoli, where gas exchange with pulmonary capillary blood occurs, and is functionally divided into a conducting zone (no gas exchange) and a respiratory zone (gas exchange).</p>
+ 
+    <article class="structure" id="airway-pathway" data-search-title="Airway pathway — nose to alveoli" data-search-terms="nose nasal cavity pharynx larynx trachea bronchi bronchial tree lungs lobes fissures bronchopulmonary segments pleura diaphragm alveoli">
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Airway Pathway</h4>
+          <p>Inspired air passes through the <b>nasal cavity</b> (warmed, humidified, filtered) or mouth, through the <b>pharynx</b> (naso-, oro-, laryngopharynx — shared with the digestive tract), through the <b>larynx</b> (voice box, containing the vocal folds and the epiglottis which protects the airway during swallowing), into the <b>trachea</b>, which bifurcates at the carina (T4/5 level, at the sternal angle) into the <b>right and left main bronchi</b>. The right main bronchus is wider, shorter and more vertical than the left, so inhaled foreign bodies more often lodge there. Bronchi branch progressively through lobar, segmental and smaller bronchi into <b>bronchioles</b>, terminating in <b>alveoli</b>, tiny sacs where gas exchange occurs across an extremely thin blood-air barrier.</p>
+        </div>
+        <div class="subsec">
+          <h4>Lung Lobes &amp; Segments</h4>
+          <p>The <b>right lung</b> has 3 lobes (upper, middle, lower) separated by horizontal and oblique fissures; the <b>left lung</b> has 2 lobes (upper, lower) separated by an oblique fissure, and is smaller due to the cardiac notch accommodating the heart. Each lung is further divided into bronchopulmonary segments (10 on the right, 8–10 on the left), each with its own segmental bronchus and artery — a clinically useful unit for localising disease and for surgical resection.</p>
+        </div>
+        <div class="subsec">
+          <h4>Pleura</h4>
+          <p>Each lung is invested by a <b>visceral pleura</b> and enclosed within a <b>parietal pleura</b> lining the thoracic wall, diaphragm and mediastinum; the potential space between them, the pleural cavity, contains a thin film of fluid that allows the layers to slide over each other during breathing while remaining coupled, so the lung expands as the chest wall expands.</p>
+        </div>
+      </div>
+      <div class="sub-grid">
+        <div class="subsec">
+          <h4>Blood Supply</h4>
+          <p><b>Pulmonary circulation</b> (functional, for gas exchange): deoxygenated blood via pulmonary arteries, oxygenated blood returned via pulmonary veins. <b>Bronchial circulation</b> (nutritive, from the aorta): supplies the lung tissue itself, particularly the airway walls.</p>
+        </div>
+        <div class="subsec">
+          <h4>Innervation</h4>
+          <p>The <b>diaphragm</b>, the principal muscle of inspiration, is supplied by the <b>phrenic nerve (C3–C5)</b>. Airway smooth muscle and glands receive autonomic innervation — parasympathetic (vagus) causing bronchoconstriction and secretion, sympathetic causing bronchodilation.</p>
+        </div>
+      </div>
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>Because the right main bronchus is wider, shorter and more vertically oriented than the left, aspirated foreign bodies and aspirated gastric contents preferentially enter the right lung, most often the right lower lobe in an upright patient. Pneumothorax (air in the pleural space) collapses the lung because the normally negative intrapleural pressure that keeps the lung expanded is lost.</p>
+      </div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     DIGESTIVE SYSTEM
+     ============================================================================================ -->
+<section class="system" id="sys-digestive" data-system="digestive">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Digestive System</h2><div class="system-tags"><span class="tag">GI tract + accessory organs</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-digestive" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <p class="system-intro">The digestive system is a continuous muscular tube from mouth to anus, specialised regionally for ingestion, digestion, absorption and elimination, supported by accessory glands that secrete digestive enzymes and bile.</p>
+ 
+    <article class="structure" id="gi-tract" data-search-title="GI tract — esophagus to rectum" data-search-terms="oral cavity tongue salivary glands pharynx esophagus stomach duodenum jejunum ileum cecum appendix colon rectum anal canal">
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>Food enters the <b>oral cavity</b>, where the <b>tongue</b> and <b>salivary glands</b> (parotid, submandibular, sublingual) begin mechanical and enzymatic digestion, then passes through the <b>pharynx</b> and <b>oesophagus</b> — a muscular tube roughly 25 cm long descending through the posterior mediastinum and diaphragm — into the <b>stomach</b>, a J-shaped reservoir with cardia, fundus, body, antrum and pylorus, where acid and pepsin begin protein digestion. Chyme passes through the pyloric sphincter into the <b>duodenum</b> (C-shaped, receiving bile and pancreatic secretions), then the <b>jejunum</b> and <b>ileum</b> (together the rest of the small intestine, the principal site of nutrient absorption), then through the ileocaecal valve into the <b>caecum</b>, from which the vermiform <b>appendix</b> arises. The <b>colon</b> (ascending, transverse, descending, sigmoid) reabsorbs water and electrolytes, and the <b>rectum</b> and <b>anal canal</b> store and expel faeces.</p>
+        </div>
+        <div class="subsec">
+          <h4>Accessory Organs</h4>
+          <ul>
+            <li><b>Liver</b> — largest internal organ; produces bile, metabolises nutrients and drugs, synthesises plasma proteins</li>
+            <li><b>Gallbladder</b> — stores and concentrates bile, releasing it via the cystic duct into the common bile duct on stimulation by cholecystokinin</li>
+            <li><b>Pancreas</b> — exocrine (digestive enzymes into the duodenum via the pancreatic duct) and endocrine (insulin, glucagon from the islets of Langerhans) functions</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Blood Supply &amp; Portal Circulation</h4>
+          <p>The gut is supplied by three unpaired branches of the abdominal aorta following embryological foregut/midgut/hindgut divisions: the <b>coeliac trunk</b> (foregut — stomach, duodenum proximal to the ampulla, liver, pancreas, spleen), the <b>superior mesenteric artery</b> (midgut — distal duodenum to proximal two-thirds of the transverse colon), and the <b>inferior mesenteric artery</b> (hindgut — distal transverse colon to upper rectum). Venous blood from the entire GI tract, spleen and pancreas drains via the <b>hepatic portal vein</b> to the liver before reaching the systemic circulation — allowing first-pass metabolism of absorbed nutrients and drugs.</p>
+        </div>
+      </div>
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>The appendix's position is variable, but pain classically begins as poorly localised periumbilical pain (referred, via the midgut's shared visceral innervation) before migrating to the right iliac fossa (McBurney's point) as inflammation irritates the overlying parietal peritoneum — a textbook example of the transition from visceral to somatic pain. Portal hypertension (e.g. from cirrhosis) can force blood through portosystemic anastomoses, causing oesophageal varices, caput medusae, and haemorrhoids.</p>
+      </div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     URINARY SYSTEM
+     ============================================================================================ -->
+<section class="system" id="sys-urinary" data-system="urinary">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Urinary System</h2><div class="system-tags"><span class="tag">Kidney · Nephron</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-urinary" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+ 
+    <article class="structure" id="kidney-nephron" data-search-title="Kidney and nephron" data-search-terms="kidney cortex medulla renal pyramids renal columns papillae calyces renal pelvis hilum nephron glomerulus bowman's capsule proximal tubule loop of henle distal tubule collecting duct ureter bladder urethra">
+      <div class="structure-head"><h3>Kidney &amp; Nephron</h3></div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Gross Anatomy</h4>
+          <p>Each bean-shaped <b>kidney</b> lies retroperitoneally at approximately T12–L3, the right slightly lower than the left due to the liver. Internally, an outer <b>cortex</b> surrounds an inner <b>medulla</b>, organised into 8–18 conical <b>renal pyramids</b> separated by <b>renal columns</b> (cortical tissue extending inward). Each pyramid's apex, the <b>papilla</b>, drains urine into a <b>minor calyx</b>; minor calyces converge into 2–3 <b>major calyces</b>, which join to form the funnel-shaped <b>renal pelvis</b>, continuous with the ureter. Vessels, nerves, lymphatics and the ureter enter/exit at the medially-facing <b>hilum</b>.</p>
+        </div>
+        <div class="subsec">
+          <h4>The Nephron (Functional Unit)</h4>
+          <p>Each kidney contains roughly a million <b>nephrons</b>. Blood is filtered at the <b>renal corpuscle</b>, comprising a capillary tuft, the <b>glomerulus</b>, invaginated into <b>Bowman's capsule</b>. Filtrate then passes through the <b>proximal convoluted tubule</b> (bulk reabsorption of glucose, amino acids, ions, water), the <b>loop of Henle</b> (descending and ascending limbs, generating the medullary concentration gradient via countercurrent multiplication), the <b>distal convoluted tubule</b> (fine regulation of Na⁺/K⁺, under aldosterone influence), and finally the <b>collecting duct</b> (final water reabsorption, under ADH influence), before draining into a minor calyx.</p>
+        </div>
+        <div class="subsec">
+          <h4>Downstream Structures</h4>
+          <ul>
+            <li><b>Ureter</b> — muscular tube carrying urine from renal pelvis to bladder by peristalsis; crosses the pelvic brim near the bifurcation of the common iliac vessels</li>
+            <li><b>Urinary bladder</b> — distensible muscular reservoir; the trigone (between the two ureteric orifices and the internal urethral orifice) is a smooth, relatively fixed region</li>
+            <li><b>Urethra</b> — conducts urine to the exterior; considerably shorter in females, a factor in higher female rates of ascending urinary tract infection</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Blood Supply</h4>
+          <p>Renal artery (direct branch of the abdominal aorta) → segmental → interlobar → arcuate → interlobular arteries → afferent arteriole → glomerulus → efferent arteriole → peritubular capillaries/vasa recta → interlobular/arcuate/interlobar/renal veins → inferior vena cava.</p>
+        </div>
+      </div>
+      <div class="clinical">
+        <h4>Clinical Anatomy</h4>
+        <p>Kidney stones typically become symptomatic when they lodge at one of three physiological narrowings of the ureter — the pelvi-ureteric junction, where the ureter crosses the pelvic brim, or the point where it enters the bladder wall — producing classic colicky loin-to-groin pain as peristalsis tries to push the stone through.</p>
+      </div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     ENDOCRINE SYSTEM
+     ============================================================================================ -->
+<section class="system" id="sys-endocrine" data-system="endocrine">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Endocrine System</h2><div class="system-tags"><span class="tag">Hormonal regulation</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-endocrine" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <article class="structure" id="endocrine-glands" data-search-title="Pituitary thyroid parathyroid adrenal glands" data-search-terms="hypothalamus pituitary gland pineal gland thyroid parathyroid glands adrenal glands pancreas islets of langerhans">
+      <div class="table-wrap">
+        <table><thead><tr><th>Gland</th><th>Location</th><th>Key hormones</th></tr></thead>
+        <tbody>
+          <tr><td>Hypothalamus</td><td>Base of brain, floor of 3rd ventricle</td><td>Releasing/inhibiting hormones controlling the anterior pituitary; produces ADH &amp; oxytocin (stored in posterior pituitary)</td></tr>
+          <tr><td>Pituitary gland</td><td>Sella turcica of sphenoid bone</td><td>Anterior: GH, TSH, ACTH, FSH/LH, prolactin. Posterior: ADH, oxytocin (released, not made, here)</td></tr>
+          <tr><td>Pineal gland</td><td>Posterior to third ventricle</td><td>Melatonin — circadian rhythm regulation</td></tr>
+          <tr><td>Thyroid gland</td><td>Anterior neck, either side of trachea, below larynx</td><td>T3/T4 (metabolic rate), calcitonin</td></tr>
+          <tr><td>Parathyroid glands (×4)</td><td>Posterior surface of thyroid lobes</td><td>Parathyroid hormone — raises blood calcium</td></tr>
+          <tr><td>Adrenal glands</td><td>Superior pole of each kidney</td><td>Cortex: cortisol, aldosterone, androgens. Medulla: adrenaline, noradrenaline</td></tr>
+          <tr><td>Pancreas (endocrine)</td><td>Islets of Langerhans, scattered through the gland</td><td>Insulin (β cells), glucagon (α cells)</td></tr>
+        </tbody></table>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Because the parathyroid glands are small, variably located, and sit directly behind the thyroid, they are at risk of inadvertent removal or devascularisation during thyroidectomy, which can cause acute post-operative hypocalcaemia. The pituitary's location just below the optic chiasm means a pituitary macroadenoma can compress the chiasm and produce bitemporal hemianopia.</p></div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     LYMPHATIC / IMMUNE SYSTEM
+     ============================================================================================ -->
+<section class="system" id="sys-lymphatic" data-system="lymphatic">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Lymphatic / Immune System</h2><div class="system-tags"><span class="tag">Fluid balance &amp; defence</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-lymphatic" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <article class="structure" id="lymphatic-structures" data-search-title="Lymph nodes, thoracic duct, spleen, thymus, tonsils" data-search-terms="lymphatic vessels lymph nodes thoracic duct right lymphatic duct spleen thymus tonsils lymph drainage">
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>A network of blind-ending <b>lymphatic capillaries</b> collects interstitial fluid that has leaked from blood capillaries and cannot be reabsorbed directly; this fluid, now called lymph, passes through <b>lymph nodes</b> — small filtering stations packed with lymphocytes and macrophages — before returning to the venous system. Lymph from the lower body, left upper limb and left side of the thorax and head drains into the <b>thoracic duct</b>, which empties into the venous system near the junction of the left subclavian and internal jugular veins; lymph from the right upper limb, right thorax and right head/neck drains via the smaller <b>right lymphatic duct</b>. The <b>spleen</b>, in the left upper quadrant, filters blood (removing old erythrocytes) and mounts immune responses to blood-borne antigens. The <b>thymus</b>, in the superior mediastinum, is the site of T-lymphocyte maturation and is largest in childhood, involuting with age. The <b>tonsils</b> (palatine, pharyngeal/adenoid, lingual) form a ring of lymphoid tissue guarding the entrance to the pharynx.</p>
+        </div>
+        <div class="subsec">
+          <h4>Regional Drainage (High-Yield)</h4>
+          <ul>
+            <li>Breast (lateral) → axillary nodes</li>
+            <li>Stomach → coeliac nodes</li>
+            <li>Testis → para-aortic (lumbar) nodes — follows testicular embryological descent</li>
+            <li>Anal canal (below pectinate line) → superficial inguinal nodes</li>
+          </ul>
+        </div>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Lymph node drainage patterns matter for cancer staging: because the testis drains to para-aortic nodes rather than inguinal nodes (a consequence of its embryological origin high in the abdomen before descent), testicular cancer characteristically spreads to retroperitoneal para-aortic nodes rather than groin nodes, even though the testis itself sits in the scrotum.</p></div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     REPRODUCTIVE SYSTEM
+     ============================================================================================ -->
+<section class="system" id="sys-reproductive" data-system="reproductive">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Reproductive Anatomy</h2><div class="system-tags"><span class="tag">Male &amp; female</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-reproductive" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <article class="structure" id="male-reproductive" data-search-title="Male reproductive anatomy" data-search-terms="testes epididymis vas deferens seminal vesicles prostate penis">
+      <div class="structure-head"><h3>Male Reproductive System</h3></div>
+      <p>The <b>testes</b> produce sperm and testosterone within the scrotum, where a slightly lower temperature than core body temperature supports spermatogenesis. Sperm mature in the <b>epididymis</b>, a coiled tube on the posterior testis, then travel through the <b>vas deferens</b> (ductus deferens), which ascends through the inguinal canal into the pelvis, joining the duct of the <b>seminal vesicle</b> to form the ejaculatory duct. The <b>prostate</b>, surrounding the proximal urethra, adds secretions that support sperm viability. The <b>penis</b> contains erectile tissue (paired corpora cavernosa, single corpus spongiosum surrounding the urethra) supplied by branches of the internal pudendal artery.</p>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Benign prostatic hyperplasia, common with age, compresses the prostatic urethra and can obstruct urinary outflow, because the prostate surrounds the urethra just distal to the bladder neck.</p></div>
+    </article>
+    <article class="structure" id="female-reproductive" data-search-title="Female reproductive anatomy" data-search-terms="ovaries uterine tubes fallopian tubes uterus cervix vagina broad ligament">
+      <div class="structure-head"><h3>Female Reproductive System</h3></div>
+      <p>The <b>ovaries</b> produce oocytes and sex hormones (oestrogen, progesterone) and are suspended by the suspensory and ovarian ligaments. Released oocytes are captured by the fimbriae of the <b>uterine (fallopian) tubes</b>, where fertilisation typically occurs, and travel to the pear-shaped <b>uterus</b>, a thick-walled muscular organ that houses a pregnancy. The uterus's lower narrow portion, the <b>cervix</b>, projects into the <b>vagina</b>, the muscular canal connecting the uterus to the exterior. The <b>broad ligament</b>, a peritoneal fold, supports the uterus, tubes and ovaries.</p>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Because fertilisation normally occurs in the ampulla of the uterine tube, a fertilised ovum that fails to reach the uterine cavity can implant there — an ectopic (tubal) pregnancy, a surgical emergency if the tube ruptures.</p></div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     SPECIAL SENSES
+     ============================================================================================ -->
+<section class="system" id="sys-senses" data-system="senses">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Special Senses — Eye &amp; Ear</h2><div class="system-tags"><span class="tag">Vision</span><span class="tag">Hearing &amp; balance</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-senses" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <article class="structure" id="eye" data-search-title="The eye" data-search-terms="cornea sclera iris pupil lens ciliary body retina optic nerve aqueous humor vitreous humor visual pathway">
+      <div class="structure-head"><h3>The Eye</h3></div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>Light enters through the transparent <b>cornea</b>, the eye's main refractive surface, and passes through the <b>anterior chamber</b> (filled with <b>aqueous humour</b>, produced by the ciliary body and draining via the trabecular meshwork) before reaching the <b>iris</b> — the pigmented diaphragm whose central aperture, the <b>pupil</b>, regulates light entry. Behind the iris, the <b>lens</b>, suspended by zonular fibres from the <b>ciliary body</b>, fine-tunes focus through accommodation. The posterior segment is filled with gel-like <b>vitreous humour</b> and lined by the <b>retina</b>, the light-sensing layer containing rods (low-light, monochrome) and cones (colour, high acuity, concentrated at the fovea). The outer fibrous coat, the <b>sclera</b>, provides structural support (the "white" of the eye), continuous anteriorly with the cornea. Visual signals leave via the <b>optic nerve (CN II)</b> at the optic disc.</p>
+        </div>
+        <div class="subsec">
+          <h4>Visual Pathway (Overview)</h4>
+          <p>Retina → optic nerve → optic chiasm (nasal retinal fibres cross) → optic tract → lateral geniculate nucleus of thalamus → optic radiation → primary visual cortex (occipital lobe).</p>
+        </div>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Because only nasal retinal fibres (carrying temporal visual field information) cross at the optic chiasm, a lesion compressing the chiasm from below — classically a pituitary tumour — cuts these crossing fibres and produces bitemporal hemianopia, loss of the outer visual field in both eyes.</p></div>
+    </article>
+    <article class="structure" id="ear" data-search-title="The ear" data-search-terms="external ear tympanic membrane middle ear ossicles auditory tube cochlea vestibular apparatus vestibulocochlear nerve">
+      <div class="structure-head"><h3>The Ear</h3></div>
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>The <b>external ear</b> (auricle and external acoustic meatus) channels sound to the <b>tympanic membrane</b> (eardrum), which vibrates and transmits sound through the air-filled <b>middle ear</b> via three small <b>ossicles</b> — malleus, incus, stapes — the smallest bones in the body, which mechanically amplify the signal before it reaches the fluid-filled inner ear. The <b>auditory (Eustachian) tube</b> connects the middle ear to the nasopharynx, equalising pressure across the tympanic membrane. The inner ear houses the <b>cochlea</b> (a fluid-filled, spiral duct converting mechanical vibration into neural signals for hearing) and the <b>vestibular apparatus</b> (semicircular canals, utricle and saccule, detecting head rotation and linear acceleration/gravity). Both structures are innervated by the <b>vestibulocochlear nerve (CN VIII)</b>.</p>
+        </div>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Because the auditory tube in young children is shorter, wider and more horizontal than in adults, middle ear infections (otitis media) are more common in childhood, as bacteria from the nasopharynx more readily reach the middle ear.</p></div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     INTEGUMENTARY SYSTEM
+     ============================================================================================ -->
+<section class="system" id="sys-integumentary" data-system="integumentary">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Integumentary System — Skin</h2><div class="system-tags"><span class="tag">Largest organ</span></div></div>
+      <button class="bookmark-btn" data-bookmark="sys-integumentary" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-6-4-6 4V3Z"/></svg>Bookmark</button>
+    </div>
+    <article class="structure" id="skin-layers" data-search-title="Skin — epidermis, dermis, hypodermis" data-search-terms="epidermis dermis hypodermis hair follicle nails sweat glands sebaceous glands sensory receptors skin cross section">
+      <div class="sub-grid">
+        <div class="subsec full">
+          <h4>Anatomical Description</h4>
+          <p>Skin is organised into three layers. The <b>epidermis</b>, a keratinised stratified squamous epithelium with no blood vessels of its own, is continuously renewed from its basal layer and provides the primary barrier against water loss, microbes and UV radiation. The <b>dermis</b>, beneath it, is a vascularised connective tissue layer containing collagen and elastin (providing strength and elasticity), hair follicles, sweat glands, sebaceous glands, and sensory receptors. The <b>hypodermis (subcutaneous layer)</b>, technically not part of the skin itself, anchors it to underlying structures and stores fat for insulation and energy.</p>
+        </div>
+        <div class="subsec">
+          <h4>Appendages</h4>
+          <ul>
+            <li><b>Hair</b> — thermoregulation, sensation, protection</li>
+            <li><b>Nails</b> — protect fingertips, aid fine manipulation</li>
+            <li><b>Sweat glands (eccrine)</b> — thermoregulation via evaporative cooling</li>
+            <li><b>Sebaceous glands</b> — secrete sebum, lubricating skin and hair</li>
+          </ul>
+        </div>
+        <div class="subsec">
+          <h4>Sensory Receptors</h4>
+          <p>Meissner's corpuscles (light touch), Pacinian corpuscles (deep pressure/vibration), Merkel cells (sustained pressure/texture), Ruffini endings (skin stretch), and free nerve endings (pain, temperature) are distributed through the dermis and epidermal junction.</p>
+        </div>
+      </div>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Burn depth is classified by which skin layers are involved: superficial (epidermis only), partial-thickness (extends into dermis, typically blistering and painful because dermal nerve endings are intact), and full-thickness (destroys the entire dermis, often painless at the burn centre because nerve endings are destroyed, and unable to heal without grafting since regenerative epidermal cells are lost).</p></div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     REGIONAL ANATOMY EXPLORER
+     ============================================================================================ -->
+<section class="system" id="sys-regional" data-system="regional">
+  <div class="wrap">
+    <div class="system-head">
+      <div><h2>Regional Anatomy Explorer</h2><div class="system-tags"><span class="tag">Cross-system view</span></div></div>
+    </div>
+    <p class="system-intro">Regional anatomy studies everything within one body area together — bones, muscles, vessels, nerves and spaces — the way a surgeon or examiner encounters it, rather than one system at a time.</p>
+    <div class="region-grid">
+      <div class="region-card" id="region-head-neck"><h3>Head &amp; Neck</h3><span class="region-sub">CN foramina · carotid sheath · triangles of the neck</span><ul><li>Skull, cervical vertebrae, hyoid bone</li><li>Carotid arteries, jugular veins, thyroid</li><li>Anterior &amp; posterior triangles of the neck</li><li>Cranial nerve exit points</li></ul></div>
+      <div class="region-card" id="region-thorax"><h3>Thorax</h3><span class="region-sub">Mediastinum · pleural cavities · great vessels</span><ul><li>Heart within the middle mediastinum</li><li>Lungs and pleura</li><li>Oesophagus, thoracic duct, descending aorta (posterior mediastinum)</li><li>Intercostal neurovascular bundles</li></ul></div>
+      <div class="region-card" id="region-abdomen"><h3>Abdomen</h3><span class="region-sub">Peritoneum · retroperitoneum · 9-region grid</span><ul><li>Stomach, liver, spleen, pancreas, kidneys</li><li>Coeliac, superior &amp; inferior mesenteric arteries</li><li>Portal venous system</li><li>Peritoneal reflections and mesenteries</li></ul></div>
+      <div class="region-card" id="region-pelvis"><h3>Pelvis</h3><span class="region-sub">Pelvic floor · viscera · perineum</span><ul><li>Bladder, rectum, internal reproductive organs</li><li>Pelvic floor musculature (levator ani)</li><li>Internal iliac vessel branches</li><li>Sacral plexus</li></ul></div>
+      <div class="region-card" id="region-back"><h3>Back</h3><span class="region-sub">Vertebral column · spinal cord · paraspinal muscles</span><ul><li>Vertebral column and intervertebral discs</li><li>Spinal cord, meninges, epidural space</li><li>Erector spinae and deep back muscles</li></ul></div>
+      <div class="region-card" id="region-upper-limb"><h3>Upper Limb</h3><span class="region-sub">Brachial plexus · axilla · compartments</span><ul><li>Brachial plexus (roots, trunks, divisions, cords, branches)</li><li>Axillary, brachial, radial/ulnar arteries</li><li>Anterior/posterior compartments of arm and forearm</li></ul></div>
+      <div class="region-card" id="region-lower-limb"><h3>Lower Limb</h3><span class="region-sub">Lumbosacral plexus · femoral triangle · fascial compartments</span><ul><li>Femoral triangle (nerve–artery–vein, lateral to medial)</li><li>Sciatic nerve and its divisions</li><li>Anterior, lateral, posterior leg compartments</li></ul></div>
+    </div>
+ 
+    <article class="structure" id="brachial-plexus" data-search-title="Brachial plexus" data-search-terms="brachial plexus roots trunks divisions cords branches">
+      <div class="structure-head"><h3>Spotlight: Brachial Plexus</h3></div>
+      <p>The brachial plexus is formed by the ventral rami of <b>C5–T1</b>, organised (medial to lateral, proximal to distal) into <b>roots → trunks (upper, middle, lower) → divisions (anterior/posterior) → cords (lateral, posterior, medial, named for their relation to the axillary artery) → branches</b> — classically remembered by the mnemonic "Randy Travis Drinks Cold Beer." Major terminal branches include the musculocutaneous, axillary, radial, median and ulnar nerves, supplying essentially all motor and sensory innervation to the upper limb.</p>
+      <div class="clinical"><h4>Clinical Anatomy</h4><p>Traction injuries can selectively damage the upper (C5–C6) or lower (C8–T1) plexus: upper trunk injury (Erb's palsy, from excessive stretching between the head and shoulder, e.g. in a difficult birth) produces the "waiter's tip" posture; lower trunk injury (Klumpke's palsy, from excessive arm traction) produces a claw hand.</p></div>
+    </article>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     RADIOLOGICAL ANATOMY
+     ============================================================================================ -->
+<section class="system" id="sys-imaging" data-system="regional">
+  <div class="wrap">
+    <div class="system-head"><div><h2>Anatomy in Imaging</h2><div class="system-tags"><span class="tag">X-ray · CT · MRI · Ultrasound</span></div></div></div>
+    <p class="system-intro">Recognising normal anatomy on medical images is a core skill for learners. This section is for anatomical orientation only — it is not a diagnostic tool, and no interpretation here should be treated as a clinical read of any image.</p>
+    <div class="imaging-grid">
+      <div class="imaging-card">
+        <div class="placeholder">Licensed chest X-ray image can be added here.<br>Learner task: identify the cardiac silhouette, hila, hemidiaphragms and costophrenic angles.</div>
+        <div class="imaging-body"><h4>Chest X-ray (PA view)</h4><p>Orient using the heart border, lung fields, ribs and the gastric air bubble under the left hemidiaphragm.</p></div>
+      </div>
+      <div class="imaging-card">
+        <div class="placeholder">Licensed axial CT (brain) image can be added here.<br>Learner task: identify the lateral ventricles, basal ganglia and cerebellum.</div>
+        <div class="imaging-body"><h4>CT — Axial Brain</h4><p>Grey matter appears denser (brighter) than white matter; CSF-filled ventricles appear dark.</p></div>
+      </div>
+      <div class="imaging-card">
+        <div class="placeholder">Licensed sagittal MRI (brain) image can be added here.<br>Learner task: identify the corpus callosum, brainstem and cerebellum.</div>
+        <div class="imaging-body"><h4>MRI — Sagittal Brain (T1)</h4><p>Excellent soft-tissue contrast; T1-weighted images show CSF as dark, fat as bright.</p></div>
+      </div>
+      <div class="imaging-card">
+        <div class="placeholder">Licensed abdominal ultrasound image can be added here.<br>Learner task: identify the liver, gallbladder and right kidney.</div>
+        <div class="imaging-body"><h4>Ultrasound — Right Upper Quadrant</h4><p>Real-time, radiation-free imaging; the liver is a common acoustic window to the kidney and gallbladder.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ============================================================================================
+     QUIZ MODE
+     ============================================================================================ -->
+<section class="system" id="sys-quiz" data-system="regional">
+  <div class="wrap">
+    <div class="system-head"><div><h2>Self-Test — Anatomy Quiz</h2><div class="system-tags"><span class="tag">Based on this atlas</span></div></div></div>
+    <p class="system-intro">Ten questions drawn directly from the content above. Bookmarks and quiz progress are stored locally in your browser only.</p>
+    <div class="quiz-shell" id="quizShell">
+      <div class="quiz-progress"><span id="quizProgressText">Question 1 of 10</span><span id="quizScoreText">Score: 0</span></div>
+      <div class="quiz-bar"><div class="quiz-bar-fill" id="quizBarFill"></div></div>
+      <div id="quizBody"></div>
+      <div class="quiz-nav">
+        <button class="btn secondary" id="quizRestart" type="button">Restart quiz</button>
+        <button class="btn" id="quizNext" type="button" disabled>Next question</button>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+</main>
+ 
+<!-- ============================================================
+     LIGHTBOX
+     ============================================================ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close image viewer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-cap" id="lightboxCap"></div>
+</div>
+ 
+<button id="back-to-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+ 
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <h4>ABOUT THIS ATLAS</h4>
+      <p>Human Anatomy Atlas is an independent educational reference built by Husain Farooqui. Content is synthesised and paraphrased from standard anatomical teaching (Terminologia Anatomica–aligned terminology, established anatomy and clinical-anatomy references) for study purposes. It is not a diagnostic or clinical-decision tool.</p>
+      <p style="margin-top:1em;"><a href="index.html" style="color:var(--teal); text-decoration:none;">← Back to Home</a> &nbsp;·&nbsp; <a href="microscopy.html" style="color:var(--teal); text-decoration:none;">Microscopy Atlas →</a></p>
+    </div>
+    <div>
+      <h4>IMAGE SOURCES &amp; LICENSES</h4>
+      <ul class="attrib-list" id="attribList"></ul>
+    </div>
+  </div>
+</footer>
+ 
+<script>
+/* ============================================================
+   IMAGE CONFIGURATION
+   All external images are public-domain plates from the 20th
+   U.S. edition of Gray's Anatomy of the Human Body (1918),
+   reproduced via Wikimedia Commons' stable Special:FilePath
+   redirect. US copyright on these plates has expired.
+   Replace any entry's `url` to swap in a different licensed
+   image without touching page markup.
+   ============================================================ */
+const ANATOMY_IMAGES = {
+  brain: {
+    lateral:  { url:"https://commons.wikimedia.org/wiki/Special:FilePath/Gray728.svg", caption:"Principal fissures and lobes of the cerebrum, lateral view.", source:"Gray's Anatomy (1918), plate 728", license:"Public domain (US)" },
+    medial:   { url:"https://commons.wikimedia.org/wiki/Special:FilePath/Gray727.png", caption:"Medial surface of the cerebral hemisphere and brainstem.", source:"Gray's Anatomy (1918), plate 727", license:"Public domain (US)" },
+    ventricles:{ url:"https://commons.wikimedia.org/wiki/Special:FilePath/Gray739.png", caption:"Cast of the ventricular cavities, lateral view.", source:"Gray's Anatomy (1918), plate 739", license:"Public domain (US)" }
+  },
+  skull: {
+    lateral: { url:"https://commons.wikimedia.org/wiki/Special:FilePath/Gray1193.png", caption:"Lateral view of the skull, surface relations of bones.", source:"Gray's Anatomy (1918), plate 1193", license:"Public domain (US)" }
+  },
+  heart: {
+    right:   { url:"https://commons.wikimedia.org/wiki/Special:FilePath/Gray493.png", caption:"Interior of right atrium and ventricle.", source:"Gray's Anatomy (1918), plate 493", license:"Public domain (US)" },
+    left:    { url:"https://commons.wikimedia.org/wiki/Special:FilePath/Gray496.png", caption:"Interior of left atrium and ventricle.", source:"Gray's Anatomy (1918), plate 496", license:"Public domain (US)" },
+    surface: { url:"https://commons.wikimedia.org/wiki/Special:FilePath/Gray491.png", caption:"External surfaces of the heart and great vessels.", source:"Gray's Anatomy (1918), plate 491", license:"Public domain (US)" }
+  }
+  /* Additional systems (respiratory, digestive, urinary, muscular, skin,
+     eye, ear, joints) currently render a licensed-placeholder frame —
+     see the `.placeholder` blocks in markup — pending a verified,
+     openly-licensed replacement image. Add entries here and reference
+     them the same way to wire in a new figure. */
+};
+ 
+/* ============================================================
+   SEARCH INDEX — built from data-search-* attributes on each
+   <article class="structure">, so the search box queries real
+   page content, not just card titles.
+   ============================================================ */
+function buildSearchIndex(){
+  const items = [];
+  document.querySelectorAll('article.structure').forEach(el => {
+    const title = el.dataset.searchTitle || el.querySelector('h3')?.textContent || 'Untitled';
+    const terms = (el.dataset.searchTerms || '').toLowerCase();
+    const system = el.closest('.system')?.querySelector('h2')?.textContent || '';
+    const firstP = el.querySelector('.subsec p, p')?.textContent || '';
+    items.push({
+      id: el.id,
+      title,
+      system,
+      terms: (title + ' ' + terms).toLowerCase(),
+      snippet: firstP.slice(0,140) + (firstP.length>140 ? '…' : '')
+    });
+  });
+  return items;
+}
+const SEARCH_INDEX = buildSearchIndex();
+document.getElementById('statStructures').textContent = SEARCH_INDEX.length;
+ 
+function runSearch(query){
+  const q = query.trim().toLowerCase();
+  const resultsBox = document.getElementById('search-results');
+  if(!q){ resultsBox.classList.remove('active'); resultsBox.innerHTML=''; return; }
+  const matches = SEARCH_INDEX.filter(i => i.terms.includes(q)).slice(0,12);
+  resultsBox.classList.add('active');
+  if(matches.length === 0){
+    resultsBox.innerHTML = `<div class="sr-empty">No structures match "${escapeHtml(query)}". Try a shorter term.</div>`;
+    return;
+  }
+  resultsBox.innerHTML = matches.map(m => `
+    <a class="sr-item" href="#${m.id}" data-jump="${m.id}">
+      <div class="sr-title">${escapeHtml(m.title)}</div>
+      <div class="sr-path">${escapeHtml(m.system)}</div>
+      <div class="sr-snip">${escapeHtml(m.snippet)}</div>
+    </a>`).join('');
+}
+function escapeHtml(s){ return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+ 
+document.getElementById('atlasSearch').addEventListener('input', e => runSearch(e.target.value));
+document.getElementById('searchBtn').addEventListener('click', () => runSearch(document.getElementById('atlasSearch').value));
+document.querySelectorAll('.qsearch').forEach(b => b.addEventListener('click', () => {
+  document.getElementById('atlasSearch').value = b.textContent;
+  runSearch(b.textContent);
+}));
+document.getElementById('search-results').addEventListener('click', e => {
+  const a = e.target.closest('[data-jump]');
+  if(a){ recordRecent(a.dataset.jump); }
+});
+ 
+/* ============================================================
+   QUICK NAV GRIDS
+   ============================================================ */
+const SYSTEM_NAV = [
+  ['sys-nervous','Nervous System','Brain, cranial nerves, CSF'],
+  ['sys-skeletal','Skeletal System','Bones & osteology'],
+  ['sys-joints','Joints','Arthrology'],
+  ['sys-muscular','Muscular System','Major muscle groups'],
+  ['sys-cardiovascular','Cardiovascular','Heart & circulation'],
+  ['sys-respiratory','Respiratory System','Airway & lungs'],
+  ['sys-digestive','Digestive System','GI tract & accessory organs'],
+  ['sys-urinary','Urinary System','Kidney & nephron'],
+  ['sys-endocrine','Endocrine System','Glands & hormones'],
+  ['sys-lymphatic','Lymphatic / Immune','Nodes, spleen, thymus'],
+  ['sys-reproductive','Reproductive','Male & female anatomy'],
+  ['sys-senses','Special Senses','Eye & ear'],
+  ['sys-integumentary','Integumentary','Skin structure'],
+];
+const REGION_NAV = [
+  ['region-head-neck','Head & Neck'],
+  ['region-thorax','Thorax'],
+  ['region-abdomen','Abdomen'],
+  ['region-pelvis','Pelvis'],
+  ['region-back','Back'],
+  ['region-upper-limb','Upper Limb'],
+  ['region-lower-limb','Lower Limb'],
+];
+const iconSvg = `<svg class="qc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18l6-6-6-6"/></svg>`;
+document.getElementById('systemQuickNav').innerHTML = SYSTEM_NAV.map(([id,t,s]) =>
+  `<a class="quick-card" href="#${id}" data-jump="${id}">${iconSvg}<span class="qc-txt"><b>${t}</b><span>${s}</span></span></a>`).join('');
+document.getElementById('regionQuickNav').innerHTML = REGION_NAV.map(([id,t]) =>
+  `<a class="quick-card" href="#${id}" data-jump="${id}">${iconSvg}<span class="qc-txt"><b>${t}</b><span>Regional anatomy</span></span></a>`).join('');
+document.querySelectorAll('#systemQuickNav a, #regionQuickNav a').forEach(a =>
+  a.addEventListener('click', () => recordRecent(a.dataset.jump)));
+ 
+/* ============================================================
+   FILTER BAR
+   ============================================================ */
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(p => p.setAttribute('aria-pressed','false'));
+    pill.setAttribute('aria-pressed','true');
+    const filter = pill.dataset.filter;
+    document.querySelectorAll('.system').forEach(sec => {
+      if(filter === 'all'){ sec.classList.remove('hidden-by-filter'); return; }
+      const [,val] = filter.split(':');
+      sec.classList.toggle('hidden-by-filter', sec.dataset.system !== val);
+    });
+  });
+});
+ 
+/* ============================================================
+   BOOKMARKS (localStorage)
+   ============================================================ */
+function getBookmarks(){ try{ return JSON.parse(localStorage.getItem('anatomy_bookmarks')||'[]'); }catch(e){ return []; } }
+function setBookmarks(arr){ try{ localStorage.setItem('anatomy_bookmarks', JSON.stringify(arr)); }catch(e){} }
+function refreshBookmarkButtons(){
+  const bm = getBookmarks();
+  document.querySelectorAll('.bookmark-btn').forEach(btn => {
+    btn.setAttribute('aria-pressed', bm.includes(btn.dataset.bookmark) ? 'true' : 'false');
+  });
+}
+document.querySelectorAll('.bookmark-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    let bm = getBookmarks();
+    const id = btn.dataset.bookmark;
+    bm = bm.includes(id) ? bm.filter(x=>x!==id) : [...bm, id];
+    setBookmarks(bm);
+    refreshBookmarkButtons();
+  });
+});
+refreshBookmarkButtons();
+ 
+/* ============================================================
+   RECENTLY VIEWED (localStorage)
+   ============================================================ */
+function getRecent(){ try{ return JSON.parse(localStorage.getItem('anatomy_recent')||'[]'); }catch(e){ return []; } }
+function recordRecent(id){
+  if(!id) return;
+  let r = getRecent().filter(x => x !== id);
+  r.unshift(id);
+  r = r.slice(0,6);
+  try{ localStorage.setItem('anatomy_recent', JSON.stringify(r)); }catch(e){}
+  renderRecent();
+}
+function renderRecent(){
+  const list = document.getElementById('recentList');
+  const r = getRecent();
+  if(r.length === 0){ list.innerHTML = '<li class="recent-empty">Structures you open will appear here.</li>'; return; }
+  list.innerHTML = r.map(id => {
+    const el = document.getElementById(id);
+    const label = el?.dataset.searchTitle || el?.querySelector('h2,h3')?.textContent || id;
+    return `<li><a href="#${id}"><span>${escapeHtml(label)}</span><span>→</span></a></li>`;
+  }).join('');
+}
+renderRecent();
+/* also record when scrolling directly into a structure via any in-page link */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', () => { const id = a.getAttribute('href').slice(1); if(document.getElementById(id)) recordRecent(id); });
+});
+ 
+/* ============================================================
+   DID YOU KNOW ROTATOR
+   ============================================================ */
+const DYK_FACTS = [
+  "Cortical folding lets roughly 2,000+ cm² of cerebral cortex fit inside a skull with less than 1,500 cm³ of internal volume.",
+  "About 5–10% of the adult human skeleton is remodelled — resorbed and rebuilt — every year.",
+  "The stapes, in the middle ear, is the smallest bone in the human body, roughly the size of a grain of rice.",
+  "Coronary arteries fill mainly during diastole, because their openings sit just above the aortic valve cusps.",
+  "The scaphoid's blood supply enters distally and runs backward through the bone, which is why waist fractures risk avascular necrosis of the proximal fragment.",
+  "The right main bronchus is wider, shorter and more vertical than the left — the anatomical reason aspirated objects more often end up in the right lung.",
+  "The hippocampus takes its name from the Greek for seahorse, describing its curved shape on dissection.",
+  "The gluteus maximus is the largest muscle in the body by mass, closely tied to the demands of upright walking and running.",
+  "A denervated, transplanted heart still beats — the SA node generates its own rhythm without any nerve input at all.",
+  "The testis drains to para-aortic lymph nodes, not groin nodes, because of where it developed embryologically before descending into the scrotum."
+];
+let dykIndex = 0;
+function rotateDyk(){ document.getElementById('dykRotator').textContent = DYK_FACTS[dykIndex % DYK_FACTS.length]; dykIndex++; }
+rotateDyk();
+setInterval(rotateDyk, 9000);
+ 
+/* ============================================================
+   FIGURE TABS (view switching within a figure)
+   ============================================================ */
+document.querySelectorAll('.figure-tabs').forEach(tabs => {
+  tabs.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed','false'));
+      btn.setAttribute('aria-pressed','true');
+      const view = btn.dataset.view;
+      const figure = tabs.closest('.figure');
+      figure.querySelectorAll('[data-view-img]').forEach(img => img.style.display = (img.dataset.viewImg===view ? 'block':'none'));
+      figure.querySelectorAll('[data-cap]').forEach(cap => cap.style.display = (cap.dataset.cap===view ? 'block':'none'));
+    });
+  });
+});
+ 
+/* ============================================================
+   IMAGE ZOOM / FULLSCREEN LIGHTBOX
+   ============================================================ */
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxCap = document.getElementById('lightboxCap');
+function openLightbox(imgEl){
+  lightboxImg.src = imgEl.src;
+  lightboxImg.alt = imgEl.alt;
+  const figure = imgEl.closest('.figure');
+  const visibleCap = figure?.querySelector('.cap-text[style*="block"], .cap-text:not([style*="none"])');
+  lightboxCap.textContent = imgEl.alt || visibleCap?.textContent || '';
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){ lightbox.classList.remove('active'); document.body.style.overflow = ''; }
+document.querySelectorAll('.figure-frame img').forEach(img => img.addEventListener('click', () => openLightbox(img)));
+document.querySelectorAll('[data-zoom],[data-fullscreen]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const img = btn.closest('.figure-frame').querySelector('img:not([style*="display: none"])') || btn.closest('.figure-frame').querySelector('img');
+    openLightbox(img);
+  });
+});
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox(); });
+ 
+/* ============================================================
+   NAV TOGGLE (mobile)
+   ============================================================ */
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  const open = navLinks.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', open ? 'true':'false');
+});
+ 
+/* ============================================================
+   BREADCRUMB + BACK TO TOP via scroll
+   ============================================================ */
+const sections = Array.from(document.querySelectorAll('.system'));
+const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+const backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('show', window.scrollY > 700);
+  let current = 'Overview';
+  for(const sec of sections){
+    const rect = sec.getBoundingClientRect();
+    if(rect.top < 160){ current = sec.querySelector('h2')?.textContent || current; }
+  }
+  breadcrumbCurrent.textContent = current;
+}, { passive:true });
+backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+ 
+/* ============================================================
+   QUIZ ENGINE — questions drawn from this page's own content
+   ============================================================ */
+const QUIZ_BANK = [
+  { q:"Which sulcus separates the frontal lobe from the parietal lobe, and marks the boundary between primary motor and primary somatosensory cortex?",
+    options:["Central sulcus","Lateral sulcus","Parieto-occipital sulcus","Longitudinal fissure"], correct:0,
+    explain:"The central sulcus (of Rolando) separates the precentral gyrus (primary motor cortex) from the postcentral gyrus (primary somatosensory cortex)." },
+  { q:"A patient presents with sudden weakness affecting mainly the contralateral leg, with the face and arm relatively spared. Which cerebral artery territory is most likely involved?",
+    options:["Middle cerebral artery","Anterior cerebral artery","Posterior cerebral artery","Posterior inferior cerebellar artery"], correct:1,
+    explain:"The anterior cerebral artery supplies the medial cerebral surface, including the leg area of the motor and sensory homunculus." },
+  { q:"Which narrow channel in the ventricular system is the most common site of obstructive hydrocephalus?",
+    options:["Interventricular foramen (of Monro)","Cerebral aqueduct (of Sylvius)","Foramen of Magendie","Central canal"], correct:1,
+    explain:"The cerebral aqueduct connecting the third and fourth ventricles is the narrowest point in the CSF pathway and a common site of obstruction." },
+  { q:"In a typical long bone, where is the epiphyseal (growth) plate located?",
+    options:["Within the diaphysis","Within the metaphysis, between diaphysis and epiphysis","On the articular surface of the epiphysis","Within the medullary cavity"], correct:1,
+    explain:"The epiphyseal plate lies in the metaphysis and is the site of longitudinal bone growth until it fuses in early adulthood." },
+  { q:"A blow to the pterion is dangerous chiefly because it can lacerate which vessel, producing an extradural haematoma?",
+    options:["Superior sagittal sinus","Anterior division of the middle meningeal artery","Internal carotid artery","Vertebral artery"], correct:1,
+    explain:"The pterion is the thinnest part of the calvarium and directly overlies the anterior division of the middle meningeal artery." },
+  { q:"Which heart valve lies between the left atrium and left ventricle?",
+    options:["Tricuspid valve","Pulmonary valve","Mitral (bicuspid) valve","Aortic valve"], correct:2,
+    explain:"The mitral (bicuspid) valve is the left atrioventricular valve; the tricuspid valve is on the right side." },
+  { q:"Which part of the cardiac conduction system is the normal pacemaker of the heart?",
+    options:["AV node","Bundle of His","SA node","Purkinje fibres"], correct:2,
+    explain:"The sinoatrial (SA) node, in the right atrial wall near the superior vena cava, spontaneously depolarises and sets the heart's normal rhythm." },
+  { q:"An inhaled foreign body most often lodges in the right lung rather than the left because the right main bronchus is:",
+    options:["Narrower and more angled","Wider, shorter and more vertical","Supplied by more bronchial arteries","Attached to more lymph nodes"], correct:1,
+    explain:"The right main bronchus's wider, shorter, more vertical course makes it the more likely path for aspirated material." },
+  { q:"Blood from the entire gastrointestinal tract, spleen and pancreas drains first into which vessel before reaching the systemic circulation?",
+    options:["Inferior vena cava","Hepatic portal vein","Coeliac trunk","Superior mesenteric artery"], correct:1,
+    explain:"The hepatic portal vein carries nutrient- and toxin-rich blood from the gut to the liver for first-pass processing before it joins systemic venous blood." },
+  { q:"Where within the nephron does filtration of blood first occur?",
+    options:["Loop of Henle","Distal convoluted tubule","Renal corpuscle (glomerulus + Bowman's capsule)","Collecting duct"], correct:2,
+    explain:"Blood is filtered at the renal corpuscle, where the glomerular capillary tuft is invaginated into Bowman's capsule." }
+];
+let quizIdx = 0, quizScore = 0, quizAnswered = false;
+const quizBody = document.getElementById('quizBody');
+const quizNext = document.getElementById('quizNext');
+const quizRestart = document.getElementById('quizRestart');
+function renderQuiz(){
+  const item = QUIZ_BANK[quizIdx];
+  document.getElementById('quizProgressText').textContent = `Question ${quizIdx+1} of ${QUIZ_BANK.length}`;
+  document.getElementById('quizScoreText').textContent = `Score: ${quizScore}`;
+  document.getElementById('quizBarFill').style.width = `${(quizIdx/QUIZ_BANK.length)*100}%`;
+  quizAnswered = false;
+  quizNext.disabled = true;
+  quizBody.innerHTML = `
+    <div class="quiz-question">${escapeHtml(item.q)}</div>
+    <div class="quiz-options">${item.options.map((opt,i)=>`<button class="quiz-opt" data-i="${i}">${escapeHtml(opt)}</button>`).join('')}</div>
+    <div class="quiz-explain" id="quizExplain"></div>
+  `;
+  quizBody.querySelectorAll('.quiz-opt').forEach(btn => btn.addEventListener('click', () => onQuizAnswer(btn, item)));
+}
+function onQuizAnswer(btn, item){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const chosen = parseInt(btn.dataset.i,10);
+  quizBody.querySelectorAll('.quiz-opt').forEach((b,i) => {
+    b.disabled = true;
+    if(i === item.correct) b.classList.add('correct');
+    else if(i === chosen) b.classList.add('incorrect');
+  });
+  if(chosen === item.correct) quizScore++;
+  document.getElementById('quizScoreText').textContent = `Score: ${quizScore}`;
+  const exp = document.getElementById('quizExplain');
+  exp.innerHTML = `<b>${chosen===item.correct ? 'Correct.' : 'Not quite.'}</b> ${escapeHtml(item.explain)}`;
+  exp.classList.add('show');
+  quizNext.disabled = false;
+}
+quizNext.addEventListener('click', () => {
+  quizIdx++;
+  if(quizIdx >= QUIZ_BANK.length){
+    document.getElementById('quizBarFill').style.width = '100%';
+    quizBody.innerHTML = `<div class="quiz-score"><div class="score-num">${quizScore}/${QUIZ_BANK.length}</div><p>Questions answered correctly. Restart to try again — the option order stays the same, but reasoning it through again reinforces recall.</p></div>`;
+    quizNext.disabled = true;
+    return;
+  }
+  renderQuiz();
+});
+quizRestart.addEventListener('click', () => { quizIdx=0; quizScore=0; renderQuiz(); });
+renderQuiz();
+ 
+/* ============================================================
+   FOOTER ATTRIBUTION LIST — generated from ANATOMY_IMAGES
+   ============================================================ */
+(function renderAttributions(){
+  const list = document.getElementById('attribList');
+  const rows = [];
+  Object.entries(ANATOMY_IMAGES).forEach(([group, views]) => {
+    Object.entries(views).forEach(([view, meta]) => {
+      rows.push(`<li>${escapeHtml(group)} — ${escapeHtml(view)}: ${escapeHtml(meta.source)}, ${escapeHtml(meta.license)}</li>`);
+    });
+  });
+  list.innerHTML = rows.join('');
+})();
+</script>
+</body>
+</html>
+ 
