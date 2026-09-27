@@ -1366,20 +1366,25 @@ function showAnatomyTab(id){
 <script src="ai-knowledge.js?v=20260908-2"></script>
 <script src="ai-portfolio.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("pageshow", () => {
+  const savedScrollPosition = sessionStorage.getItem("homeScrollPosition");
+  if (savedScrollPosition === null) return;
 
-  if (savedHomeScrollPosition !== null) {
-    window.addEventListener("load", () => {
-      requestAnimationFrame(() => {
-        const previousScrollBehavior = document.documentElement.style.scrollBehavior;
-        document.documentElement.style.scrollBehavior = "auto";
-        window.scrollTo(0, Number(savedHomeScrollPosition));
-        document.documentElement.style.scrollBehavior = previousScrollBehavior;
-        sessionStorage.removeItem("homeScrollPosition");
-        history.scrollRestoration = "auto";
-      });
-    }, { once: true });
-  }
+  history.scrollRestoration = "manual";
+  document.body.classList.remove("page-exit");
+  document.body.classList.add("page-loaded");
+
+  requestAnimationFrame(() => {
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "auto";
+    window.scrollTo(0, Number(savedScrollPosition));
+    document.documentElement.style.scrollBehavior = previousScrollBehavior;
+    sessionStorage.removeItem("homeScrollPosition");
+    history.scrollRestoration = "auto";
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
 
   requestAnimationFrame(() => {
     document.body.classList.add("page-loaded");
