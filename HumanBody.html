@@ -394,6 +394,16 @@ canvas{
 
 
 /* =========================
+   MOBILE VIEWER CONTROLS
+========================= */
+
+.mobile-viewer-controls,
+#mobileSelectionLabel{
+    display:none;
+}
+
+
+/* =========================
    TOAST
 ========================= */
 
@@ -475,6 +485,114 @@ canvas{
         font-size:10px;
     }
 }
+
+@media(max-width:768px){
+
+    body.mobile-skeleton-mode .top,
+    body.mobile-skeleton-mode .panel.left,
+    body.mobile-skeleton-mode .panel.right{
+        display:none;
+    }
+
+    body.mobile-skeleton-mode .mobile-viewer-controls{
+        position:fixed;
+        z-index:20;
+        top:max(8px,env(safe-area-inset-top));
+        left:8px;
+        right:8px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:5px;
+        padding:5px;
+        border:1px solid rgba(98,232,234,.18);
+        border-radius:10px;
+        background:rgba(5,8,12,.72);
+        backdrop-filter:blur(8px);
+    }
+
+    .mobile-viewer-controls button{
+        flex:0 0 auto;
+        min-height:32px;
+        padding:0 8px;
+        border:1px solid #263741;
+        border-radius:7px;
+        background:#081016;
+        color:var(--text);
+        font:11px Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+        white-space:nowrap;
+        cursor:pointer;
+    }
+
+    .mobile-viewer-controls button:hover,
+    .mobile-viewer-controls button:focus-visible{
+        border-color:var(--cyan);
+        color:var(--cyan);
+    }
+
+    #mobileActiveSystem{
+        overflow:hidden;
+        color:var(--cyan);
+        font-size:10px;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+
+    #mobileSystemsMenu{
+        position:absolute;
+        top:calc(100% + 6px);
+        left:0;
+        display:none;
+        width:min(190px,70vw);
+        padding:7px;
+        border:1px solid rgba(98,232,234,.2);
+        border-radius:9px;
+        background:rgba(5,8,12,.94);
+        box-shadow:0 12px 30px rgba(0,0,0,.4);
+        backdrop-filter:blur(10px);
+    }
+
+    #mobileSystemsMenu.open{
+        display:block;
+    }
+
+    #mobileSystemsMenu .mobile-layer{
+        min-height:34px;
+        margin:2px 0;
+        padding:7px 9px;
+        font-size:11px;
+    }
+
+    #mobileSelectionLabel{
+        position:fixed;
+        z-index:15;
+        right:10px;
+        bottom:max(8px,env(safe-area-inset-bottom));
+        max-width:calc(100vw - 20px);
+        overflow:hidden;
+        padding:4px 8px;
+        border:1px solid rgba(98,232,234,.16);
+        border-radius:6px;
+        background:rgba(5,8,12,.56);
+        color:#c5d7dc;
+        font-size:10px;
+        line-height:1.3;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        pointer-events:none;
+    }
+
+    body.mobile-skeleton-mode.has-mobile-selection #mobileSelectionLabel{
+        display:block;
+    }
+
+    body.mobile-skeleton-mode #viewer,
+    body.mobile-skeleton-mode #viewer canvas{
+        width:100vw;
+        height:100dvh;
+    }
+
+}
 </style>
 </head>
 
@@ -520,6 +638,28 @@ canvas{
     </div>
 
 </div>
+
+
+<div class="mobile-viewer-controls" aria-label="Mobile skeleton viewer controls">
+
+    <button id="mobileSystemsToggle" type="button" aria-expanded="false" aria-controls="mobileSystemsMenu">Systems</button>
+    <span id="mobileActiveSystem">Skeleton</span>
+    <button id="mobileFit" type="button">Fit</button>
+    <button id="mobileReset" type="button">Reset</button>
+    <button id="mobileRestore" type="button">Restore</button>
+
+    <div id="mobileSystemsMenu" aria-label="Choose anatomical system">
+        <button class="layer mobile-layer" type="button" data-system="skeleton">Skeleton</button>
+        <button class="layer mobile-layer" type="button" data-system="muscular">Muscular</button>
+        <button class="layer mobile-layer" type="button" data-system="organs">Organs</button>
+        <button class="layer mobile-layer" type="button" data-system="cardio">Cardiovascular</button>
+        <button class="layer mobile-layer" type="button" data-system="nervous">Nervous</button>
+        <button id="mobileSystemsBack" type="button">Back</button>
+    </div>
+
+</div>
+
+<div id="mobileSelectionLabel" aria-live="polite"></div>
 
 
 <!-- =========================
@@ -1052,6 +1192,9 @@ new Set();
 let selectedObject =
 null;
 
+let activeSystem =
+"skeleton";
+
 /* =========================================================
    UI
 ========================================================= */
@@ -1427,6 +1570,9 @@ function showSystem(
     system
 ){
 
+    activeSystem =
+    system;
+
     Object
     .entries(
         models
@@ -1465,12 +1611,80 @@ function showSystem(
     system.toUpperCase();
 
 
+    const activeSystemLabel =
+    document.getElementById(
+        "mobileActiveSystem"
+    );
+
+
+    if(activeSystemLabel){
+
+        activeSystemLabel.textContent =
+        system === "cardio"
+            ? "Cardiovascular"
+            : system.charAt(0).toUpperCase() +
+              system.slice(1);
+
+    }
+
+
+    syncMobileViewerMode();
+
+
     clearSelection();
 
 
     fitCamera();
 
 }
+
+
+function syncMobileViewerMode(){
+
+    const isMobileSkeleton =
+    window.matchMedia(
+        "(max-width: 768px)"
+    ).matches &&
+    activeSystem === "skeleton";
+
+
+    document.body.classList.toggle(
+        "mobile-skeleton-mode",
+        isMobileSkeleton
+    );
+
+
+    if(!isMobileSkeleton){
+
+        document.body.classList.remove(
+            "has-mobile-selection"
+        );
+
+
+        document
+        .getElementById(
+            "mobileSystemsMenu"
+        )
+        .classList.remove(
+            "open"
+        );
+
+
+        document
+        .getElementById(
+            "mobileSystemsToggle"
+        )
+        .setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+}
+
+
+syncMobileViewerMode();
 
 
 /* =========================================================
@@ -1496,6 +1710,109 @@ document
         );
 
     }
+);
+
+
+document
+.getElementById(
+    "mobileSystemsToggle"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        const menu =
+        document.getElementById(
+            "mobileSystemsMenu"
+        );
+
+
+        const isOpen =
+        menu.classList.toggle(
+            "open"
+        );
+
+
+        document
+        .getElementById(
+            "mobileSystemsToggle"
+        )
+        .setAttribute(
+            "aria-expanded",
+            String(isOpen)
+        );
+
+    }
+);
+
+
+document
+.getElementById(
+    "mobileSystemsBack"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        document
+        .getElementById(
+            "mobileSystemsMenu"
+        )
+        .classList.remove(
+            "open"
+        );
+
+
+        document
+        .getElementById(
+            "mobileSystemsToggle"
+        )
+        .setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+);
+
+
+document
+.getElementById(
+    "mobileFit"
+)
+.addEventListener(
+    "click",
+    fitCamera
+);
+
+
+document
+.getElementById(
+    "mobileReset"
+)
+.addEventListener(
+    "click",
+    resetAll
+);
+
+
+document
+.getElementById(
+    "mobileRestore"
+)
+.addEventListener(
+    "click",
+    restoreAll
+);
+
+
+window
+.matchMedia(
+    "(max-width: 768px)"
+)
+.addEventListener(
+    "change",
+    syncMobileViewerMode
 );
 
 
@@ -1882,6 +2199,29 @@ function selectObject(
 
     "Right-click: hide only this structure.";
 
+
+    document.body.classList.toggle(
+        "has-mobile-selection",
+        activeSystem === "skeleton" &&
+        window.matchMedia(
+            "(max-width: 768px)"
+        ).matches
+    );
+
+
+    document
+    .getElementById(
+        "mobileSelectionLabel"
+    )
+    .textContent =
+    object.userData.displayName +
+    " • " +
+    (
+        object.userData.system === "cardio"
+            ? "Cardiovascular"
+            : object.userData.system
+    );
+
 }
 
 
@@ -1942,6 +2282,11 @@ function clearSelection(){
 
     selectedObject =
     null;
+
+
+    document.body.classList.remove(
+        "has-mobile-selection"
+    );
 
 }
 
