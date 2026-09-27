@@ -1397,7 +1397,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ) return;
 
     link.addEventListener("click", e => {
-      if (href === "microscopy.html") {
+      if (href === "microscopy.html" || href === "anatomy.html") {
         if (window.scrollY > 0) {
           sessionStorage.setItem("homeScrollPosition", String(window.scrollY));
         } else {
