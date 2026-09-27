@@ -12,13 +12,15 @@
 <meta property="og:image:alt" content="Husain Farooqui">
 <title>Husain Farooqui — Web developer · Future Doctor · Learner</title>
 <script>
-  const navigationEntry = performance.getEntriesByType('navigation')[0];
-  const cameFromThisSite = document.referrer && new URL(document.referrer).origin === location.origin;
-  if (cameFromThisSite && navigationEntry?.type !== 'reload') document.documentElement.classList.add('skip-arabic-intro');
+  const savedHomeScrollPosition = sessionStorage.getItem('homeScrollPosition');
+  if (savedHomeScrollPosition !== null) history.scrollRestoration = 'manual';
+  if (sessionStorage.getItem('introShown') === 'true') {
+    document.documentElement.classList.add('skip-arabic-intro');
+  }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa+Ink:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=IBM+Plex+Sans+Arabic:wght@300;400;500&family=Josefin+Sans:wght@100;200;300;400&family=Noto+Kufi+Arabic:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa+Ink:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=El+Messiri:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500&family=Josefin+Sans:wght@100;200;300;400&family=Noto+Kufi+Arabic:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="favicon.png">
 <style>
   /* PAGE FADE TRANSITION */
@@ -57,7 +59,7 @@ body{background:var(--bg-deep);color:var(--text-primary);font-family:var(--font-
 #progress-bar{position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan));z-index:9997;box-shadow:0 0 10px var(--cyan)}
 nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 6vw;height:70px;display:flex;align-items:center;justify-content:space-between;background:rgba(3,5,8,.65);backdrop-filter:blur(24px);border-bottom:1px solid var(--glass-border)}
 .nav-logo{font-family:var(--font-display);font-size:1.5rem;font-weight:500;color:var(--text-primary);text-decoration:none}
-.nav-logo{font-family:var(--font-arabic-display);font-size:1.3rem;font-weight:500;line-height:1;color:var(--gold-soft);letter-spacing:0;background:linear-gradient(110deg,var(--gold-soft),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nav-logo{font-family:'El Messiri',sans-serif;font-size:1.3rem;font-weight:500;line-height:1.15;vertical-align:middle;color:var(--gold-soft);letter-spacing:0;background:linear-gradient(110deg,var(--gold-soft),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .nav-about{
   margin-left:16px;
   color:var(--cyan);
@@ -496,6 +498,7 @@ footer{position:relative;z-index:1;overflow:hidden}
 </div>
 <script>
   if (!document.documentElement.classList.contains('skip-arabic-intro')) {
+    sessionStorage.setItem('introShown', 'true');
     document.body.classList.add('intro-active');
     const introDuration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 300 : 2200;
     window.setTimeout(() => {
@@ -512,8 +515,8 @@ footer{position:relative;z-index:1;overflow:hidden}
   <ul class="nav-links">
     <li><a href="#home">Home</a></li>
     <li><a href="#research">Research</a></li>
-    <li><a href="#microscopy">Microscopy</a></li>
-    <li><a href="#anatomy">Anatomy</a></li>
+    <li><a href="microscopy.html">Microscopy</a></li>
+    <li><a href="anatomy.html">Anatomy</a></li>
     <li><a href="#interests">Interests</a></li>
     <li><a href="#husain-ai">HUSAIN'S AI</a></li>
     <li><a href="about.html">About</a></li>
@@ -536,8 +539,8 @@ footer{position:relative;z-index:1;overflow:hidden}
 <div class="mobile-menu" id="mobile-menu">
   <a href="#home" onclick="closeMobile()">Home</a>
   <a href="#research" onclick="closeMobile()">Research</a>
-  <a href="#microscopy" onclick="closeMobile()">Microscopy</a>
-  <a href="#anatomy" onclick="closeMobile()">Anatomy</a>
+  <a href="microscopy.html" onclick="closeMobile()">Microscopy</a>
+  <a href="anatomy.html" onclick="closeMobile()">Anatomy</a>
   <a href="#interests" onclick="closeMobile()">Interests</a>
   <a href="#husain-ai" onclick="closeMobile()">HUSAIN'S AI</a>
   <a href="about.html" onclick="closeMobile()">ABOUT</a>
@@ -645,6 +648,33 @@ footer{position:relative;z-index:1;overflow:hidden}
 
     <a href="microscopy.html" class="micro-page-button">
       EXPLORE MICROSCOPY →
+    </a>
+
+  </div>
+
+  <div class="micro-page-orb">
+    <div class="micro-orb-core"></div>
+  </div>
+
+</section>
+
+<section class="micro-page-link">
+
+  <div class="micro-page-link-content">
+
+    <span class="micro-page-label">ANATOMY</span>
+
+    <h2>
+      Human
+      <span>Anatomy</span>
+    </h2>
+
+    <p>
+      Explore the structure of the human body and its major systems.
+    </p>
+
+    <a href="anatomy.html" class="micro-page-button">
+      EXPLORE MORE →
     </a>
 
   </div>
@@ -1338,6 +1368,19 @@ function showAnatomyTab(id){
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+  if (savedHomeScrollPosition !== null) {
+    window.addEventListener("load", () => {
+      requestAnimationFrame(() => {
+        const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = "auto";
+        window.scrollTo(0, Number(savedHomeScrollPosition));
+        document.documentElement.style.scrollBehavior = previousScrollBehavior;
+        sessionStorage.removeItem("homeScrollPosition");
+        history.scrollRestoration = "auto";
+      });
+    }, { once: true });
+  }
+
   requestAnimationFrame(() => {
     document.body.classList.add("page-loaded");
   });
@@ -1354,6 +1397,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ) return;
 
     link.addEventListener("click", e => {
+      if (href === "microscopy.html") {
+        if (window.scrollY > 0) {
+          sessionStorage.setItem("homeScrollPosition", String(window.scrollY));
+        } else {
+          sessionStorage.removeItem("homeScrollPosition");
+        }
+      }
+
       e.preventDefault();
 
       document.body.classList.remove("page-loaded");
