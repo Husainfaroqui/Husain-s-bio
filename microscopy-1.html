@@ -1,0 +1,5104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Microscopy — Human Histology Atlas | Husain Farooqui</title>
+
+<meta name="description"
+content="Interactive human microscopy and histology atlas covering cells, tissues and major organ systems.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa+Ink:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=El+Messiri:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500&family=Josefin+Sans:wght@100;200;300;400&family=Noto+Kufi+Arabic:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   EXISTING-SITE / ANATOMY-STYLE THEME
+========================================================= */
+
+:root{
+    --bg-deep:#030508;
+    --bg-mid:#070b12;
+    --bg-surface:#0c1220;
+    --glass:rgba(12,22,44,.55);
+    --glass-border:rgba(100,160,255,.12);
+    --purple:#7b6cff;
+    --blue:#4a9eff;
+    --cyan:#00e5ff;
+    --gold:#c9ae72;
+    --gold-soft:#f4f0e7;
+    --emerald:#0d6b54;
+    --text-primary:#e8edf5;
+    --text-secondary:#7e92b0;
+    --text-muted:#3a4d6a;
+    --font-display:'Cormorant Garamond',Georgia,serif;
+    --font-ui:'Josefin Sans',sans-serif;
+    --font-mono:'DM Mono',monospace;
+    --font-arabic-display:'El Messiri',sans-serif;
+    --font-arabic-calligraphy:'Aref Ruqaa Ink','Amiri',serif;
+    --font-arabic-text:'Noto Naskh Arabic','IBM Plex Sans Arabic',sans-serif;
+    --bg:var(--bg-deep);
+    --surface:var(--glass);
+    --surface-soft:var(--bg-surface);
+    --text:var(--text-primary);
+    --muted:var(--text-secondary);
+    --accent:var(--cyan);
+    --accent-dark:var(--gold);
+    --border:var(--glass-border);
+    --shadow:0 18px 55px rgba(0,0,0,.35);
+    --radius:4px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:var(--font-ui);
+    font-weight:300;
+    color:var(--text-primary);
+    background:var(--bg-deep);
+    line-height:1.7;
+    overflow-x:hidden;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:1000;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:70px;
+    padding:0 6vw;
+    background:rgba(3,5,8,.65);
+    backdrop-filter:blur(24px);
+    border-bottom:1px solid var(--glass-border);
+}
+
+.logo{
+    font-family:var(--font-arabic-display);
+    font-size:1.3rem;
+    font-weight:500;
+    line-height:1.15;
+    vertical-align:middle;
+    color:var(--gold-soft);
+    text-decoration:none;
+    letter-spacing:0;
+    background:linear-gradient(110deg,var(--gold-soft),var(--gold));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.nav-links{
+    display:flex;
+    gap:1.8rem;
+    list-style:none;
+}
+
+.nav-links a{
+    position:relative;
+    color:var(--text-secondary);
+    font-family:var(--font-ui);
+    font-size:.66rem;
+    font-weight:300;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    text-decoration:none;
+    transition:color .3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+    color:var(--cyan);
+}
+
+.nav-links a::after{
+    content:'';
+    position:absolute;
+    bottom:-4px;
+    left:0;
+    right:0;
+    height:1px;
+    background:var(--cyan);
+    transform:scaleX(0);
+    transition:transform .3s;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after{
+    transform:scaleX(1);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    max-width:1200px;
+    margin:auto;
+    padding:140px 6vw 55px;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+
+    margin-bottom:20px;
+
+    color:var(--cyan);
+    font-family:var(--font-mono);
+    font-size:.6rem;
+    font-weight:400;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+}
+
+.eyebrow::before{
+    content:"";
+
+    width:28px;
+    height:1px;
+
+    background:var(--gold);
+}
+
+.hero h1{
+    max-width:950px;
+    font-family:var(--font-display);
+    font-size:clamp(3.5rem,8vw,7rem);
+    line-height:.98;
+    font-weight:300;
+    margin-bottom:1.5rem;
+}
+
+.hero h1 span{
+    color:var(--blue);
+}
+
+.hero p{
+    max-width:800px;
+
+    color:var(--text-secondary);
+    font-size:.85rem;
+    font-weight:300;
+    line-height:1.9;
+}
+
+
+/* =========================================================
+   ATLAS STATS
+========================================================= */
+
+.stats{
+    max-width:1200px;
+    margin:auto;
+    padding:1.5rem 6vw 2rem;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:2rem;
+    text-align:center;
+    border-top:1px solid var(--glass-border);
+    border-bottom:1px solid var(--glass-border);
+    background:var(--glass);
+    backdrop-filter:blur(10px);
+}
+
+.stat{
+    padding:1rem;
+}
+
+.stat strong{
+    display:block;
+    font-family:var(--font-display);
+    font-size:clamp(2rem,4vw,3rem);
+    font-weight:300;
+    line-height:1;
+    color:var(--text-primary);
+}
+
+.stat span{
+    display:block;
+    margin-top:.6rem;
+    color:var(--text-muted);
+    font-family:var(--font-mono);
+    font-size:.55rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls{
+    max-width:1200px;
+    margin:auto;
+    padding:1.5rem 6vw 2rem;
+}
+
+.control-box{
+    display:flex;
+    flex-wrap:wrap;
+
+    gap:.75rem;
+    padding:1rem;
+    background:var(--glass);
+    backdrop-filter:blur(20px);
+    border:1px solid var(--glass-border);
+}
+
+.search{
+    flex:1;
+
+    min-width:220px;
+    padding:.75rem 1rem;
+    background:var(--bg-surface);
+    color:var(--text-primary);
+    border:1px solid var(--glass-border);
+    border-radius:4px;
+    outline:none;
+    font-family:var(--font-ui);
+    font-size:.75rem;
+    font-weight:300;
+}
+
+.search:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 0 1px rgba(0,229,255,.12);
+}
+
+.filter{
+    padding:.7rem 1rem;
+    background:var(--bg-surface);
+    color:var(--text-secondary);
+    border:1px solid var(--glass-border);
+    border-radius:4px;
+    outline:none;
+    cursor:pointer;
+    color-scheme:dark;
+    font-family:var(--font-ui);
+    font-size:.7rem;
+    font-weight:300;
+}
+
+.search::placeholder{
+    color:var(--text-muted);
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+    max-width:1200px;
+    margin:auto;
+    padding:0 6vw 6rem;
+}
+
+.library{
+    display:grid;
+
+    grid-template-columns:
+        minmax(220px,275px)
+        minmax(0,1fr);
+    gap:1.5rem;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+    position:sticky;
+    top:90px;
+
+    align-self:start;
+
+    padding:1.4rem;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(20px);
+}
+
+.sidebar h3{
+    margin-bottom:1rem;
+    font-family:var(--font-display);
+    font-size:1.7rem;
+    font-weight:400;
+    color:var(--text-primary);
+}
+
+.category{
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:.7rem .25rem;
+    background:none;
+    color:var(--text-secondary);
+    border:0;
+    border-bottom:1px solid rgba(255,255,255,.04);
+    text-align:left;
+    cursor:pointer;
+    font-family:var(--font-ui);
+    font-size:.72rem;
+    font-weight:300;
+    transition:all .3s;
+}
+
+.category:hover,
+.category.active{
+    color:var(--cyan);
+    padding-left:.6rem;
+    font-weight:400;
+    border-left:1px solid var(--cyan);
+    background:rgba(0,229,255,.035);
+}
+
+
+/* =========================================================
+   SPECIMEN GRID
+========================================================= */
+
+.specimen-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:1.2rem;
+}
+
+.specimen-card{
+    overflow:hidden;
+
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(20px);
+
+    cursor:pointer;
+
+    transition:
+        transform .3s,
+        box-shadow .3s,
+        border-color .3s;
+}
+
+.specimen-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(0,229,255,.25);
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
+}
+
+.specimen-image{
+    position:relative;
+
+    height:245px;
+
+    overflow:hidden;
+
+    background:var(--bg-mid);
+}
+
+.specimen-image img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+
+    transition:transform .35s ease;
+}
+
+.specimen-card:hover .specimen-image img{
+    transform:scale(1.035);
+}
+
+.specimen-image::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:none;
+
+    pointer-events:none;
+}
+
+.mag{
+    position:absolute;
+
+    right:14px;
+    bottom:14px;
+
+    z-index:2;
+
+    padding:.35rem .55rem;
+    background:rgba(3,5,8,.88);
+    color:var(--gold-soft);
+    border:1px solid var(--glass-border);
+    font-family:var(--font-mono);
+    font-size:.55rem;
+    font-weight:300;
+}
+
+.specimen-info{
+    padding:1.1rem;
+}
+
+.specimen-info small{
+    color:var(--gold);
+    font-family:var(--font-mono);
+    font-size:.55rem;
+    font-weight:400;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+.specimen-info h3{
+    margin:7px 0 8px;
+
+    font-family:var(--font-display);
+    font-size:1.55rem;
+    font-weight:400;
+    line-height:1.15;
+    color:var(--text-primary);
+}
+
+.specimen-info p{
+    color:var(--text-secondary);
+    font-size:.72rem;
+    font-weight:300;
+    line-height:1.7;
+}
+
+
+/* =========================================================
+   MODAL / VIEWER
+========================================================= */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    z-index:5000;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(3,5,8,.88);
+    backdrop-filter:blur(24px);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.viewer{
+    width:min(1300px,100%);
+
+    max-height:95vh;
+
+    overflow:auto;
+    background:var(--bg-surface);
+    border:1px solid var(--glass-border);
+    border-radius:4px;
+    box-shadow:0 40px 100px rgba(0,0,0,.55);
+}
+
+.viewer-top{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 22px;
+
+    border-bottom:1px solid var(--glass-border);
+    background:var(--bg-mid);
+}
+
+.viewer-title h2{
+    font-family:var(--font-display);
+    font-size:2rem;
+    font-weight:400;
+    color:var(--text-primary);
+}
+
+.viewer-title p{
+    color:var(--text-secondary);
+    font-size:.65rem;
+}
+
+.close{
+    width:42px;
+    height:42px;
+
+    border:1px solid var(--glass-border);
+    border-radius:4px;
+    background:var(--glass);
+    color:var(--gold-soft);
+    cursor:pointer;
+    font-size:21px;
+    transition:all .3s;
+}
+
+.close:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+    background:rgba(201,174,114,.05);
+}
+
+.viewer-layout{
+    display:grid;
+
+    grid-template-columns:
+        minmax(0,1.55fr)
+        minmax(320px,.8fr);
+}
+
+
+/* =========================================================
+   IMAGE VIEWER
+========================================================= */
+
+.image-area{
+    position:relative;
+
+    min-height:580px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    background:var(--bg-deep);
+}
+
+.image-wrap{
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    touch-action:none;
+}
+
+.image-wrap img{
+    max-width:100%;
+    max-height:670px;
+
+    object-fit:contain;
+
+    user-select:none;
+
+    transform-origin:center;
+
+    transition:transform .15s;
+}
+
+.viewer-tools{
+    position:absolute;
+
+    left:50%;
+    bottom:20px;
+
+    transform:translateX(-50%);
+
+    display:flex;
+
+    gap:7px;
+
+    padding:8px;
+
+    background:rgba(3,5,8,.88);
+    border:1px solid var(--glass-border);
+    border-radius:4px;
+    backdrop-filter:blur(24px);
+}
+
+.viewer-tools button{
+    min-width:40px;
+    height:38px;
+
+    padding:0 10px;
+
+    border:1px solid rgba(201,174,114,.3);
+    border-radius:4px;
+    background:rgba(201,174,114,.045);
+    color:var(--gold-soft);
+    cursor:pointer;
+    font-family:var(--font-ui);
+    font-size:.65rem;
+    font-weight:300;
+    letter-spacing:.08em;
+    transition:all .3s;
+}
+
+.viewer-tools button:hover{
+    background:rgba(201,174,114,.08);
+    border-color:var(--gold);
+    color:#fffdf7;
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.details{
+    padding:30px;
+
+    max-height:680px;
+
+    overflow-y:auto;
+
+    background:var(--bg-surface);
+    border-left:1px solid var(--glass-border);
+}
+
+.detail-section{
+    margin-bottom:28px;
+}
+
+.detail-section h4{
+    margin-bottom:8px;
+
+    color:var(--cyan);
+    font-family:var(--font-mono);
+    font-size:.55rem;
+    font-weight:400;
+    letter-spacing:.16em;
+
+    text-transform:uppercase;
+}
+
+.detail-section p{
+    color:var(--text-secondary);
+    font-size:.72rem;
+    line-height:1.8;
+}
+
+.detail-section ul{
+    padding-left:18px;
+
+    color:var(--text-secondary);
+    font-size:.72rem;
+    line-height:1.85;
+}
+
+.badge{
+    display:inline-block;
+
+    margin:3px 4px 3px 0;
+
+    padding:.3rem .55rem;
+    background:var(--glass);
+    color:var(--gold);
+    border:1px solid var(--glass-border);
+    font-family:var(--font-mono);
+    font-size:.55rem;
+    font-weight:300;
+}
+
+.source-box{
+    padding:.75rem;
+    background:rgba(3,5,8,.4);
+    border:1px solid var(--glass-border);
+    font-size:.65rem;
+    color:var(--text-secondary);
+    overflow-wrap:anywhere;
+}
+
+
+/* =========================================================
+   PRACTICAL SECTION
+========================================================= */
+
+.practical{
+    margin-top:5rem;
+    padding:2.2rem;
+    background:var(--glass);
+    color:var(--text-primary);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(20px);
+}
+
+.practical-label{
+    color:var(--gold);
+    font-family:var(--font-mono);
+    font-size:.55rem;
+    font-weight:400;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+}
+
+.practical h2{
+    margin:10px 0 10px;
+
+    font-family:var(--font-display);
+    font-size:clamp(2rem,4vw,3rem);
+    font-weight:400;
+    color:var(--text-primary);
+}
+
+.practical p{
+    color:var(--text-secondary);
+    max-width:700px;
+    margin-bottom:1.5rem;
+}
+
+.quiz-image{
+    width:100%;
+
+    max-height:430px;
+
+    object-fit:contain;
+
+    display:block;
+
+    background:var(--bg-deep);
+    border:1px solid var(--glass-border);
+    border-radius:4px;
+
+    margin-bottom:20px;
+}
+
+.options{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:10px;
+}
+
+.option{
+    padding:14px 16px;
+
+    background:var(--glass);
+    color:var(--text-secondary);
+    border:1px solid var(--glass-border);
+    border-radius:4px;
+    text-align:left;
+    cursor:pointer;
+    font-family:var(--font-ui);
+    font-size:.68rem;
+    font-weight:300;
+    letter-spacing:.08em;
+    transition:all .3s;
+}
+
+.option:hover{
+    color:var(--cyan);
+    border-color:var(--cyan);
+    background:rgba(0,229,255,.05);
+}
+
+.option.correct{
+    background:rgba(13,107,84,.2);
+    border-color:var(--emerald);
+    color:var(--gold-soft);
+}
+
+.option.wrong{
+    background:rgba(201,174,114,.06);
+    border-color:var(--gold);
+    color:var(--gold-soft);
+}
+
+.quiz-result{
+    margin-top:18px;
+
+    color:var(--text-secondary);
+    font-family:var(--font-mono);
+    font-size:.65rem;
+}
+
+
+/* =========================================================
+   FLASHCARD
+========================================================= */
+
+.flashcards{
+    margin-top:3rem;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:1.2rem;
+}
+
+.flashcard{
+    min-height:210px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    padding:1.5rem;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(20px);
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.flashcard:hover{
+    transform:translateY(-4px);
+    border-color:rgba(0,229,255,.25);
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
+}
+
+.flashcard small{
+    color:var(--cyan);
+    font-family:var(--font-mono);
+    font-size:.55rem;
+    font-weight:400;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+}
+
+.flashcard h3{
+    margin:10px 0;
+
+    font-family:var(--font-display);
+    font-size:1.5rem;
+    font-weight:400;
+    color:var(--text-primary);
+}
+
+.flashcard p{
+    color:var(--text-secondary);
+    font-size:.72rem;
+    font-weight:300;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    padding:1rem 6vw;
+    border-top:1px solid var(--glass-border);
+    background:rgba(3,5,8,.85);
+    color:var(--text-muted);
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:.55rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:950px){
+
+    .nav-links{
+        gap:.8rem;
+    }
+
+    .nav-links a{
+        font-size:.58rem;
+        letter-spacing:.1em;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .library{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        position:static;
+    }
+
+    .viewer-layout{
+        grid-template-columns:1fr;
+    }
+
+    .details{
+        max-height:none;
+
+        border-left:0;
+
+        border-top:1px solid var(--border);
+    }
+
+    .image-area{
+        min-height:420px;
+    }
+
+    .flashcards{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:650px){
+
+    .navbar{
+        padding:0 5vw;
+    }
+
+    .nav-links{
+        gap:.45rem;
+    }
+
+    .nav-links a{
+        font-size:.49rem;
+        letter-spacing:.08em;
+    }
+
+    .logo{
+        font-size:1.1rem;
+    }
+
+    .hero{
+        padding-top:110px;
+    }
+
+    .hero h1{
+        font-size:clamp(2.6rem,10vw,3rem);
+    }
+
+    .hero p{
+        font-size:.85rem;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .specimen-grid{
+        grid-template-columns:1fr;
+    }
+
+    .control-box{
+        flex-direction:column;
+    }
+
+    .search,
+    .filter{
+        width:100%;
+        min-width:0;
+    }
+
+    .options{
+        grid-template-columns:1fr;
+    }
+
+    .flashcards{
+        grid-template-columns:1fr;
+    }
+
+    .practical{
+        padding:26px;
+    }
+
+    .practical h2{
+        font-size:31px;
+    }
+
+    .modal{
+        padding:8px;
+    }
+
+    .viewer{
+        max-height:98vh;
+    }
+
+    .image-area{
+        min-height:320px;
+    }
+
+    .details{
+        padding:20px;
+    }
+}
+
+@media(max-width:380px){
+    .navbar{
+        padding:0 4vw;
+    }
+
+    .nav-links{
+        gap:.3rem;
+    }
+
+    .nav-links a{
+        font-size:.44rem;
+        letter-spacing:.05em;
+    }
+
+    .logo{
+        font-size:1rem;
+    }
+}
+
+#specimenGrid > div[style]{
+    background:var(--glass)!important;
+    color:var(--text-secondary)!important;
+    border-color:var(--glass-border)!important;
+    border-radius:4px!important;
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+<a href="index.html" class="logo">حسين</a>
+
+<ul class="nav-links">
+
+<li>
+<a href="index.html">Home</a>
+</li>
+
+<li>
+<a href="microscopy.html" class="active">Microscopy</a>
+</li>
+
+<li>
+<a href="anatomy.html">Anatomy</a>
+</li>
+
+<li>
+<a href="about.html">About</a>
+</li>
+
+</ul>
+
+</nav>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<header class="hero">
+
+<div class="eyebrow">
+Human Microscopy & Histology Atlas
+</div>
+
+<h1>
+The human body,
+<span>at microscopic scale.</span>
+</h1>
+
+<p>
+Explore human cells, tissues and organs through microscopy.
+Identify microscopic structures, understand tissue architecture,
+compare similar specimens and connect microscopic anatomy with
+function and clinical relevance.
+</p>
+
+</header>
+
+
+<!-- =====================================================
+     STATS
+===================================================== -->
+
+<section class="stats">
+
+<div class="stat">
+<strong id="statSpecimens">0</strong>
+<span>Microscopy specimens</span>
+</div>
+
+<div class="stat">
+<strong id="statSystems">0</strong>
+<span>Body systems</span>
+</div>
+
+<div class="stat">
+<strong id="statCategories">0</strong>
+<span>Histology categories</span>
+</div>
+
+<div class="stat">
+<strong id="statViewed">0%</strong>
+<span>Atlas explored</span>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTROLS
+===================================================== -->
+
+<section class="controls">
+
+<div class="control-box">
+
+<input
+id="search"
+class="search"
+type="search"
+placeholder="Search neuron, glomerulus, blood, cartilage, liver..."
+>
+
+<select id="systemFilter" class="filter">
+
+<option value="all">All systems</option>
+
+</select>
+
+<select id="categoryFilter" class="filter">
+
+<option value="all">All categories</option>
+
+</select>
+
+<select id="stainFilter" class="filter">
+
+<option value="all">All stains</option>
+
+</select>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+<div class="library">
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+<h3>Atlas</h3>
+
+<button class="category active" data-category="all">
+<span>All specimens</span>
+<span id="allCount">0</span>
+</button>
+
+<div id="categoryButtons"></div>
+
+</aside>
+
+
+<!-- SPECIMENS -->
+
+<section>
+
+<div
+id="specimenGrid"
+class="specimen-grid">
+</div>
+
+</section>
+
+</div>
+
+
+<!-- =====================================================
+     PRACTICAL
+===================================================== -->
+
+<section class="practical">
+
+<div class="practical-label">
+Histology Practical
+</div>
+
+<h2>
+Identify the specimen.
+</h2>
+
+<p>
+Study the image first. Look for architecture, cell shape,
+nuclei, layers and distinctive microscopic clues before revealing
+the answer.
+</p>
+
+<img
+id="quizImage"
+class="quiz-image"
+alt="Histology practical specimen"
+>
+
+<div
+id="quizOptions"
+class="options">
+</div>
+
+<div
+id="quizResult"
+class="quiz-result">
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     FLASHCARDS
+===================================================== -->
+
+<section class="flashcards" id="flashcards"></section>
+
+</main>
+
+
+<footer>
+
+Human Microscopy & Histology Atlas
+<br>
+Husain Farooqui
+
+</footer>
+
+
+<!-- =====================================================
+     VIEWER
+===================================================== -->
+
+<div id="modal" class="modal">
+
+<div class="viewer">
+
+<div class="viewer-top">
+
+<div class="viewer-title">
+
+<h2 id="modalTitle">
+Specimen
+</h2>
+
+<p id="modalSubtitle">
+Histology
+</p>
+
+</div>
+
+<button
+id="closeModal"
+class="close"
+aria-label="Close viewer">
+×
+</button>
+
+</div>
+
+
+<div class="viewer-layout">
+
+
+<!-- IMAGE -->
+
+<div class="image-area">
+
+<div class="image-wrap" id="imageWrap">
+
+<img
+id="viewerImage"
+alt="Microscopic specimen"
+draggable="false"
+>
+
+</div>
+
+
+<div class="viewer-tools">
+
+<button id="zoomOut">−</button>
+
+<button id="zoomReset">100%</button>
+
+<button id="zoomIn">+</button>
+
+<button id="fullscreen">⛶</button>
+
+</div>
+
+</div>
+
+
+<!-- DETAILS -->
+
+<aside class="details">
+
+
+<div class="detail-section">
+
+<h4>Classification</h4>
+
+<div id="detailTags"></div>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>What you are seeing</h4>
+
+<p id="detailDescription"></p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>Structures to identify</h4>
+
+<ul id="detailStructures"></ul>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>Histological architecture</h4>
+
+<p id="detailHistology"></p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>Important cell types</h4>
+
+<ul id="detailCells"></ul>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>Function</h4>
+
+<p id="detailFunction"></p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>How to identify it</h4>
+
+<p id="detailIdentification"></p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>Clinical correlation</h4>
+
+<p id="detailClinical"></p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>High-yield practical points</h4>
+
+<ul id="detailHighYield"></ul>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>Look-alikes</h4>
+
+<p id="detailLookAlikes"></p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h4>Image source & license</h4>
+
+<div
+id="detailSource"
+class="source-box">
+</div>
+
+</div>
+
+
+</aside>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   MICROSCOPY DATABASE
+========================================================= */
+
+const SPECIMENS = [
+
+/* =====================================================
+   BLOOD
+===================================================== */
+
+{
+id:"blood-smear",
+name:"Peripheral Blood Smear",
+category:"Blood",
+system:"Cardiovascular",
+tissue:"Blood",
+stain:"Blood film",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blood%20smear%20labelled.png",
+
+magnification:"Blood smear",
+
+description:"A peripheral blood film showing the formed elements of human blood.",
+
+structures:[
+"Red blood cells",
+"Neutrophil",
+"Lymphocyte",
+"Monocyte",
+"Eosinophil",
+"Basophil",
+"Platelets"
+],
+
+histology:"Peripheral blood is a fluid connective tissue. Mature erythrocytes dominate the field while leukocytes and platelets are present in much smaller numbers.",
+
+cellTypes:[
+"Erythrocytes",
+"Neutrophils",
+"Lymphocytes",
+"Monocytes",
+"Eosinophils",
+"Basophils",
+"Platelets"
+],
+
+function:"Blood transports gases, nutrients, hormones and metabolic products and participates in immunity and hemostasis.",
+
+identification:"First identify the numerous anucleate erythrocytes. Then look for the larger nucleated leukocytes and the tiny platelets.",
+
+clinical:"Peripheral blood morphology is used in the evaluation of anemia, infection, inflammation and hematological disorders.",
+
+highYield:[
+"RBCs are the dominant formed element.",
+"Mature RBCs lack nuclei.",
+"Neutrophils have multilobed nuclei.",
+"Lymphocytes have dense round nuclei.",
+"Platelets are tiny cytoplasmic fragments."
+],
+
+lookAlikes:"Different leukocytes can be confused with one another, so nuclear morphology and cytoplasmic granules are especially important.",
+
+source:"Wikimedia Commons — Blood smear labelled.png. Creative Commons Attribution-ShareAlike 4.0. Source information is documented on the Commons file page."
+},
+
+{
+id:"blood-rbc",
+name:"Erythrocytes",
+category:"Blood",
+system:"Cardiovascular",
+tissue:"Blood",
+stain:"Blood film",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blood%20smear%20%28265%2021%29%20Human.jpg",
+
+magnification:"Peripheral smear",
+
+description:"Numerous erythrocytes in a human peripheral blood smear.",
+
+structures:[
+"Erythrocytes",
+"Central pallor",
+"Occasional platelets"
+],
+
+histology:"Mature erythrocytes are anucleate biconcave discs. Their morphology allows efficient gas exchange and flexibility while moving through small vessels.",
+
+cellTypes:[
+"Erythrocytes"
+],
+
+function:"Transport oxygen and carbon dioxide.",
+
+identification:"Look for numerous pink-to-red anucleate discs with relatively uniform size and central pallor.",
+
+clinical:"Changes in size, shape and hemoglobinization of erythrocytes are important morphological clues in different anemias.",
+
+highYield:[
+"Biconcave disc",
+"No nucleus when mature",
+"Central pallor",
+"Highly flexible cell membrane"
+],
+
+lookAlikes:"Abnormal RBC shapes can resemble one another; morphology must be interpreted with the overall smear.",
+
+source:"Wikimedia Commons — Blood smear (265 21) Human.jpg. Verify the current Commons license/attribution before redistribution."
+},
+
+{
+id:"wbc-neutrophil",
+name:"Neutrophil",
+category:"Blood",
+system:"Cardiovascular",
+tissue:"Blood",
+stain:"Blood film",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blood%20smear%20labelled.png",
+
+magnification:"Peripheral smear",
+
+description:"A labelled peripheral smear showing a neutrophil among other formed elements.",
+
+structures:[
+"Multilobed nucleus",
+"Fine cytoplasmic granules",
+"Surrounding erythrocytes"
+],
+
+histology:"Neutrophils are granulocytic leukocytes with a segmented nucleus. Their cytoplasmic granules are generally subtle on routine blood films.",
+
+cellTypes:[
+"Neutrophil"
+],
+
+function:"Important cells of innate immune defense, especially in acute inflammatory responses.",
+
+identification:"The segmented or multilobed nucleus is the key practical clue.",
+
+clinical:"Changes in neutrophil number and morphology may occur in infection, inflammation and hematological disorders.",
+
+highYield:[
+"Multilobed nucleus",
+"Granulocyte",
+"Major innate immune cell"
+],
+
+lookAlikes:"Band forms have a less segmented nucleus and may be confused with mature neutrophils.",
+
+source:"Wikimedia Commons labelled blood smear. CC BY-SA 4.0."
+},
+
+{
+id:"wbc-lymphocyte",
+name:"Lymphocyte",
+category:"Blood",
+system:"Lymphatic",
+tissue:"Blood",
+stain:"Blood film",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blood%20smear%20labelled.png",
+
+magnification:"Peripheral smear",
+
+description:"A lymphocyte identified in a labelled human blood smear.",
+
+structures:[
+"Dense nucleus",
+"Thin cytoplasmic rim"
+],
+
+histology:"Small lymphocytes typically have a large, dark-staining round nucleus occupying most of the cell.",
+
+cellTypes:[
+"Lymphocyte"
+],
+
+function:"Participate in adaptive and innate immune responses.",
+
+identification:"Look for a relatively small cell dominated by a dense round nucleus with only a narrow rim of cytoplasm.",
+
+clinical:"Lymphocyte morphology and count are relevant in immune, infectious and hematological conditions.",
+
+highYield:[
+"Large nucleus-to-cytoplasm ratio",
+"Round dense nucleus",
+"Small amount of cytoplasm"
+],
+
+lookAlikes:"Small lymphocytes can be confused with other small mononuclear cells if the smear is poorly prepared.",
+
+source:"Wikimedia Commons labelled blood smear. CC BY-SA 4.0."
+},
+
+{
+id:"wbc-monocyte",
+name:"Monocyte",
+category:"Blood",
+system:"Cardiovascular",
+tissue:"Blood",
+stain:"Blood film",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blood%20smear%20labelled.png",
+
+magnification:"Peripheral smear",
+
+description:"A monocyte in a human peripheral blood smear.",
+
+structures:[
+"Large cell body",
+"Indented/kidney-shaped nucleus",
+"Abundant cytoplasm"
+],
+
+histology:"Monocytes are large agranulocytes with abundant cytoplasm and a characteristic folded or kidney-shaped nucleus.",
+
+cellTypes:[
+"Monocyte"
+],
+
+function:"Circulate in blood and can differentiate into macrophage-lineage cells in tissues.",
+
+identification:"Look for a relatively large leukocyte with abundant gray-blue cytoplasm and an indented nucleus.",
+
+clinical:"Monocyte changes can accompany chronic inflammatory and infectious processes.",
+
+highYield:[
+"Large leukocyte",
+"Indented nucleus",
+"Abundant cytoplasm"
+],
+
+lookAlikes:"Reactive lymphocytes can sometimes appear larger and require careful comparison.",
+
+source:"Wikimedia Commons labelled blood smear. CC BY-SA 4.0."
+},
+
+{
+id:"wbc-eosinophil",
+name:"Eosinophil",
+category:"Blood",
+system:"Cardiovascular",
+tissue:"Blood",
+stain:"Blood film",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blood%20smear%20labelled.png",
+
+magnification:"Peripheral smear",
+
+description:"An eosinophil identified in a labelled blood smear.",
+
+structures:[
+"Bilobed nucleus",
+"Prominent cytoplasmic granules"
+],
+
+histology:"Eosinophils characteristically contain prominent eosinophilic granules and usually have a bilobed nucleus.",
+
+cellTypes:[
+"Eosinophil"
+],
+
+function:"Participate in immune responses including those associated with parasites and allergic inflammation.",
+
+identification:"The strong cytoplasmic granules and bilobed nucleus are useful practical clues.",
+
+clinical:"Eosinophil counts can change in allergic and parasitic conditions among other causes.",
+
+highYield:[
+"Usually bilobed nucleus",
+"Large eosinophilic granules",
+"Granulocyte"
+],
+
+lookAlikes:"Neutrophils also have segmented nuclei, but their granules are less intensely eosinophilic.",
+
+source:"Wikimedia Commons labelled blood smear. CC BY-SA 4.0."
+},
+
+{
+id:"wbc-basophil",
+name:"Basophil",
+category:"Blood",
+system:"Cardiovascular",
+tissue:"Blood",
+stain:"Blood film",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blood%20smear%20labelled.png",
+
+magnification:"Peripheral smear",
+
+description:"A basophil identified in a labelled peripheral blood smear.",
+
+structures:[
+"Dark cytoplasmic granules",
+"Nucleus partly obscured by granules"
+],
+
+histology:"Basophils are rare granulocytes whose dark cytoplasmic granules can obscure portions of the nucleus.",
+
+cellTypes:[
+"Basophil"
+],
+
+function:"Participate in inflammatory and hypersensitivity-related immune responses.",
+
+identification:"The unusually dark coarse granules are the major practical clue.",
+
+clinical:"Basophil abnormalities may occur in selected hematological and inflammatory conditions.",
+
+highYield:[
+"Rare leukocyte",
+"Dark coarse granules",
+"Nucleus can be obscured"
+],
+
+lookAlikes:"Eosinophils also contain conspicuous granules but have characteristic eosinophilic coloration and bilobed nuclei.",
+
+source:"Wikimedia Commons labelled blood smear. CC BY-SA 4.0."
+},
+
+{
+id:"platelet",
+name:"Platelet",
+category:"Blood",
+system:"Cardiovascular",
+tissue:"Blood",
+stain:"Blood film",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Blood%20smear%20labelled.png",
+
+magnification:"Peripheral smear",
+
+description:"Tiny platelet fragments distributed among erythrocytes in a blood smear.",
+
+structures:[
+"Platelet fragment",
+"Granules"
+],
+
+histology:"Platelets are anucleate cytoplasmic fragments derived from megakaryocytes.",
+
+cellTypes:[
+"Platelet"
+],
+
+function:"Participate in primary hemostasis and clot formation.",
+
+identification:"They are much smaller than erythrocytes and appear as small basophilic fragments.",
+
+clinical:"Platelet number and morphology are relevant to disorders of bleeding and thrombosis.",
+
+highYield:[
+"No nucleus",
+"Much smaller than RBCs",
+"Derived from megakaryocytes"
+],
+
+lookAlikes:"Platelet clumps and staining artifacts can mimic abnormal platelet distributions.",
+
+source:"Wikimedia Commons labelled blood smear. CC BY-SA 4.0."
+},
+
+
+/* =====================================================
+   NERVOUS
+===================================================== */
+
+{
+id:"neuron",
+name:"Human Neuron",
+category:"Nervous Tissue",
+system:"Nervous",
+tissue:"Nervous tissue",
+stain:"Microscopy",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Human%20neuron.jpg",
+
+magnification:"Microscopy",
+
+description:"A microscopic view of human neuronal structure.",
+
+structures:[
+"Cell body",
+"Nucleus",
+"Dendritic processes",
+"Axonal process"
+],
+
+histology:"Neurons are specialized excitable cells with a soma and processes. Their morphology reflects their role in receiving, integrating and transmitting information.",
+
+cellTypes:[
+"Neuron",
+"Supporting glial cells where visible"
+],
+
+function:"Receive, integrate and transmit electrical and chemical signals.",
+
+identification:"Look for a prominent neuronal soma and processes extending from the cell body.",
+
+clinical:"Neuronal injury and degeneration occur in many neurological diseases.",
+
+highYield:[
+"Soma contains nucleus",
+"Dendrites are generally receptive",
+"Axon conducts signals away from soma"
+],
+
+lookAlikes:"Glial-cell-rich regions contain many smaller nuclei but lack the prominent neuronal soma.",
+
+source:"Wikimedia Commons — Human neuron."
+},
+
+{
+id:"peripheral-nerve",
+name:"Peripheral Nerve",
+category:"Nervous Tissue",
+system:"Nervous",
+tissue:"Nerve",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Peripheral%20nerve%2C%20cross%20section.jpg",
+
+magnification:"Cross-section",
+
+description:"Cross-sectional organization of a peripheral nerve.",
+
+structures:[
+"Nerve fibres",
+"Fascicles",
+"Connective tissue sheaths"
+],
+
+histology:"Peripheral nerves contain axons and associated Schwann cells organized into fascicles supported by connective tissue.",
+
+cellTypes:[
+"Axons",
+"Schwann cells",
+"Connective tissue cells"
+],
+
+function:"Conduct electrical signals between the central nervous system and peripheral tissues.",
+
+identification:"Fascicular organization with many small nerve profiles is characteristic.",
+
+clinical:"Peripheral nerve structure is important in understanding neuropathies and nerve injury.",
+
+highYield:[
+"Fascicles contain nerve fibres",
+"Connective tissue supports nerve architecture",
+"Schwann cells are associated with peripheral axons"
+],
+
+lookAlikes:"Smooth muscle bundles can be confused at low magnification, so fascicular organization and cellular morphology matter.",
+
+source:"Wikimedia Commons — Peripheral nerve, cross section."
+},
+
+{
+id:"cerebellum",
+name:"Cerebellar Cortex",
+category:"Nervous Tissue",
+system:"Nervous",
+tissue:"Brain",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Human%20cerebellum%20under%20a%20microscope.jpg",
+
+magnification:"Histological section",
+
+description:"Cerebellar cortex with its characteristic layered organization.",
+
+structures:[
+"Molecular layer",
+"Purkinje cell layer",
+"Granular layer",
+"White matter"
+],
+
+histology:"The cerebellar cortex is organized into three major cortical layers: molecular, Purkinje-cell and granular layers.",
+
+cellTypes:[
+"Purkinje cells",
+"Granule cells",
+"Glial cells"
+],
+
+function:"Participates in coordination, balance, posture and motor learning.",
+
+identification:"The large Purkinje neurons form a distinct boundary between the molecular and granular layers.",
+
+clinical:"Cerebellar structural changes are relevant to several degenerative, vascular and neoplastic conditions.",
+
+highYield:[
+"Three cortical layers",
+"Purkinje cells form a single prominent layer",
+"Granular layer is densely cellular"
+],
+
+lookAlikes:"Cerebral cortex has a different layered organization and does not show the distinctive Purkinje-cell layer.",
+
+source:"Wikimedia Commons — Human cerebellum under a microscope.jpg. CC BY 4.0."
+},
+
+
+/* =====================================================
+   MUSCLE
+===================================================== */
+
+{
+id:"skeletal-muscle",
+name:"Skeletal Muscle",
+category:"Muscle",
+system:"Musculoskeletal",
+tissue:"Muscle",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Skeletal%20muscle%20histology.jpg",
+
+magnification:"Light microscopy",
+
+description:"Longitudinal skeletal muscle fibres displaying characteristic striations.",
+
+structures:[
+"Muscle fibres",
+"Peripheral nuclei",
+"Cross-striations",
+"Endomysium"
+],
+
+histology:"Skeletal muscle fibres are long cylindrical multinucleated cells. Their organized sarcomeres produce visible cross-striations.",
+
+cellTypes:[
+"Skeletal muscle fibres",
+"Satellite cells where visible"
+],
+
+function:"Produces voluntary movement, maintains posture and contributes to heat production.",
+
+identification:"Long parallel fibres with obvious striations and peripheral nuclei.",
+
+clinical:"Skeletal muscle architecture is relevant in muscular dystrophies, inflammatory myopathies and muscle injury.",
+
+highYield:[
+"Striated",
+"Multinucleated",
+"Peripheral nuclei",
+"Long cylindrical fibres"
+],
+
+lookAlikes:"Cardiac muscle is also striated but has central nuclei, branching cells and intercalated discs.",
+
+source:"Use a verified openly licensed human skeletal-muscle micrograph with attribution."
+},
+
+{
+id:"cardiac-muscle",
+name:"Cardiac Muscle",
+category:"Muscle",
+system:"Cardiovascular",
+tissue:"Muscle",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Cardiac%20muscle%20histology.jpg",
+
+magnification:"Light microscopy",
+
+description:"Cardiac muscle showing branching fibres and central nuclei.",
+
+structures:[
+"Cardiomyocytes",
+"Central nuclei",
+"Striations",
+"Intercalated discs"
+],
+
+histology:"Cardiac muscle consists of branched striated cardiomyocytes joined by specialized intercellular junctions.",
+
+cellTypes:[
+"Cardiomyocytes"
+],
+
+function:"Produces rhythmic contractions that pump blood.",
+
+identification:"Look for striations, central nuclei, branching fibres and intercalated discs.",
+
+clinical:"Cardiomyocyte injury and remodeling are important in myocardial disease.",
+
+highYield:[
+"Striated",
+"Central nucleus",
+"Branching fibres",
+"Intercalated discs"
+],
+
+lookAlikes:"Skeletal muscle is more regularly arranged and has peripheral nuclei.",
+
+source:"Use a verified openly licensed human cardiac-muscle micrograph with attribution."
+},
+
+{
+id:"smooth-muscle",
+name:"Smooth Muscle",
+category:"Muscle",
+system:"Musculoskeletal",
+tissue:"Muscle",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Smooth%20muscle%20tissue.jpg",
+
+magnification:"Light microscopy",
+
+description:"Spindle-shaped smooth muscle cells arranged in bundles.",
+
+structures:[
+"Spindle-shaped cells",
+"Central nuclei",
+"Smooth muscle bundles"
+],
+
+histology:"Smooth muscle cells are elongated and tapered, with centrally placed nuclei and no obvious cross-striations on routine light microscopy.",
+
+cellTypes:[
+"Smooth muscle cells"
+],
+
+function:"Produces involuntary contraction in hollow organs and blood vessels.",
+
+identification:"Look for elongated spindle-shaped cells with central cigar-shaped nuclei and no visible striations.",
+
+clinical:"Smooth muscle participates in disorders of vessels and hollow organs and in many benign and malignant tumors.",
+
+highYield:[
+"No obvious striations",
+"Spindle-shaped cells",
+"Central nuclei",
+"Involuntary muscle"
+],
+
+lookAlikes:"Dense connective tissue can look similar at low power but has fewer cells and more obvious extracellular collagen.",
+
+source:"Wikimedia Commons — Smooth muscle tissue.jpg. CC BY-SA 4.0."
+},
+
+
+/* =====================================================
+   CONNECTIVE / CARTILAGE / BONE
+===================================================== */
+
+{
+id:"areolar",
+name:"Areolar Connective Tissue",
+category:"Connective Tissue",
+system:"Musculoskeletal",
+tissue:"Connective tissue",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Psuedostratified%20Ciliated%20Columnar%20Epithelium%2C%20Areolar%20Connective%20Tissue.jpg",
+
+magnification:"Light microscopy",
+
+description:"Loose connective tissue containing cells, collagen fibres and extracellular matrix.",
+
+structures:[
+"Collagen fibres",
+"Elastic fibres",
+"Fibroblasts",
+"Ground substance"
+],
+
+histology:"Loose connective tissue has abundant extracellular matrix and relatively loosely arranged fibres.",
+
+cellTypes:[
+"Fibroblasts",
+"Macrophages",
+"Mast cells",
+"Other resident cells"
+],
+
+function:"Provides support, packing, diffusion pathways and a site for immune activity.",
+
+identification:"Look for loosely arranged fibres with numerous cells and abundant open extracellular space.",
+
+clinical:"Loose connective tissue participates in inflammation, edema and tissue repair.",
+
+highYield:[
+"Loose fibre arrangement",
+"Many cell types",
+"Abundant ground substance"
+],
+
+lookAlikes:"Dense connective tissue has more tightly packed collagen and less open space.",
+
+source:"Wikimedia Commons — Psuedostratified Ciliated Columnar Epithelium, Areolar Connective Tissue.jpg. CC0; the image includes areolar connective tissue."
+},
+
+{
+id:"hyaline-cartilage",
+name:"Hyaline Cartilage",
+category:"Cartilage",
+system:"Musculoskeletal",
+tissue:"Cartilage",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Hyaline%20cartilage.jpg",
+
+magnification:"Histological section",
+
+description:"Hyaline cartilage containing chondrocytes within lacunae.",
+
+structures:[
+"Chondrocytes",
+"Lacunae",
+"Cartilage matrix",
+"Perichondrium where present"
+],
+
+histology:"Hyaline cartilage contains chondrocytes in lacunae surrounded by a relatively smooth extracellular matrix.",
+
+cellTypes:[
+"Chondrocytes"
+],
+
+function:"Provides support, smooth joint surfaces and a template for endochondral bone formation.",
+
+identification:"Look for rounded chondrocytes in lacunae within a glassy-looking matrix.",
+
+clinical:"Articular cartilage degeneration is central to osteoarthritis.",
+
+highYield:[
+"Chondrocytes in lacunae",
+"Glassy matrix",
+"Usually perichondrium except at articular surfaces"
+],
+
+lookAlikes:"Elastic cartilage has visible elastic fibres; fibrocartilage has prominent collagen bundles.",
+
+source:"Use a verified openly licensed human hyaline-cartilage micrograph."
+},
+
+{
+id:"elastic-cartilage",
+name:"Elastic Cartilage",
+category:"Cartilage",
+system:"Musculoskeletal",
+tissue:"Cartilage",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Ear%20elastic%20cartilage%20044.png",
+
+magnification:"Histological section",
+
+description:"Cartilage containing chondrocytes and abundant elastic fibres.",
+
+structures:[
+"Chondrocytes",
+"Lacunae",
+"Elastic fibres",
+"Matrix"
+],
+
+histology:"Elastic cartilage resembles hyaline cartilage but contains a prominent network of elastic fibres.",
+
+cellTypes:[
+"Chondrocytes"
+],
+
+function:"Provides flexible structural support.",
+
+identification:"Find chondrocytes in lacunae together with a visible elastic fibre network.",
+
+clinical:"Important in structures requiring flexible support.",
+
+highYield:[
+"Elastic fibres",
+"Chondrocytes in lacunae",
+"Flexible cartilage"
+],
+
+lookAlikes:"Hyaline cartilage has a more homogeneous matrix, while fibrocartilage has thick collagen bundles.",
+
+source:"Wikimedia Commons — Ear elastic cartilage 044.png. CC BY 4.0."
+},
+
+{
+id:"fibrocartilage",
+name:"Fibrocartilage",
+category:"Cartilage",
+system:"Musculoskeletal",
+tissue:"Cartilage",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Connective%20Tissue%20Fibrocartilage%20%2841140134344%29.jpg",
+
+magnification:"Histological section",
+
+description:"Fibrocartilage containing chondrocytes among prominent collagen bundles.",
+
+structures:[
+"Chondrocytes",
+"Lacunae",
+"Collagen bundles"
+],
+
+histology:"Fibrocartilage combines cartilaginous cells with dense collagenous extracellular matrix and is adapted for resistance to compression and tension.",
+
+cellTypes:[
+"Chondrocytes",
+"Fibroblast-like cells"
+],
+
+function:"Provides strong support in structures exposed to mechanical stress.",
+
+identification:"Look for rows of chondrocytes between thick collagen bundles.",
+
+clinical:"Fibrocartilage is important in intervertebral discs and other load-bearing structures.",
+
+highYield:[
+"Thick collagen bundles",
+"Chondrocytes in rows",
+"No obvious glassy matrix"
+],
+
+lookAlikes:"Dense regular connective tissue has fibroblasts rather than typical chondrocytes in lacunae.",
+
+source:"Wikimedia Commons — Connective Tissue Fibrocartilage (41140134634).jpg. CC0."
+},
+
+{
+id:"compact-bone",
+name:"Compact Bone",
+category:"Bone",
+system:"Musculoskeletal",
+tissue:"Bone",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Compact%20bone%20histology%202014.jpg",
+
+magnification:"Histological section",
+
+description:"Compact bone showing organized osteonal architecture.",
+
+structures:[
+"Osteons",
+"Central canals",
+"Lamellae",
+"Lacunae",
+"Canaliculi"
+],
+
+histology:"Compact bone is organized into concentric lamellae around central canals, forming osteons.",
+
+cellTypes:[
+"Osteocytes",
+"Osteoblasts where visible",
+"Osteoclasts where visible"
+],
+
+function:"Provides mechanical support and protection while serving as a mineral reservoir.",
+
+identification:"Concentric lamellae surrounding central canals are a major clue.",
+
+clinical:"Bone remodeling and pathological changes alter osteonal and trabecular architecture.",
+
+highYield:[
+"Osteon",
+"Central canal",
+"Concentric lamellae",
+"Osteocytes in lacunae"
+],
+
+lookAlikes:"Spongy bone lacks the same dense osteonal organization and instead has trabeculae with marrow spaces.",
+
+source:"Wikimedia Commons — Compact bone histology 2014.jpg. CC BY-SA 4.0."
+},
+
+
+/* =====================================================
+   CARDIOVASCULAR
+===================================================== */
+
+{
+id:"artery",
+name:"Muscular Artery",
+category:"Vascular",
+system:"Cardiovascular",
+tissue:"Blood vessel",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Artery.png",
+
+magnification:"Histological section",
+
+description:"Cross-section of an arterial wall.",
+
+structures:[
+"Tunica intima",
+"Internal elastic lamina",
+"Tunica media",
+"Adventitia"
+],
+
+histology:"Arterial walls contain an endothelial intima and a prominent muscular media surrounded by connective tissue adventitia.",
+
+cellTypes:[
+"Endothelial cells",
+"Smooth muscle cells",
+"Fibroblasts"
+],
+
+function:"Conduct and distribute blood under pressure.",
+
+identification:"A relatively thick tunica media compared with veins is a useful clue.",
+
+clinical:"Arterial wall structure is central to understanding atherosclerosis, hypertension-related remodeling and aneurysmal disease.",
+
+highYield:[
+"Thick muscular media",
+"Endothelial lining",
+"Well-defined vessel wall layers"
+],
+
+lookAlikes:"Veins usually have thinner media and relatively larger irregular lumens.",
+
+source:"Wikimedia Commons — Artery.png. CC0 (public-domain dedication)."
+},
+
+{
+id:"vein",
+name:"Vein",
+category:"Vascular",
+system:"Cardiovascular",
+tissue:"Blood vessel",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Large%20vein-Inferior%20vena%20cava.jpg",
+
+magnification:"Histological section",
+
+description:"Large venous vessel with a relatively thin muscular wall and large lumen.",
+
+structures:[
+"Tunica intima",
+"Tunica media",
+"Tunica adventitia",
+"Lumen"
+],
+
+histology:"Veins generally have thinner walls and larger, more irregular lumens than arteries of comparable size.",
+
+cellTypes:[
+"Endothelial cells",
+"Smooth muscle cells",
+"Fibroblasts"
+],
+
+function:"Return blood toward the heart and serve as an important blood reservoir.",
+
+identification:"Large irregular lumen and comparatively thinner media are useful clues.",
+
+clinical:"Venous structure is relevant to thrombosis, venous insufficiency and vascular injury.",
+
+highYield:[
+"Large lumen",
+"Thinner media than artery",
+"Prominent adventitia in large veins"
+],
+
+lookAlikes:"Lymphatic vessels can also have thin walls but are usually smaller and more irregular.",
+
+source:"Wikimedia Commons — Large vein-Inferior vena cava.jpg."
+},
+
+{
+id:"capillary",
+name:"Capillary",
+category:"Vascular",
+system:"Cardiovascular",
+tissue:"Blood vessel",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Capillary.jpg",
+
+magnification:"Microscopy",
+
+description:"A microscopic capillary profile demonstrating a very thin vessel wall.",
+
+structures:[
+"Endothelium",
+"Basement membrane",
+"Lumen",
+"Red blood cells"
+],
+
+histology:"Capillaries consist primarily of endothelial cells and their supporting basement membrane, allowing efficient exchange between blood and tissues.",
+
+cellTypes:[
+"Endothelial cells"
+],
+
+function:"Permit exchange of gases, nutrients, hormones and metabolic products between blood and tissues.",
+
+identification:"Very small lumen with an extremely thin endothelial wall.",
+
+clinical:"Capillary permeability and structure are important in edema, inflammation and microvascular disease.",
+
+highYield:[
+"One-cell-thick endothelial lining",
+"Very small lumen",
+"Primary exchange vessels"
+],
+
+lookAlikes:"Small venules contain more cellular and connective tissue components.",
+
+source:"Wikimedia Commons — Capillary.jpg. CC BY-SA 3.0."
+},
+
+
+/* =====================================================
+   RESPIRATORY
+===================================================== */
+
+{
+id:"trachea",
+name:"Trachea",
+category:"Respiratory",
+system:"Respiratory",
+tissue:"Airway",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Trachea%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Tracheal wall showing respiratory epithelium, connective tissue, glands and cartilage.",
+
+structures:[
+"Pseudostratified ciliated epithelium",
+"Goblet cells",
+"Submucosal glands",
+"Hyaline cartilage"
+],
+
+histology:"The trachea has respiratory epithelium overlying connective tissue and glands, supported by hyaline cartilage.",
+
+cellTypes:[
+"Ciliated epithelial cells",
+"Goblet cells",
+"Basal cells",
+"Chondrocytes"
+],
+
+function:"Conducts and conditions inspired air.",
+
+identification:"Respiratory epithelium plus hyaline cartilage and submucosal glands is characteristic.",
+
+clinical:"Airway inflammation and structural disease can alter the mucosa and supporting tissues.",
+
+highYield:[
+"Pseudostratified ciliated epithelium",
+"Goblet cells",
+"Hyaline cartilage",
+"Submucosal glands"
+],
+
+lookAlikes:"Bronchi have cartilage and glands but occur within the lung and have a different overall architecture.",
+
+source:"Wikimedia Commons — Trachea histology.jpg. CC BY-SA 4.0."
+},
+
+{
+id:"bronchus",
+name:"Bronchus",
+category:"Respiratory",
+system:"Respiratory",
+tissue:"Airway",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Bronchus%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Bronchial wall with respiratory epithelium, smooth muscle, glands and cartilage.",
+
+structures:[
+"Respiratory epithelium",
+"Smooth muscle",
+"Cartilage",
+"Glands"
+],
+
+histology:"Bronchi retain cartilage and submucosal glands while the smooth-muscle layer becomes increasingly prominent as airways branch.",
+
+cellTypes:[
+"Ciliated epithelial cells",
+"Goblet cells",
+"Smooth muscle cells",
+"Chondrocytes"
+],
+
+function:"Conduct air through progressively smaller airways.",
+
+identification:"Look for cartilage plates and respiratory epithelium in an airway embedded in lung tissue.",
+
+clinical:"Airway remodeling occurs in several chronic respiratory diseases.",
+
+highYield:[
+"Cartilage plates",
+"Respiratory epithelium",
+"Smooth muscle",
+"Submucosal glands"
+],
+
+lookAlikes:"Bronchioles lack cartilage and have more prominent smooth muscle relative to their size.",
+
+source:"Use a verified openly licensed human bronchial micrograph."
+},
+
+{
+id:"alveoli",
+name:"Pulmonary Alveoli",
+category:"Respiratory",
+system:"Respiratory",
+tissue:"Lung",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Lung%20histology%20200x%20unlabelled.png",
+
+magnification:"200×",
+
+description:"Lung tissue showing respiratory bronchioles, alveolar ducts, sacs and alveoli.",
+
+structures:[
+"Respiratory bronchiole",
+"Alveolar duct",
+"Alveolar sac",
+"Alveoli",
+"Alveolar septa"
+],
+
+histology:"The respiratory zone is formed by progressively thinner structures ending in alveolar spaces surrounded by delicate septa.",
+
+cellTypes:[
+"Type I pneumocytes",
+"Type II pneumocytes",
+"Alveolar macrophages"
+],
+
+function:"Provides the main surface for gas exchange between air and pulmonary capillary blood.",
+
+identification:"Numerous thin-walled air spaces separated by delicate septa are characteristic.",
+
+clinical:"Alveolar architecture is altered in emphysema, pulmonary edema, fibrosis and other lung disorders.",
+
+highYield:[
+"Thin alveolar septa",
+"Large gas-exchange surface",
+"Type I pneumocytes are extremely thin",
+"Type II pneumocytes produce surfactant"
+],
+
+lookAlikes:"Artifacts can create artificial spaces, so identify the organized alveolar pattern rather than isolated empty spaces.",
+
+source:"Wikimedia Commons — Lung histology 200x unlabelled.png. CC BY-SA 4.0."
+},
+
+
+/* =====================================================
+   DIGESTIVE
+===================================================== */
+
+{
+id:"esophagus",
+name:"Esophagus",
+category:"Digestive",
+system:"Digestive",
+tissue:"GI tract",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Oesophagus.jpg",
+
+magnification:"Histological section",
+
+description:"Esophageal wall showing stratified squamous mucosa and supporting layers.",
+
+structures:[
+"Stratified squamous epithelium",
+"Lamina propria",
+"Submucosa",
+"Muscular wall"
+],
+
+histology:"The esophagus is lined by non-keratinized stratified squamous epithelium adapted to withstand mechanical abrasion.",
+
+cellTypes:[
+"Squamous epithelial cells",
+"Connective tissue cells",
+"Smooth/skeletal muscle depending on region"
+],
+
+function:"Conducts swallowed material from pharynx to stomach.",
+
+identification:"The thick stratified squamous epithelial lining is the key clue.",
+
+clinical:"Esophageal mucosal injury and metaplastic changes are important clinical topics.",
+
+highYield:[
+"Stratified squamous non-keratinized epithelium",
+"Submucosal glands",
+"Muscle type changes along its length"
+],
+
+lookAlikes:"Oral mucosa can also show stratified squamous epithelium; deeper wall organization helps distinguish the esophagus.",
+
+source:"Wikimedia Commons — Oesophagus.jpg."
+},
+
+{
+id:"stomach",
+name:"Stomach",
+category:"Digestive",
+system:"Digestive",
+tissue:"GI tract",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Stomaco.JPG",
+
+magnification:"Histological section",
+
+description:"Gastric mucosa containing pits and glands.",
+
+structures:[
+"Gastric pits",
+"Gastric glands",
+"Surface epithelium",
+"Lamina propria",
+"Muscularis mucosae"
+],
+
+histology:"The stomach has a simple columnar surface epithelium with gastric pits opening into glands.",
+
+cellTypes:[
+"Surface mucous cells",
+"Parietal cells",
+"Chief cells",
+"Enteroendocrine cells"
+],
+
+function:"Mechanical mixing, acid secretion and initiation of protein digestion.",
+
+identification:"Gastric pits and glands without intestinal villi are characteristic.",
+
+clinical:"Gastritis, peptic disease and neoplasia involve changes in gastric mucosal architecture.",
+
+highYield:[
+"Simple columnar surface epithelium",
+"Gastric pits",
+"Gastric glands",
+"No intestinal villi"
+],
+
+lookAlikes:"Small intestine has villi, which helps distinguish it from stomach.",
+
+source:"Wikimedia Commons — Stomaco.JPG."
+},
+
+{
+id:"duodenum",
+name:"Duodenum",
+category:"Digestive",
+system:"Digestive",
+tissue:"Small intestine",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Duodenum%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Small-intestinal mucosa with villi and intestinal crypts.",
+
+structures:[
+"Villi",
+"Crypts",
+"Simple columnar epithelium",
+"Brunner glands"
+],
+
+histology:"The duodenum has villous mucosa and intestinal crypts. Brunner glands in the submucosa are a useful identifying feature.",
+
+cellTypes:[
+"Enterocytes",
+"Goblet cells",
+"Paneth cells",
+"Enteroendocrine cells"
+],
+
+function:"Major site of digestion and nutrient absorption and receives secretions from accessory digestive organs.",
+
+identification:"Villi plus submucosal Brunner glands are the major practical clues.",
+
+clinical:"Duodenal mucosa is relevant to malabsorption and inflammatory disease.",
+
+highYield:[
+"Villi",
+"Crypts",
+"Brunner glands",
+"Goblet cells"
+],
+
+lookAlikes:"Jejunum and ileum also have villi but lack the characteristic abundance of Brunner glands.",
+
+source:"Wikimedia Commons — Duodenum histology.jpg. CC BY-SA 3.0."
+},
+
+{
+id:"ileum",
+name:"Ileum",
+category:"Digestive",
+system:"Digestive",
+tissue:"Small intestine",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Histology%20of%20Ileum.png",
+
+magnification:"Histological section",
+
+description:"Ileal mucosa with villi and lymphoid tissue.",
+
+structures:[
+"Villi",
+"Crypts",
+"Goblet cells",
+"Peyer patches"
+],
+
+histology:"The ileum contains villi and crypts and is particularly associated with aggregated lymphoid nodules known as Peyer patches.",
+
+cellTypes:[
+"Enterocytes",
+"Goblet cells",
+"Immune cells",
+"Paneth cells"
+],
+
+function:"Absorbs nutrients and participates in immune surveillance.",
+
+identification:"Villi combined with prominent lymphoid aggregates suggest ileum.",
+
+clinical:"The ileum is important in several inflammatory and malabsorptive disorders.",
+
+highYield:[
+"Villi",
+"Peyer patches",
+"Crypts",
+"Many goblet cells"
+],
+
+lookAlikes:"Jejunum generally has fewer large lymphoid aggregates.",
+
+source:"Wikimedia Commons — Histology of Ileum.png. CC BY 4.0."
+},
+
+{
+id:"colon",
+name:"Colon",
+category:"Digestive",
+system:"Digestive",
+tissue:"Large intestine",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Colon%20of%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Normal colonic mucosa containing numerous straight intestinal crypts.",
+
+structures:[
+"Intestinal crypts",
+"Simple columnar epithelium",
+"Goblet cells",
+"Lamina propria"
+],
+
+histology:"The colon has numerous straight crypts and abundant goblet cells but lacks the villi characteristic of the small intestine.",
+
+cellTypes:[
+"Colonocytes",
+"Goblet cells",
+"Enteroendocrine cells"
+],
+
+function:"Absorbs water and electrolytes and helps form and store fecal material.",
+
+identification:"Straight crypts extending toward the muscularis mucosae and absence of villi are key clues.",
+
+clinical:"Crypt architecture and epithelial atypia are important in inflammatory and neoplastic disease.",
+
+highYield:[
+"No villi",
+"Straight crypts",
+"Many goblet cells"
+],
+
+lookAlikes:"Small intestine has villi and therefore a very different luminal profile.",
+
+source:"Wikimedia Commons — Colon of histology.jpg. CC BY-SA 4.0."
+},
+
+{
+id:"liver",
+name:"Liver",
+category:"Digestive",
+system:"Digestive",
+tissue:"Liver",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Liver-H%26E.jpg",
+
+magnification:"Histological section",
+
+description:"Liver tissue demonstrating hepatocyte plates and vascular spaces.",
+
+structures:[
+"Hepatocytes",
+"Hepatic plates",
+"Sinusoids",
+"Central vein"
+],
+
+histology:"Hepatocytes form plates separated by sinusoidal spaces. This architecture allows close interaction between hepatocytes and blood.",
+
+cellTypes:[
+"Hepatocytes",
+"Sinusoidal endothelial cells",
+"Resident macrophage-lineage cells"
+],
+
+function:"Metabolism, detoxification, protein synthesis, bile production and nutrient storage.",
+
+identification:"Look for plates of polygonal hepatocytes separated by sinusoids.",
+
+clinical:"Hepatocyte injury and remodeling occur in hepatitis, fatty liver disease and cirrhosis.",
+
+highYield:[
+"Hepatic plates",
+"Sinusoids",
+"Central vein",
+"Polygonal hepatocytes"
+],
+
+lookAlikes:"Other glandular tissues do not show the same characteristic sinusoidal organization.",
+
+source:"Wikimedia Commons — Liver-H&E.jpg. License information is documented on the current Commons page."
+},
+
+{
+id:"pancreas",
+name:"Pancreas",
+category:"Digestive / Endocrine",
+system:"Digestive",
+tissue:"Gland",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Pancreas%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Pancreatic tissue containing exocrine acini and endocrine islets.",
+
+structures:[
+"Acini",
+"Ducts",
+"Islets of Langerhans",
+"Connective tissue"
+],
+
+histology:"Most of the pancreas is exocrine acinar tissue. Endocrine islets are paler clusters scattered through the gland.",
+
+cellTypes:[
+"Acinar cells",
+"Islet endocrine cells",
+"Duct cells"
+],
+
+function:"Produces digestive enzymes and endocrine hormones such as insulin and glucagon.",
+
+identification:"Look for dark-staining acini surrounding lighter endocrine islets.",
+
+clinical:"Pancreatic tissue is involved in pancreatitis, diabetes and neoplastic disease.",
+
+highYield:[
+"Acini = exocrine",
+"Islets = endocrine",
+"Islets often appear paler"
+],
+
+lookAlikes:"Salivary glands contain acini but do not contain pancreatic islets.",
+
+source:"Wikimedia Commons — Pancreas histology.jpg. CC BY 4.0."
+},
+
+{
+id:"gallbladder",
+name:"Gallbladder",
+category:"Digestive",
+system:"Digestive",
+tissue:"Gallbladder",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Gallbladder%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Gallbladder wall with folded mucosa.",
+
+structures:[
+"Simple columnar epithelium",
+"Mucosal folds",
+"Laminar connective tissue",
+"Smooth muscle"
+],
+
+histology:"The gallbladder has a highly folded mucosa lined by simple columnar epithelium and a prominent smooth-muscle layer.",
+
+cellTypes:[
+"Columnar epithelial cells",
+"Smooth muscle cells"
+],
+
+function:"Stores and concentrates bile.",
+
+identification:"Highly folded mucosa without the classic muscularis mucosae and submucosa of the GI tract is a useful clue.",
+
+clinical:"Gallbladder inflammation and stones can alter the wall architecture.",
+
+highYield:[
+"Simple columnar epithelium",
+"Prominent folds",
+"Smooth muscle"
+],
+
+lookAlikes:"Some intestinal mucosal structures can also appear folded, so wall organization is important.",
+
+source:"Wikimedia Commons — Gallbladder histology.jpg. CC BY 3.0."
+},
+
+
+/* =====================================================
+   URINARY
+===================================================== */
+
+{
+id:"kidney-cortex",
+name:"Kidney Cortex",
+category:"Urinary",
+system:"Urinary",
+tissue:"Kidney",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Histology-kidney.jpg",
+
+magnification:"Cortex",
+
+description:"Kidney cortex containing glomeruli and renal tubules.",
+
+structures:[
+"Glomerulus",
+"Proximal convoluted tubule",
+"Distal convoluted tubule",
+"Bowman's capsule"
+],
+
+histology:"The renal cortex contains renal corpuscles and numerous convoluted tubules. The glomerulus is the capillary tuft within the renal corpuscle.",
+
+cellTypes:[
+"Podocytes",
+"Proximal tubule epithelial cells",
+"Distal tubule epithelial cells"
+],
+
+function:"The kidney filters blood and regulates fluid, electrolyte and acid-base balance.",
+
+identification:"Look for round renal corpuscles surrounded by many tubules.",
+
+clinical:"Glomerular and tubular changes are central to many kidney diseases.",
+
+highYield:[
+"Glomeruli occur in cortex",
+"PCT has a brush border",
+"DCT has a clearer lumen"
+],
+
+lookAlikes:"Medulla lacks renal corpuscles and contains primarily loops of Henle and collecting ducts.",
+
+source:"Wikimedia Commons — Histology-kidney.jpg. CC BY-SA 2.5."
+},
+
+{
+id:"glomerulus",
+name:"Renal Glomerulus",
+category:"Urinary",
+system:"Urinary",
+tissue:"Kidney",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Histopathology%20of%20glomerulus%20with%20congestion.jpg",
+
+magnification:"Renal corpuscle",
+
+description:"Renal glomerulus within Bowman's capsule.",
+
+structures:[
+"Glomerular capillary loops",
+"Bowman's capsule",
+"Bowman's space",
+"Mesangial region"
+],
+
+histology:"The glomerulus is a tuft of specialized capillaries enclosed by Bowman's capsule and separated from it by Bowman's space.",
+
+cellTypes:[
+"Endothelial cells",
+"Podocytes",
+"Mesangial cells"
+],
+
+function:"Performs the initial filtration step of urine formation.",
+
+identification:"A compact capillary tuft enclosed by a clear capsular space is characteristic.",
+
+clinical:"Changes in the glomerular filtration barrier can cause proteinuria and other manifestations of renal disease.",
+
+highYield:[
+"Capillary tuft",
+"Bowman's space",
+"Podocytes",
+"Mesangium"
+],
+
+lookAlikes:"Other round structures in tissue are not glomeruli; look for the surrounding capsular space and capillary tuft.",
+
+source:"Wikimedia Commons — Histopathology of glomerulus with congestion.jpg. Openly licensed; this is a glomerulus micrograph with congestion, so the card should identify it as such rather than calling it normal."
+},
+
+{
+id:"ureter",
+name:"Ureter",
+category:"Urinary",
+system:"Urinary",
+tissue:"Ureter",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Ureter.JPG",
+
+magnification:"Histological section",
+
+description:"Ureter with characteristic folded mucosa and muscular wall.",
+
+structures:[
+"Urothelium",
+"Mucosal folds",
+"Smooth muscle",
+"Adventitia"
+],
+
+histology:"The ureter is lined by transitional epithelium and has a muscular wall specialized for peristaltic propulsion of urine.",
+
+cellTypes:[
+"Urothelial cells",
+"Smooth muscle cells"
+],
+
+function:"Conducts urine from kidney to bladder.",
+
+identification:"Folded urothelial lining and thick smooth-muscle wall are useful clues.",
+
+clinical:"Ureteric obstruction and stones affect the urinary tract and can cause characteristic structural changes.",
+
+highYield:[
+"Urothelium",
+"Folded lumen",
+"Smooth muscle"
+],
+
+lookAlikes:"Urinary bladder also has urothelium but has a much larger and more variable wall architecture.",
+
+source:"Wikimedia Commons — Ureter.JPG."
+},
+
+{
+id:"bladder",
+name:"Urinary Bladder",
+category:"Urinary",
+system:"Urinary",
+tissue:"Urinary tract",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Urinary%20bladder%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Urinary bladder wall with transitional epithelium and detrusor muscle.",
+
+structures:[
+"Urothelium",
+"Lamina propria",
+"Detrusor muscle"
+],
+
+histology:"The bladder is lined by urothelium capable of changing its apparent thickness as the organ distends.",
+
+cellTypes:[
+"Urothelial cells",
+"Smooth muscle cells"
+],
+
+function:"Stores urine and contracts during micturition.",
+
+identification:"Look for urothelium with large superficial cells and thick interlacing smooth muscle.",
+
+clinical:"Urothelial pathology is important in bladder disease.",
+
+highYield:[
+"Urothelium",
+"Umbrella cells",
+"Thick detrusor muscle"
+],
+
+lookAlikes:"Ureter also has urothelium but typically shows more obvious mucosal folds and a different wall organization.",
+
+source:"Use a verified openly licensed human bladder micrograph."
+},
+
+
+/* =====================================================
+   ENDOCRINE
+===================================================== */
+
+{
+id:"thyroid",
+name:"Thyroid Gland",
+category:"Endocrine",
+system:"Endocrine",
+tissue:"Gland",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Histology%20of%20Thyroid%20gland.jpg",
+
+magnification:"H&E",
+
+description:"Thyroid tissue organized into follicles containing colloid.",
+
+structures:[
+"Thyroid follicles",
+"Colloid",
+"Follicular cells",
+"Parafollicular cells"
+],
+
+histology:"Thyroid follicles are spherical structures lined by follicular cells and filled with colloid.",
+
+cellTypes:[
+"Follicular cells",
+"Parafollicular cells"
+],
+
+function:"Produces thyroid hormones involved in metabolism, growth and development.",
+
+identification:"Round follicles filled with eosinophilic colloid are highly characteristic.",
+
+clinical:"Thyroiditis, hyperplasia and thyroid neoplasms alter follicular architecture.",
+
+highYield:[
+"Follicles",
+"Colloid",
+"Simple cuboidal follicular epithelium",
+"Parafollicular cells"
+],
+
+lookAlikes:"Other endocrine tissues do not show the characteristic colloid-filled follicles.",
+
+source:"Wikimedia Commons — Histology of Thyroid gland.jpg. CC BY-SA 4.0."
+},
+
+{
+id:"adrenal",
+name:"Adrenal Gland",
+category:"Endocrine",
+system:"Endocrine",
+tissue:"Gland",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Adrenal%20gland%20histology%202014.jpg",
+
+magnification:"Histological section",
+
+description:"Adrenal tissue showing cortical organization and medullary region.",
+
+structures:[
+"Capsule",
+"Zona glomerulosa",
+"Zona fasciculata",
+"Zona reticularis",
+"Medulla"
+],
+
+histology:"The adrenal cortex is organized into three zones surrounding the central medulla.",
+
+cellTypes:[
+"Cortical cells",
+"Chromaffin cells"
+],
+
+function:"Produces steroid hormones in the cortex and catecholamines in the medulla.",
+
+identification:"Look for zonation of the cortex surrounding a central medulla.",
+
+clinical:"Adrenal architecture is relevant to disorders of cortisol, aldosterone and catecholamine production.",
+
+highYield:[
+"Three cortical zones",
+"Medulla centrally",
+"Zona fasciculata is broad"
+],
+
+lookAlikes:"Other endocrine glands do not have the same three-zone cortical organization.",
+
+source:"Use a verified openly licensed human adrenal-gland micrograph."
+},
+
+{
+id:"pituitary",
+name:"Pituitary Gland",
+category:"Endocrine",
+system:"Endocrine",
+tissue:"Gland",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Pituitary%20gland%20histology%202014.jpg",
+
+magnification:"Histological section",
+
+description:"Pituitary tissue showing the contrast between anterior and posterior regions.",
+
+structures:[
+"Anterior pituitary",
+"Posterior pituitary",
+"Endocrine cells"
+],
+
+histology:"The anterior pituitary is more cellular and glandular, whereas the posterior pituitary is more fibrous and neural in organization.",
+
+cellTypes:[
+"Acidophils",
+"Basophils",
+"Chromophobes",
+"Glial-like pituicytes"
+],
+
+function:"Regulates multiple endocrine organs and physiological processes.",
+
+identification:"The cellular anterior region contrasts with the paler posterior region.",
+
+clinical:"Pituitary lesions can affect hormone production and local structures.",
+
+highYield:[
+"Anterior vs posterior difference",
+"Highly vascular endocrine tissue",
+"Multiple hormone-producing cell populations"
+],
+
+lookAlikes:"Other endocrine tissues can be cellular but lack the characteristic anterior/posterior organization.",
+
+source:"Wikimedia Commons — Pituitary gland histology 2014.jpg. CC BY-SA 4.0."
+},
+
+
+/* =====================================================
+   LYMPHATIC
+===================================================== */
+
+{
+id:"lymph-node",
+name:"Lymph Node",
+category:"Lymphatic",
+system:"Lymphatic",
+tissue:"Lymphoid tissue",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Lymph%20node%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Lymph node architecture with cortex, paracortex and medulla.",
+
+structures:[
+"Capsule",
+"Cortex",
+"Lymphoid follicles",
+"Paracortex",
+"Medulla",
+"Sinuses"
+],
+
+histology:"Lymph nodes are organized into cortical follicles, a T-cell-rich paracortex and medullary cords and sinuses.",
+
+cellTypes:[
+"B lymphocytes",
+"T lymphocytes",
+"Macrophages",
+"Plasma cells"
+],
+
+function:"Filter lymph and provide sites for immune-cell interaction.",
+
+identification:"A capsule surrounding lymphoid follicles with deeper medullary regions is characteristic.",
+
+clinical:"Lymph-node architecture changes in reactive, infectious and neoplastic conditions.",
+
+highYield:[
+"Cortex contains follicles",
+"Paracortex is T-cell rich",
+"Medulla contains cords and sinuses"
+],
+
+lookAlikes:"Spleen has white and red pulp rather than a cortex-medulla lymph-node organization.",
+
+source:"Use a verified openly licensed human lymph-node micrograph."
+},
+
+{
+id:"spleen",
+name:"Spleen",
+category:"Lymphatic",
+system:"Lymphatic",
+tissue:"Lymphoid organ",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Human%20spleen%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Splenic tissue showing white and red pulp.",
+
+structures:[
+"White pulp",
+"Red pulp",
+"Central arteriole",
+"Splenic sinusoids"
+],
+
+histology:"The spleen is organized into immune-rich white pulp embedded within vascular red pulp.",
+
+cellTypes:[
+"Lymphocytes",
+"Macrophages",
+"Endothelial cells"
+],
+
+function:"Filters blood and participates in immune surveillance.",
+
+identification:"Alternating white lymphoid nodules and red vascular pulp are key clues.",
+
+clinical:"Splenic architecture is altered in congestion, inflammation and hematological disease.",
+
+highYield:[
+"White pulp",
+"Red pulp",
+"Central arterioles"
+],
+
+lookAlikes:"Lymph nodes have a cortex and medulla and are associated with lymphatic vessels rather than a red-pulp/white-pulp pattern.",
+
+source:"Use a verified openly licensed human spleen micrograph."
+},
+
+{
+id:"thymus",
+name:"Thymus",
+category:"Lymphatic",
+system:"Lymphatic",
+tissue:"Lymphoid organ",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Histology%20of%20thymus.jpg",
+
+magnification:"Histological section",
+
+description:"Thymic tissue with distinct cortical and medullary regions.",
+
+structures:[
+"Capsule",
+"Cortex",
+"Medulla",
+"Hassall corpuscles"
+],
+
+histology:"The thymus has lobules with a densely cellular cortex and paler medulla containing characteristic Hassall corpuscles.",
+
+cellTypes:[
+"T lymphocyte precursors",
+"Epithelial reticular cells",
+"Macrophages"
+],
+
+function:"Site of T-cell maturation and selection.",
+
+identification:"Lobular organization with dark cortex and pale medulla plus Hassall corpuscles is characteristic.",
+
+clinical:"Thymic architecture is relevant to immune development and thymic disorders.",
+
+highYield:[
+"Cortex darker",
+"Medulla paler",
+"Hassall corpuscles"
+],
+
+lookAlikes:"Lymph nodes have lymphoid follicles, while the thymus has lobules and Hassall corpuscles.",
+
+source:"Wikimedia Commons — Histology of thymus.jpg. CC BY 4.0."
+},
+
+
+/* =====================================================
+   MALE REPRODUCTIVE
+===================================================== */
+
+{
+id:"testis",
+name:"Testis",
+category:"Reproductive",
+system:"Male reproductive",
+tissue:"Testis",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Histology%20image%20of%20testis.jpg",
+
+magnification:"H&E",
+
+description:"Testicular tissue showing seminiferous tubules.",
+
+structures:[
+"Seminiferous tubules",
+"Spermatogenic cells",
+"Sertoli cells",
+"Interstitial tissue",
+"Leydig cells"
+],
+
+histology:"Seminiferous tubules contain developing germ cells supported by Sertoli cells. Leydig cells are found in the interstitial tissue.",
+
+cellTypes:[
+"Spermatogonia",
+"Primary spermatocytes",
+"Spermatids",
+"Sertoli cells",
+"Leydig cells"
+],
+
+function:"Produces spermatozoa and testosterone.",
+
+identification:"Numerous circular or oval seminiferous tubules containing layers of developing germ cells are characteristic.",
+
+clinical:"Microscopic assessment is important in disorders affecting spermatogenesis and testicular architecture.",
+
+highYield:[
+"Seminiferous tubules",
+"Sertoli cells",
+"Leydig cells",
+"Developing germ cells"
+],
+
+lookAlikes:"Some other glandular tissues have circular profiles but do not show the layered germ-cell organization of seminiferous tubules.",
+
+source:"Wikimedia Commons — Histology image of testis.jpg. CC BY-SA 4.0."
+},
+
+{
+id:"epididymis",
+name:"Epididymis",
+category:"Reproductive",
+system:"Male reproductive",
+tissue:"Duct",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Epididymis%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Epididymal duct lined by pseudostratified columnar epithelium.",
+
+structures:[
+"Epididymal duct",
+"Stereocilia",
+"Smooth muscle",
+"Lumen"
+],
+
+histology:"The epididymal duct is lined by pseudostratified columnar epithelium with stereocilia and surrounded by smooth muscle.",
+
+cellTypes:[
+"Principal cells",
+"Basal cells",
+"Smooth muscle cells"
+],
+
+function:"Maturation, storage and transport of spermatozoa.",
+
+identification:"A highly coiled duct with pseudostratified epithelium and stereocilia is characteristic.",
+
+clinical:"Epididymal inflammation can affect sperm transport.",
+
+highYield:[
+"Pseudostratified epithelium",
+"Stereocilia",
+"Large duct lumen"
+],
+
+lookAlikes:"Vas deferens has a much thicker muscular wall.",
+
+source:"Wikimedia Commons — Epididymis histology.jpg. License information is documented on the Commons page."
+},
+
+
+/* =====================================================
+   FEMALE REPRODUCTIVE
+===================================================== */
+
+{
+id:"ovary",
+name:"Ovary",
+category:"Reproductive",
+system:"Female reproductive",
+tissue:"Ovary",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Ovary%20Histology.jpg",
+
+magnification:"Histological section",
+
+description:"Ovarian cortex containing follicles at different stages of development.",
+
+structures:[
+"Ovarian follicles",
+"Oocytes",
+"Granulosa cells",
+"Theca layers"
+],
+
+histology:"The ovarian cortex contains follicles at different stages of maturation embedded within stromal tissue.",
+
+cellTypes:[
+"Oocyte",
+"Granulosa cells",
+"Theca cells"
+],
+
+function:"Produces oocytes and endocrine hormones.",
+
+identification:"Follicles containing oocytes at different stages are characteristic.",
+
+clinical:"Follicular architecture is relevant to ovarian function and several reproductive disorders.",
+
+highYield:[
+"Follicles in cortex",
+"Oocyte",
+"Granulosa cells",
+"Theca layers"
+],
+
+lookAlikes:"Testicular tubules have a very different layered germ-cell architecture.",
+
+source:"Wikimedia Commons — Ovary Histology.jpg. License information is documented on the Commons page."
+},
+
+{
+id:"uterus",
+name:"Uterus",
+category:"Reproductive",
+system:"Female reproductive",
+tissue:"Uterus",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:Redirect/file/Uterus%20histology.jpg",
+
+magnification:"Histological section",
+
+description:"Uterine wall showing endometrium and myometrium.",
+
+structures:[
+"Endometrium",
+"Endometrial glands",
+"Myometrium",
+"Blood vessels"
+],
+
+histology:"The endometrium contains glands within a vascular stroma and changes throughout the menstrual cycle. The myometrium consists of thick smooth muscle.",
+
+cellTypes:[
+"Endometrial epithelial cells",
+"Stromal cells",
+"Smooth muscle cells"
+],
+
+function:"Supports implantation and pregnancy and participates in menstruation.",
+
+identification:"Gland-rich endometrium overlying thick smooth muscle is characteristic.",
+
+clinical:"Endometrial architecture changes with hormonal state and is relevant to several gynecological conditions.",
+
+highYield:[
+"Endometrial glands",
+"Vascular stroma",
+"Thick myometrium"
+],
+
+lookAlikes:"Other hollow organs contain smooth muscle but do not show the characteristic endometrial glandular architecture.",
+
+source:"Use a verified openly licensed human uterine micrograph."
+},
+
+{
+id:"fallopian-tube",
+name:"Fallopian Tube",
+category:"Reproductive",
+system:"Female reproductive",
+tissue:"Uterine tube",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Normal%20Fallopian%20Tube%2C%20Human%20%282760475010%29.jpg",
+
+magnification:"Histological section",
+
+description:"Highly folded mucosa of the uterine tube.",
+
+structures:[
+"Mucosal folds",
+"Ciliated epithelium",
+"Secretory cells",
+"Smooth muscle"
+],
+
+histology:"The uterine tube has an extensively folded mucosa lined by ciliated and secretory epithelial cells.",
+
+cellTypes:[
+"Ciliated columnar cells",
+"Secretory cells",
+"Smooth muscle cells"
+],
+
+function:"Provides the environment for transport of the oocyte and sperm and is the usual site of fertilization.",
+
+identification:"Numerous branching mucosal folds within the lumen are a key clue.",
+
+clinical:"Tubal inflammation and obstruction can affect fertility.",
+
+highYield:[
+"Highly folded mucosa",
+"Ciliated cells",
+"Smooth muscle wall"
+],
+
+lookAlikes:"Some GI structures are folded, but the combination of ciliated epithelium and branching mucosal folds is distinctive.",
+
+source:"Wikimedia Commons — Normal Fallopian Tube, Human (2760475010).jpg. License information is documented on the Commons page."
+},
+
+
+/* =====================================================
+   SKIN
+===================================================== */
+
+{
+id:"skin",
+name:"Human Skin",
+category:"Integumentary",
+system:"Integumentary",
+tissue:"Skin",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Skin.png",
+
+magnification:"Histological section",
+
+description:"Human skin showing epidermis and underlying dermal tissue.",
+
+structures:[
+"Epidermis",
+"Dermis",
+"Subcutaneous tissue",
+"Skin appendages"
+],
+
+histology:"The epidermis is keratinized stratified squamous epithelium overlying connective tissue of the dermis.",
+
+cellTypes:[
+"Keratinocytes",
+"Melanocytes",
+"Langerhans cells",
+"Merkel cells"
+],
+
+function:"Provides a protective barrier and contributes to sensation, thermoregulation and immune defense.",
+
+identification:"Look for the layered epidermis overlying connective tissue.",
+
+clinical:"Skin architecture is important in inflammatory, infectious and neoplastic conditions.",
+
+highYield:[
+"Keratinized stratified squamous epithelium",
+"Epidermis",
+"Dermis",
+"Skin appendages"
+],
+
+lookAlikes:"Mucosal stratified squamous epithelium lacks the same keratinized surface and skin appendages.",
+
+source:"Wikimedia Commons — Skin.png. Public domain."
+},
+
+{
+id:"sweat-gland",
+name:"Sweat Gland",
+category:"Integumentary",
+system:"Integumentary",
+tissue:"Skin appendage",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Sweat%20gland%20histology%202014.jpg",
+
+magnification:"400×",
+
+description:"Coiled tubular sweat-gland profiles within skin.",
+
+structures:[
+"Secretory portions",
+"Ducts",
+"Surrounding connective tissue"
+],
+
+histology:"Sweat glands consist of coiled tubular secretory structures and ducts located within the dermis and deeper tissue.",
+
+cellTypes:[
+"Secretory epithelial cells",
+"Myoepithelial cells",
+"Duct epithelial cells"
+],
+
+function:"Participates in thermoregulation and other skin functions.",
+
+identification:"Multiple coiled tubular profiles are characteristic.",
+
+clinical:"Sweat-gland structure is relevant to disorders of sweating and selected skin tumors.",
+
+highYield:[
+"Coiled tubular structure",
+"Secretory portion",
+"Duct"
+],
+
+lookAlikes:"Other tubular structures may appear similar, so location within skin and epithelial characteristics are important.",
+
+source:"Wikimedia Commons — Sweat gland histology 2014.jpg. CC BY-SA 4.0."
+},
+
+
+/* =====================================================
+   SPECIAL SENSES
+===================================================== */
+
+{
+id:"retina",
+name:"Retina",
+category:"Special Senses",
+system:"Visual",
+tissue:"Eye",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Retina%20--%20high%20mag.jpg",
+
+magnification:"Histological section",
+
+description:"Retinal tissue showing its layered organization.",
+
+structures:[
+"Photoreceptor layer",
+"Outer nuclear layer",
+"Inner nuclear layer",
+"Ganglion cell layer",
+"Inner and outer plexiform regions"
+],
+
+histology:"The retina is a multilayered neural tissue containing photoreceptors, interneurons and ganglion cells.",
+
+cellTypes:[
+"Rods",
+"Cones",
+"Bipolar cells",
+"Ganglion cells",
+"Horizontal cells",
+"Amacrine cells"
+],
+
+function:"Converts light into neural signals and begins visual processing.",
+
+identification:"The organized layered architecture of the neural retina is the key clue.",
+
+clinical:"Retinal architecture is important in understanding retinal degeneration and vascular disease.",
+
+highYield:[
+"Multiple neural layers",
+"Photoreceptors",
+"Bipolar cells",
+"Ganglion cells"
+],
+
+lookAlikes:"Other neural tissues lack the characteristic laminated retinal architecture.",
+
+source:"Wikimedia Commons — Retina -- high mag.jpg. CC BY-SA 4.0."
+},
+
+{
+id:"cornea",
+name:"Cornea",
+category:"Special Senses",
+system:"Visual",
+tissue:"Eye",
+stain:"Histology",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Cornea%20corte%20histol%C3%B3gico.png",
+
+magnification:"Histological section",
+
+description:"Corneal tissue with epithelium, stroma and posterior lining.",
+
+structures:[
+"Corneal epithelium",
+"Bowman region",
+"Stroma",
+"Descemet membrane",
+"Endothelium"
+],
+
+histology:"The cornea has a specialized transparent stroma arranged in organized lamellae between epithelial and endothelial surfaces.",
+
+cellTypes:[
+"Corneal epithelial cells",
+"Keratinocyte-like stromal cells",
+"Endothelial cells"
+],
+
+function:"Provides structural protection and major refractive power for the eye.",
+
+identification:"A layered avascular connective tissue structure with a highly organized stroma is characteristic.",
+
+clinical:"Corneal injury and disease can affect transparency and vision.",
+
+highYield:[
+"Avascular stroma",
+"Organized collagen lamellae",
+"Anterior epithelium",
+"Posterior endothelium"
+],
+
+lookAlikes:"Other dense connective tissues do not have the characteristic layered corneal organization.",
+
+source:"Wikimedia Commons — Cornea corte histológico.png. CC BY-SA 4.0."
+},
+
+
+/* =====================================================
+   CELL / GLAND
+===================================================== */
+
+{
+id:"adipose",
+name:"Adipose Tissue",
+category:"Connective Tissue",
+system:"Musculoskeletal",
+tissue:"Adipose",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Histology%20of%20Adipose%20tissue.jpg",
+
+magnification:"Histological section",
+
+description:"Adipose tissue containing large lipid-filled adipocytes.",
+
+structures:[
+"Adipocytes",
+"Nuclei",
+"Delicate connective tissue"
+],
+
+histology:"Mature white adipocytes contain a large lipid droplet that displaces the nucleus toward the cell periphery.",
+
+cellTypes:[
+"Adipocytes"
+],
+
+function:"Energy storage, endocrine signaling, insulation and mechanical cushioning.",
+
+identification:"Large clear cells with thin rims of cytoplasm and peripheral nuclei.",
+
+clinical:"Adipose tissue participates in metabolic and endocrine physiology.",
+
+highYield:[
+"Large lipid vacuole",
+"Peripheral nucleus",
+"Thin cytoplasmic rim"
+],
+
+lookAlikes:"Artifacts can also produce empty-looking spaces, so cell outlines and nuclei should be assessed.",
+
+source:"Wikimedia Commons — Histology of Adipose tissue.jpg. License information is documented on the Commons page."
+},
+
+{
+id:"thyroid-follicle",
+name:"Thyroid Follicles",
+category:"Endocrine",
+system:"Endocrine",
+tissue:"Thyroid",
+stain:"H&E",
+
+image:"https://commons.wikimedia.org/wiki/Special:FilePath/Thyroid%20follicle.jpg",
+
+magnification:"Microscopy",
+
+description:"Individual thyroid follicles containing colloid and lined by follicular cells.",
+
+structures:[
+"Follicular lumen",
+"Colloid",
+"Follicular epithelium"
+],
+
+histology:"Each follicle stores colloid within its lumen and is lined by follicular cells.",
+
+cellTypes:[
+"Follicular cells"
+],
+
+function:"Stores and produces thyroid hormone precursors.",
+
+identification:"Circular follicular structures filled with colloid.",
+
+clinical:"Follicular architecture changes with functional states and disease.",
+
+highYield:[
+"Follicle",
+"Colloid",
+"Follicular cells"
+],
+
+lookAlikes:"Other glandular structures generally do not form colloid-filled spherical follicles.",
+
+source:"Wikimedia Commons — Thyroid follicle.jpg. License information is documented on the Commons page."
+}
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let activeCategory="all";
+let currentSpecimen=null;
+let zoom=1;
+
+let viewed =
+JSON.parse(
+localStorage.getItem("microscopyViewed") || "[]"
+);
+
+let quizScore =
+Number(
+localStorage.getItem("microscopyQuizScore") || 0
+);
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const grid=document.getElementById("specimenGrid");
+const search=document.getElementById("search");
+
+const systemFilter=
+document.getElementById("systemFilter");
+
+const categoryFilter=
+document.getElementById("categoryFilter");
+
+const stainFilter=
+document.getElementById("stainFilter");
+
+const categoryButtons=
+document.getElementById("categoryButtons");
+
+const modal=
+document.getElementById("modal");
+
+const viewerImage=
+document.getElementById("viewerImage");
+
+const imageWrap=
+document.getElementById("imageWrap");
+
+
+/* =========================================================
+   BUILD FILTERS
+========================================================= */
+
+function uniqueValues(key){
+
+return [
+...new Set(
+SPECIMENS
+.map(x=>x[key])
+.filter(Boolean)
+)
+].sort();
+
+}
+
+function buildFilters(){
+
+uniqueValues("system").forEach(value=>{
+
+const option=document.createElement("option");
+
+option.value=value;
+option.textContent=value;
+
+systemFilter.appendChild(option);
+
+});
+
+
+uniqueValues("category").forEach(value=>{
+
+const option=document.createElement("option");
+
+option.value=value;
+option.textContent=value;
+
+categoryFilter.appendChild(option);
+
+});
+
+
+uniqueValues("stain").forEach(value=>{
+
+const option=document.createElement("option");
+
+option.value=value;
+option.textContent=value;
+
+stainFilter.appendChild(option);
+
+});
+
+
+const categories=
+uniqueValues("category");
+
+document.getElementById(
+"allCount"
+).textContent=
+SPECIMENS.length;
+
+
+categories.forEach(category=>{
+
+const button=
+document.createElement("button");
+
+button.className="category";
+
+button.dataset.category=category;
+
+button.innerHTML=`
+<span>${category}</span>
+<span>
+${SPECIMENS.filter(
+x=>x.category===category
+).length}
+</span>
+`;
+
+button.addEventListener(
+"click",
+()=>{
+
+document
+.querySelectorAll(".category")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+button.classList.add("active");
+
+activeCategory=category;
+
+categoryFilter.value=category;
+
+render();
+
+}
+);
+
+categoryButtons.appendChild(button);
+
+});
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+const query=
+search.value
+.toLowerCase()
+.trim();
+
+const system=
+systemFilter.value;
+
+const category=
+categoryFilter.value;
+
+const stain=
+stainFilter.value;
+
+
+const filtered=
+SPECIMENS.filter(item=>{
+
+const categoryMatch=
+activeCategory==="all" ||
+item.category===activeCategory;
+
+const systemMatch=
+system==="all" ||
+item.system===system;
+
+const categorySelectMatch=
+category==="all" ||
+item.category===category;
+
+const stainMatch=
+stain==="all" ||
+item.stain===stain;
+
+
+const searchable=`
+${item.name}
+${item.category}
+${item.system}
+${item.tissue}
+${item.description}
+${item.histology}
+${item.identification}
+${item.structures.join(" ")}
+${item.cellTypes.join(" ")}
+`.toLowerCase();
+
+
+const searchMatch=
+!query ||
+searchable.includes(query);
+
+
+return(
+categoryMatch &&
+systemMatch &&
+categorySelectMatch &&
+stainMatch &&
+searchMatch
+);
+
+});
+
+
+grid.innerHTML="";
+
+
+if(!filtered.length){
+
+grid.innerHTML=`
+<div style="
+grid-column:1/-1;
+padding:60px;
+text-align:center;
+color:#777;
+background:#fff;
+border:1px solid var(--border);
+border-radius:20px;
+">
+No specimens found.
+</div>
+`;
+
+return;
+
+}
+
+
+filtered.forEach(item=>{
+
+const card=
+document.createElement("article");
+
+card.className="specimen-card";
+
+card.innerHTML=`
+
+<div class="specimen-image">
+
+<img
+src="${item.image}"
+alt="${item.name} microscopic specimen"
+loading="lazy"
+>
+
+<span class="mag">
+${item.magnification}
+</span>
+
+</div>
+
+<div class="specimen-info">
+
+<small>
+${item.system} · ${item.category}
+</small>
+
+<h3>
+${item.name}
+</h3>
+
+<p>
+${item.description}
+</p>
+
+</div>
+`;
+
+card.addEventListener(
+"click",
+()=>openViewer(item)
+);
+
+grid.appendChild(card);
+
+});
+
+updateStats(filtered);
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+const systems=
+new Set(
+SPECIMENS.map(x=>x.system)
+);
+
+const categories=
+new Set(
+SPECIMENS.map(x=>x.category)
+);
+
+document.getElementById(
+"statSpecimens"
+).textContent=
+SPECIMENS.length;
+
+document.getElementById(
+"statSystems"
+).textContent=
+systems.size;
+
+document.getElementById(
+"statCategories"
+).textContent=
+categories.size;
+
+const percentage=
+SPECIMENS.length
+?
+Math.round(
+(viewed.length /
+SPECIMENS.length)*100
+)
+:0;
+
+document.getElementById(
+"statViewed"
+).textContent=
+percentage+"%";
+
+}
+
+
+/* =========================================================
+   VIEWER
+========================================================= */
+
+function openViewer(item){
+
+currentSpecimen=item;
+
+zoom=1;
+
+viewerImage.src=item.image;
+
+viewerImage.style.transform="scale(1)";
+
+document.getElementById(
+"modalTitle"
+).textContent=item.name;
+
+document.getElementById(
+"modalSubtitle"
+).textContent=
+`${item.system} · ${item.category} · ${item.stain} · ${item.magnification}`;
+
+
+document.getElementById(
+"detailTags"
+).innerHTML=`
+
+<span class="badge">
+${item.system}
+</span>
+
+<span class="badge">
+${item.category}
+</span>
+
+<span class="badge">
+${item.tissue}
+</span>
+
+<span class="badge">
+${item.stain}
+</span>
+`;
+
+
+document.getElementById(
+"detailDescription"
+).textContent=
+item.description;
+
+
+document.getElementById(
+"detailStructures"
+).innerHTML=
+item.structures
+.map(x=>`<li>${x}</li>`)
+.join("");
+
+
+document.getElementById(
+"detailHistology"
+).textContent=
+item.histology;
+
+
+document.getElementById(
+"detailCells"
+).innerHTML=
+item.cellTypes
+.map(x=>`<li>${x}</li>`)
+.join("");
+
+
+document.getElementById(
+"detailFunction"
+).textContent=
+item.function;
+
+
+document.getElementById(
+"detailIdentification"
+).textContent=
+item.identification;
+
+
+document.getElementById(
+"detailClinical"
+).textContent=
+item.clinical;
+
+
+document.getElementById(
+"detailHighYield"
+).innerHTML=
+item.highYield
+.map(x=>`<li>${x}</li>`)
+.join("");
+
+
+document.getElementById(
+"detailLookAlikes"
+).textContent=
+item.lookAlikes;
+
+
+document.getElementById(
+"detailSource"
+).textContent=
+item.source;
+
+
+/* progress */
+
+if(!viewed.includes(item.id)){
+
+viewed.push(item.id);
+
+localStorage.setItem(
+"microscopyViewed",
+JSON.stringify(viewed)
+);
+
+updateStats();
+
+}
+
+
+modal.classList.add("show");
+
+document.body.style.overflow="hidden";
+
+}
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+function closeViewer(){
+
+modal.classList.remove("show");
+
+document.body.style.overflow="";
+
+}
+
+document.getElementById(
+"closeModal"
+).addEventListener(
+"click",
+closeViewer
+);
+
+
+modal.addEventListener(
+"click",
+e=>{
+
+if(e.target===modal){
+closeViewer();
+}
+
+});
+
+
+document.addEventListener(
+"keydown",
+e=>{
+
+if(e.key==="Escape"){
+closeViewer();
+}
+
+});
+
+
+/* =========================================================
+   ZOOM
+========================================================= */
+
+function updateZoom(){
+
+viewerImage.style.transform=
+`scale(${zoom})`;
+
+document.getElementById(
+"zoomReset"
+).textContent=
+Math.round(zoom*100)+"%";
+
+}
+
+
+document.getElementById(
+"zoomIn"
+).addEventListener(
+"click",
+()=>{
+
+zoom=
+Math.min(5,zoom+.25);
+
+updateZoom();
+
+}
+);
+
+
+document.getElementById(
+"zoomOut"
+).addEventListener(
+"click",
+()=>{
+
+zoom=
+Math.max(.5,zoom-.25);
+
+updateZoom();
+
+}
+);
+
+
+document.getElementById(
+"zoomReset"
+).addEventListener(
+"click",
+()=>{
+
+zoom=1;
+
+updateZoom();
+
+}
+);
+
+
+/* =========================================================
+   FULLSCREEN
+========================================================= */
+
+document.getElementById(
+"fullscreen"
+).addEventListener(
+"click",
+async()=>{
+
+if(!document.fullscreenElement){
+
+await document
+.querySelector(".image-area")
+.requestFullscreen();
+
+}else{
+
+await document.exitFullscreen();
+
+}
+
+}
+);
+
+
+/* =========================================================
+   SEARCH / FILTERS
+========================================================= */
+
+search.addEventListener(
+"input",
+render
+);
+
+systemFilter.addEventListener(
+"change",
+()=>{
+
+activeCategory="all";
+
+document
+.querySelectorAll(".category")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+document
+.querySelector('.category[data-category="all"]')
+?.classList.add("active");
+
+render();
+
+}
+);
+
+categoryFilter.addEventListener(
+"change",
+()=>{
+
+activeCategory=
+categoryFilter.value;
+
+document
+.querySelectorAll(".category")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+if(categoryFilter.value==="all"){
+
+document
+.querySelector('.category[data-category="all"]')
+?.classList.add("active");
+
+}
+
+render();
+
+}
+);
+
+stainFilter.addEventListener(
+"change",
+render
+);
+
+
+/* =========================================================
+   ALL CATEGORY BUTTON
+========================================================= */
+
+document
+.querySelector('.category[data-category="all"]')
+.addEventListener(
+"click",
+()=>{
+
+document
+.querySelectorAll(".category")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+document
+.querySelector('.category[data-category="all"]')
+.classList.add("active");
+
+activeCategory="all";
+
+categoryFilter.value="all";
+
+render();
+
+}
+);
+
+
+/* =========================================================
+   FLASHCARDS
+========================================================= */
+
+const flashcardsData=[
+
+{
+title:"PCT vs DCT",
+text:"PCT usually has a more prominent brush border and a less distinct lumen. DCT has a clearer lumen."
+},
+
+{
+title:"Artery vs Vein",
+text:"Arteries generally have a thicker muscular wall and more regular lumen. Veins usually have thinner walls and larger irregular lumens."
+},
+
+{
+title:"Small Intestine vs Colon",
+text:"Small intestine has villi. Colon has straight crypts but no villi."
+},
+
+{
+title:"Skeletal vs Cardiac Muscle",
+text:"Both are striated, but cardiac muscle has central nuclei, branching fibres and intercalated discs."
+},
+
+{
+title:"Hyaline vs Elastic Cartilage",
+text:"Elastic cartilage contains a prominent elastic fibre network, while hyaline cartilage has a more homogeneous matrix."
+},
+
+{
+title:"Thyroid",
+text:"Round follicles filled with colloid are the classic practical clue."
+},
+
+{
+title:"Cerebellum",
+text:"The molecular layer, Purkinje-cell layer and granular layer form its characteristic cortical organization."
+},
+
+{
+title:"Thymus",
+text:"Dark cortex, pale medulla and Hassall corpuscles are important identification clues."
+},
+
+{
+title:"Colon",
+text:"Numerous straight crypts and absence of villi are highly useful clues."
+}
+
+];
+
+
+const flashcardContainer=
+document.getElementById(
+"flashcards"
+);
+
+flashcardsData.forEach(
+card=>{
+
+const el=
+document.createElement("article");
+
+el.className="flashcard";
+
+el.innerHTML=`
+
+<small>
+Practical comparison
+</small>
+
+<h3>
+${card.title}
+</h3>
+
+<p>
+${card.text}
+</p>
+
+`;
+
+flashcardContainer.appendChild(el);
+
+}
+);
+
+
+/* =========================================================
+   QUIZ
+========================================================= */
+
+let quizSpecimen=null;
+
+function newQuiz(){
+
+quizSpecimen=
+SPECIMENS[
+Math.floor(
+Math.random()*SPECIMENS.length
+)
+];
+
+
+document.getElementById(
+"quizImage"
+).src=
+quizSpecimen.image;
+
+
+const correct=
+quizSpecimen.name;
+
+
+const alternatives=
+SPECIMENS
+.filter(x=>x.name!==correct)
+.sort(
+()=>Math.random()-.5
+)
+.slice(0,3)
+.map(x=>x.name);
+
+
+const options=[
+correct,
+...alternatives
+]
+.sort(
+()=>Math.random()-.5
+);
+
+
+const container=
+document.getElementById(
+"quizOptions"
+);
+
+container.innerHTML="";
+
+
+document.getElementById(
+"quizResult"
+).textContent="";
+
+
+options.forEach(
+option=>{
+
+const button=
+document.createElement("button");
+
+button.className="option";
+
+button.textContent=option;
+
+
+button.addEventListener(
+"click",
+()=>{
+
+if(option===correct){
+
+button.classList.add("correct");
+
+quizScore++;
+
+localStorage.setItem(
+"microscopyQuizScore",
+quizScore
+);
+
+document.getElementById(
+"quizResult"
+).textContent=
+`Correct. Practical score: ${quizScore}`;
+
+}else{
+
+button.classList.add("wrong");
+
+document.getElementById(
+"quizResult"
+).textContent=
+`Not quite. Look again at the tissue architecture and try again.`;
+
+}
+
+}
+);
+
+
+container.appendChild(button);
+
+}
+);
+
+}
+
+
+document.getElementById(
+"quizImage"
+).addEventListener(
+"click",
+newQuiz
+);
+
+
+/* =========================================================
+   IMAGE DRAG / PAN
+========================================================= */
+
+let dragging=false;
+let startX=0;
+let startY=0;
+
+let panX=0;
+let panY=0;
+
+
+function updateTransform(){
+
+viewerImage.style.transform=
+`translate(${panX}px,${panY}px) scale(${zoom})`;
+
+}
+
+
+imageWrap.addEventListener(
+"pointerdown",
+e=>{
+
+if(zoom<=1)return;
+
+dragging=true;
+
+startX=e.clientX-panX;
+startY=e.clientY-panY;
+
+imageWrap.setPointerCapture(
+e.pointerId
+);
+
+}
+);
+
+
+imageWrap.addEventListener(
+"pointermove",
+e=>{
+
+if(!dragging)return;
+
+panX=e.clientX-startX;
+panY=e.clientY-startY;
+
+updateTransform();
+
+}
+);
+
+
+imageWrap.addEventListener(
+"pointerup",
+()=>{
+
+dragging=false;
+
+}
+);
+
+
+/* =========================================================
+   RESET PAN WHEN ZOOM CHANGES
+========================================================= */
+
+document.getElementById(
+"zoomReset"
+).addEventListener(
+"click",
+()=>{
+
+panX=0;
+panY=0;
+
+updateTransform();
+
+}
+);
+
+
+/* =========================================================
+   IMAGE ERROR HANDLING
+========================================================= */
+
+viewerImage.addEventListener(
+"error",
+()=>{
+  viewerImage.style.display="none";
+  viewerImage.alt="Micrograph unavailable";
+  const sourceBox=document.getElementById("detailSource");
+  if(sourceBox) sourceBox.innerHTML="<strong>Image could not be loaded.</strong> The specimen entry remains available with its histology explanation and source attribution.";
+}
+);
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+buildFilters();
+
+render();
+
+newQuiz();
+
+updateStats();
+
+</script>
+
+</body>
