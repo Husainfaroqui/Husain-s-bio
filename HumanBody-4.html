@@ -1,0 +1,2713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Husain — Human Anatomy Explorer</title>
+
+<style>
+:root{
+    --bg:#05080c;
+    --panel:rgba(8,13,18,.92);
+    --line:#263740;
+    --cyan:#62e8ea;
+    --text:#edf7f8;
+    --muted:#8ea1a9;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body{
+    touch-action:none;
+}
+
+#viewer{
+    position:fixed;
+    inset:0;
+}
+
+canvas{
+    display:block;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.top{
+    position:fixed;
+    z-index:10;
+    left:0;
+    right:0;
+    top:0;
+    height:76px;
+
+    padding:12px 16px;
+
+    display:flex;
+    align-items:center;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(4,7,11,.97),
+            rgba(4,7,11,.72),
+            transparent
+        );
+
+    pointer-events:none;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.logo{
+    width:47px;
+    height:47px;
+
+    border:2px solid var(--cyan);
+    border-radius:14px;
+
+    display:grid;
+    place-items:center;
+
+    color:var(--cyan);
+
+    font:25px Georgia,serif;
+}
+
+.brand h1{
+    margin:0;
+
+    font:700 20px Georgia,serif;
+
+    letter-spacing:1.5px;
+}
+
+.brand p{
+    margin:3px 0 0;
+
+    color:var(--muted);
+
+    font:13px Georgia,serif;
+}
+
+.status{
+    margin-left:auto;
+
+    border:1px solid #246f74;
+
+    background:#0c2024dd;
+
+    color:var(--cyan);
+
+    padding:11px 15px;
+
+    border-radius:12px;
+
+    font-size:12px;
+}
+
+
+/* =========================
+   PANELS
+========================= */
+
+.panel{
+    position:fixed;
+    z-index:10;
+
+    top:90px;
+
+    padding:14px;
+
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    border-radius:17px;
+
+    backdrop-filter:blur(15px);
+
+    box-shadow:0 15px 50px rgba(0,0,0,.25);
+}
+
+.left{
+    left:15px;
+    width:235px;
+}
+
+.right{
+    right:15px;
+    width:275px;
+}
+
+.title{
+    margin-bottom:10px;
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    letter-spacing:1.6px;
+
+    text-transform:uppercase;
+}
+
+
+/* =========================
+   SYSTEM BUTTONS
+========================= */
+
+.layer{
+    width:100%;
+
+    margin:5px 0;
+
+    padding:10px 11px;
+
+    border:1px solid #263741;
+
+    border-radius:10px;
+
+    background:#081016;
+
+    color:var(--text);
+
+    text-align:left;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    transition:.15s;
+}
+
+.layer:hover{
+    border-color:#47727a;
+}
+
+.layer.active{
+    border-color:var(--cyan);
+
+    color:var(--cyan);
+
+    background:#0b1c20;
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.row{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:7px;
+
+    margin-top:9px;
+}
+
+.ctrl{
+    padding:9px;
+
+    border:1px solid #263741;
+
+    border-radius:10px;
+
+    background:#081016;
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    font-size:12px;
+}
+
+.ctrl:hover{
+    border-color:var(--cyan);
+}
+
+
+/* =========================
+   INFORMATION
+========================= */
+
+.right h2{
+    margin:0 0 4px;
+
+    font:700 18px Georgia,serif;
+}
+
+.sub{
+    color:var(--cyan);
+
+    font-size:10px;
+
+    letter-spacing:1px;
+}
+
+.info{
+    margin-top:12px;
+
+    padding-top:11px;
+
+    border-top:1px solid #1a272e;
+
+    color:#aebdc2;
+
+    font-size:12px;
+
+    line-height:1.6;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+#loading{
+    position:fixed;
+
+    z-index:30;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    min-width:260px;
+
+    padding:20px;
+
+    text-align:center;
+
+    background:var(--panel);
+
+    border:1px solid var(--line);
+
+    border-radius:15px;
+
+    backdrop-filter:blur(15px);
+}
+
+.bar{
+    height:4px;
+
+    margin-top:12px;
+
+    background:#18242a;
+
+    border-radius:4px;
+
+    overflow:hidden;
+}
+
+.fill{
+    width:0;
+    height:100%;
+
+    background:var(--cyan);
+}
+
+
+/* =========================
+   RIGHT CLICK MENU
+========================= */
+
+#contextMenu{
+    display:none;
+
+    position:fixed;
+
+    z-index:100;
+
+    min-width:210px;
+
+    padding:7px;
+
+    background:#091117;
+
+    border:1px solid #31505a;
+
+    border-radius:12px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+
+.context-title{
+    padding:8px 10px;
+
+    border-bottom:1px solid #203039;
+
+    color:var(--cyan);
+
+    font-size:12px;
+}
+
+.context-button{
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:#e9f2f3;
+
+    padding:10px;
+
+    text-align:left;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:12px;
+}
+
+.context-button:hover{
+    background:#13252a;
+}
+
+.hide-button{
+    color:#ff9da5;
+}
+
+
+/* =========================
+   MOBILE VIEWER CONTROLS
+========================= */
+
+.mobile-viewer-controls,
+#mobileSelectionLabel{
+    display:none;
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+#toast{
+    display:none;
+
+    position:fixed;
+
+    z-index:200;
+
+    left:50%;
+
+    bottom:25px;
+
+    transform:translateX(-50%);
+
+    padding:10px 15px;
+
+    background:#091117ee;
+
+    border:1px solid #2b444e;
+
+    border-radius:10px;
+
+    font-size:12px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+    .left{
+        left:8px;
+        width:165px;
+        top:82px;
+
+        padding:10px;
+    }
+
+    .right{
+        right:8px;
+        width:180px;
+        top:82px;
+
+        padding:10px;
+    }
+
+    .brand h1{
+        font-size:16px;
+    }
+
+    .brand p{
+        font-size:11px;
+    }
+
+    .logo{
+        width:41px;
+        height:41px;
+    }
+
+    .status{
+        font-size:10px;
+        padding:9px;
+    }
+
+    .layer,
+    .ctrl{
+        font-size:11px;
+    }
+
+    .right h2{
+        font-size:15px;
+    }
+
+    .info{
+        font-size:10px;
+    }
+}
+
+@media(max-width:768px){
+
+    body.mobile-skeleton-mode .top,
+    body.mobile-skeleton-mode .panel.left,
+    body.mobile-skeleton-mode .panel.right{
+        display:none;
+    }
+
+    body.mobile-skeleton-mode .mobile-viewer-controls{
+        position:fixed;
+        z-index:20;
+        top:max(8px,env(safe-area-inset-top));
+        left:8px;
+        right:8px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:5px;
+        padding:5px;
+        border:1px solid rgba(98,232,234,.18);
+        border-radius:10px;
+        background:rgba(5,8,12,.72);
+        backdrop-filter:blur(8px);
+    }
+
+    .mobile-viewer-controls button{
+        flex:0 0 auto;
+        min-height:32px;
+        padding:0 8px;
+        border:1px solid #263741;
+        border-radius:7px;
+        background:#081016;
+        color:var(--text);
+        font:11px Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+        white-space:nowrap;
+        cursor:pointer;
+    }
+
+    .mobile-viewer-controls button:hover,
+    .mobile-viewer-controls button:focus-visible{
+        border-color:var(--cyan);
+        color:var(--cyan);
+    }
+
+    #mobileActiveSystem{
+        overflow:hidden;
+        color:var(--cyan);
+        font-size:10px;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+
+    #mobileSystemsMenu{
+        position:absolute;
+        top:calc(100% + 6px);
+        left:0;
+        display:none;
+        width:min(190px,70vw);
+        padding:7px;
+        border:1px solid rgba(98,232,234,.2);
+        border-radius:9px;
+        background:rgba(5,8,12,.94);
+        box-shadow:0 12px 30px rgba(0,0,0,.4);
+        backdrop-filter:blur(10px);
+    }
+
+    #mobileSystemsMenu.open{
+        display:block;
+    }
+
+    #mobileSystemsMenu .mobile-layer{
+        min-height:34px;
+        margin:2px 0;
+        padding:7px 9px;
+        font-size:11px;
+    }
+
+    #mobileSelectionLabel{
+        position:fixed;
+        z-index:15;
+        right:10px;
+        bottom:max(8px,env(safe-area-inset-bottom));
+        max-width:calc(100vw - 20px);
+        overflow:hidden;
+        padding:4px 8px;
+        border:1px solid rgba(98,232,234,.16);
+        border-radius:6px;
+        background:rgba(5,8,12,.56);
+        color:#c5d7dc;
+        font-size:10px;
+        line-height:1.3;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        pointer-events:none;
+    }
+
+    body.mobile-skeleton-mode.has-mobile-selection #mobileSelectionLabel{
+        display:block;
+    }
+
+    body.mobile-skeleton-mode #viewer,
+    body.mobile-skeleton-mode #viewer canvas{
+        width:100vw;
+        height:100dvh;
+    }
+
+}
+
+/* =========================
+   BOTTOM STRUCTURE INFO
+========================= */
+#viewer{position:fixed;inset:0;transition:bottom .22s ease}
+
+#structureInfo{
+    position:fixed;z-index:25;left:0;right:0;bottom:0;
+    display:none;max-height:min(42vh,420px);overflow:auto;
+    padding:16px 20px calc(16px + env(safe-area-inset-bottom));
+    background:rgba(7,12,16,.97);border-top:1px solid #31454d;
+    box-shadow:0 -18px 45px rgba(0,0,0,.42);backdrop-filter:blur(14px)
+}
+body.structure-info-open #structureInfo{display:block}
+.structure-info-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;max-width:1100px;margin:0 auto 8px}
+.structure-info-kicker{color:#62e8ea;font-size:10px;letter-spacing:1.3px;text-transform:uppercase}
+#structureInfo h2{margin:2px 0 0;color:#edf7f8;font:700 20px Georgia,serif}
+#structureInfoClose{width:34px;height:34px;flex:0 0 34px;border:1px solid #30464f;border-radius:9px;background:#0a1217;color:#edf7f8;font-size:22px;line-height:1;cursor:pointer}
+#structureInfoSummary{display:flex;align-items:center;justify-content:space-between;gap:12px;width:min(1100px,100%);margin:0 auto;padding:11px 12px;border:1px solid #263b44;border-radius:10px;background:#0a141a;color:#c7d5d9;text-align:left;cursor:pointer;font:12px/1.55 Inter,system-ui,sans-serif}
+#structureInfoSummary:hover{border-color:#62e8ea}
+.structure-info-arrow{color:#62e8ea;font-size:16px}
+#structureInfoDetails{width:min(1100px,100%);margin:10px auto 0;padding:13px 14px;border-left:2px solid #62e8ea;color:#b9c9ce;font:13px/1.7 Inter,system-ui,sans-serif}
+body.structure-info-open #viewer{bottom:clamp(150px,30vh,330px)}
+body.structure-info-open #viewer canvas{height:100%!important}
+@media(max-width:768px){
+ body.mobile-skeleton-mode #structureInfo{display:block}
+ body.structure-info-open #viewer{bottom:min(48vh,380px)}
+ #structureInfo{max-height:48vh;padding:12px 12px calc(12px + env(safe-area-inset-bottom))}
+ #structureInfo h2{font-size:17px}
+ #structureInfoDetails{font-size:12px}
+}
+
+
+@media(max-width:768px){
+    body.mobile-skeleton-mode.structure-info-open #structureInfo{
+        display:block !important;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div id="viewer"></div>
+
+
+<!-- =========================
+     TOP
+========================= -->
+
+<div class="top">
+
+    <div class="brand">
+
+        <div class="logo">
+            H
+        </div>
+
+        <div>
+
+            <h1>
+                BODY EXPLORER
+            </h1>
+
+            <p>
+                Interactive Human Anatomy
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="status"
+        id="status"
+    >
+        Loading anatomy…
+    </div>
+
+</div>
+
+
+<div class="mobile-viewer-controls" aria-label="Mobile skeleton viewer controls">
+
+    <button id="mobileSystemsToggle" type="button" aria-expanded="false" aria-controls="mobileSystemsMenu">Systems</button>
+    <span id="mobileActiveSystem">Skeleton</span>
+    <button id="mobileFit" type="button">Fit</button>
+    <button id="mobileReset" type="button">Reset</button>
+    <button id="mobileRestore" type="button">Restore</button>
+
+    <div id="mobileSystemsMenu" aria-label="Choose anatomical system">
+        <button class="layer mobile-layer" type="button" data-system="skeleton">Skeleton</button>
+        <button class="layer mobile-layer" type="button" data-system="muscular">Muscular</button>
+        <button class="layer mobile-layer" type="button" data-system="organs">Organs</button>
+        <button class="layer mobile-layer" type="button" data-system="cardio">Cardiovascular</button>
+        <button class="layer mobile-layer" type="button" data-system="nervous">Nervous</button>
+        <button id="mobileSystemsBack" type="button">Back</button>
+    </div>
+
+</div>
+
+<div id="mobileSelectionLabel" aria-live="polite"></div>
+
+
+<!-- =========================
+     LEFT PANEL
+========================= -->
+
+<aside class="panel left">
+
+    <div class="title">
+        Anatomical Systems
+    </div>
+
+
+    <button
+        class="layer active"
+        data-system="skeleton"
+    >
+        🦴 Skeleton
+    </button>
+
+
+    <button
+        class="layer"
+        data-system="muscular"
+    >
+        💪 Muscular
+    </button>
+
+
+    <button
+        class="layer"
+        data-system="organs"
+    >
+        🫀 Organs
+    </button>
+
+
+    <button
+        class="layer"
+        data-system="cardio"
+    >
+        🩸 Cardiovascular
+    </button>
+
+
+    <button
+        class="layer"
+        data-system="nervous"
+    >
+        🧠 Nervous
+    </button>
+
+
+    <div class="row">
+
+        <button
+            class="ctrl"
+            id="restore"
+        >
+            Restore All
+        </button>
+
+        <button
+            class="ctrl"
+            id="front"
+        >
+            Front
+        </button>
+
+    </div>
+
+
+    <div class="row">
+
+        <button
+            class="ctrl"
+            id="fit"
+        >
+            Fit
+        </button>
+
+        <button
+            class="ctrl"
+            id="reset"
+        >
+            Reset
+        </button>
+
+    </div>
+
+
+    <div class="info">
+
+        <b>Dissection mode</b><br><br>
+
+        Right-click any anatomical structure
+        to hide <b>only that structure</b>.
+
+        The anatomy behind it remains visible.
+
+        <br><br>
+
+        Male and female reproductive anatomy
+        are excluded.
+
+    </div>
+
+</aside>
+
+
+
+
+
+<!-- =========================
+     LOADING
+========================= -->
+
+<div id="loading">
+
+    <b>
+        Loading real 3D anatomy
+    </b>
+
+    <div id="loadText">
+        Starting…
+    </div>
+
+    <div class="bar">
+
+        <div
+            class="fill"
+            id="fill"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     RIGHT CLICK MENU
+========================= -->
+
+<div id="contextMenu">
+
+    <div
+        class="context-title"
+        id="contextName"
+    >
+        Structure
+    </div>
+
+
+    <button
+        class="context-button hide-button"
+        id="hideStructure"
+    >
+        Hide this structure
+    </button>
+
+
+    <button
+        class="context-button"
+        id="focusStructure"
+    >
+        Focus structure
+    </button>
+
+
+    <button
+        class="context-button"
+        id="cancelMenu"
+    >
+        Cancel
+    </button>
+
+</div>
+
+
+<div id="toast"></div>
+
+<section id="structureInfo" aria-live="polite">
+  <div class="structure-info-head">
+    <div>
+      <div class="structure-info-kicker" id="structureInfoSystem">ANATOMY</div>
+      <h2 id="structureInfoName">Selected Structure</h2>
+    </div>
+    <button id="structureInfoClose" type="button" aria-label="Close information">×</button>
+  </div>
+  <button id="structureInfoSummary" type="button">
+    <span id="structureInfoSummaryText">Select a bone or organ to view information.</span>
+    <span class="structure-info-arrow">⌄</span>
+  </button>
+  <div id="structureInfoDetails" hidden></div>
+</section>
+
+
+
+<!-- =========================
+     THREE.JS IMPORT MAP
+========================= -->
+
+<script type="importmap">
+
+{
+    "imports": {
+        "three":
+        "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+    }
+}
+
+</script>
+
+
+<script type="module">
+
+import * as THREE
+from "three";
+
+
+import {
+    OrbitControls
+}
+from
+"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js";
+
+
+import {
+    GLTFLoader
+}
+from
+"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js";
+
+
+import {
+    DRACOLoader
+}
+from
+"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/DRACOLoader.js";
+
+
+/* =========================================================
+   REAL ANATOMICAL MODEL SOURCE
+========================================================= */
+
+const MODEL_BASE =
+"https://cdn.jsdelivr.net/gh/Liyucheng1997/242_lab-human-anatomy@main/public/models/";
+
+
+const MODEL_FILES = {
+
+    skeleton:
+    "skeleton.glb",
+
+    muscular:
+    "muscular.glb",
+
+    organs:
+    "visceral.glb",
+
+    cardio:
+    "cardiovascular.glb",
+
+    nervous:
+    "nervous.glb"
+
+};
+
+
+/* =========================================================
+   SCENE
+========================================================= */
+
+const scene =
+new THREE.Scene();
+
+
+scene.background =
+new THREE.Color(
+    0x05080c
+);
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+const camera =
+new THREE.PerspectiveCamera(
+    42,
+    innerWidth / innerHeight,
+    0.01,
+    100
+);
+
+
+camera.position.set(
+    0,
+    1.15,
+    3
+);
+
+
+/* =========================================================
+   RENDERER
+========================================================= */
+
+const renderer =
+new THREE.WebGLRenderer({
+
+    antialias:true,
+
+    powerPreference:
+    "high-performance"
+
+});
+
+
+renderer.setPixelRatio(
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+);
+
+
+renderer.setSize(
+    innerWidth,
+    innerHeight
+);
+
+
+renderer.outputColorSpace =
+THREE.SRGBColorSpace;
+
+
+renderer.toneMapping =
+THREE.ACESFilmicToneMapping;
+
+
+renderer.toneMappingExposure =
+1.08;
+
+
+document
+.getElementById("viewer")
+.appendChild(
+    renderer.domElement
+);
+
+
+/* =========================================================
+   CAMERA CONTROLS
+========================================================= */
+
+const controls =
+new OrbitControls(
+    camera,
+    renderer.domElement
+);
+
+
+controls.enableDamping =
+true;
+
+
+controls.dampingFactor =
+0.055;
+
+
+controls.enablePan =
+true;
+
+
+controls.screenSpacePanning =
+true;
+
+
+controls.minDistance =
+0.35;
+
+
+controls.maxDistance =
+8;
+
+
+/* =========================================================
+   LIGHTING
+========================================================= */
+
+scene.add(
+    new THREE.HemisphereLight(
+        0xffffff,
+        0x17232a,
+        2.1
+    )
+);
+
+
+const keyLight =
+new THREE.DirectionalLight(
+    0xffffff,
+    2.7
+);
+
+
+keyLight.position.set(
+    3,
+    5,
+    4
+);
+
+
+scene.add(
+    keyLight
+);
+
+
+const fillLight =
+new THREE.DirectionalLight(
+    0x8edcff,
+    1
+);
+
+
+fillLight.position.set(
+    -4,
+    2,
+    3
+);
+
+
+scene.add(
+    fillLight
+);
+
+
+const rimLight =
+new THREE.DirectionalLight(
+    0xffffff,
+    1.4
+);
+
+
+rimLight.position.set(
+    0,
+    3,
+    -5
+);
+
+
+scene.add(
+    rimLight
+);
+
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+const anatomyRoot =
+new THREE.Group();
+
+
+scene.add(
+    anatomyRoot
+);
+
+
+/* =========================================================
+   GLTF LOADER
+========================================================= */
+
+const loader =
+new GLTFLoader();
+
+
+const draco =
+new DRACOLoader();
+
+
+draco.setDecoderPath(
+    "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/libs/draco/"
+);
+
+
+loader.setDRACOLoader(
+    draco
+);
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const models = {};
+
+const allAnatomicalMeshes = [];
+
+const hiddenStructures =
+new Set();
+
+let selectedObject =
+null;
+
+let activeSystem =
+"skeleton";
+
+/* =========================================================
+   UI
+========================================================= */
+
+const loading =
+document.getElementById(
+    "loading"
+);
+
+
+const loadText =
+document.getElementById(
+    "loadText"
+);
+
+
+const fill =
+document.getElementById(
+    "fill"
+);
+
+
+const status =
+document.getElementById(
+    "status"
+);
+
+
+/* =========================================================
+   EXCLUDE REPRODUCTIVE ANATOMY
+========================================================= */
+
+const reproductivePattern =
+/reproductive|genital|penis|testis|testicle|ovary|ovaries|uterus|vagina|prostate|seminal|vas deferens|epididym|fallopian|clitoris|cervix|placenta/i;
+
+
+function isReproductive(
+    object
+){
+
+    let current =
+    object;
+
+
+        /* =========================================================
+           CANCEL
+        ========================================================== */
+
+    let names =
+    [];
+
+
+    while(current){
+
+        if(current.name){
+            names.push(
+                current.name
+            );
+        }
+
+
+        if(
+            current.userData &&
+            current.userData.name
+        ){
+
+            names.push(
+                current.userData.name
+            );
+
+        }
+
+
+        current =
+        current.parent;
+
+    }
+
+
+    return reproductivePattern.test(
+        names.join(" ")
+    );
+
+}
+
+
+/* =========================================================
+   CLEAN NAME
+========================================================= */
+
+function cleanName(
+    name
+){
+
+    return (
+        name ||
+        "Anatomical Structure"
+    )
+    .replaceAll(
+        "_",
+        " "
+    )
+    .replaceAll(
+        "-",
+        " "
+    )
+    .replace(
+        /\s+/g,
+        " "
+    )
+    .trim();
+
+}
+
+
+/* =========================================================
+   PREPARE MODEL
+========================================================= */
+
+function prepareModel(
+    model,
+    system
+){
+
+    model.traverse(
+        object => {
+
+            if(
+                !object.isMesh
+            ){
+
+                return;
+
+            }
+
+
+            object.userData.system =
+            system;
+
+
+            object.userData.displayName =
+            object.name ||
+            "Anatomical Structure";
+
+
+            allAnatomicalMeshes.push(
+                object
+            );
+
+
+            object.castShadow =
+            true;
+
+
+            object.receiveShadow =
+            true;
+
+
+            /*
+             * Remove reproductive anatomy.
+             */
+
+            if(
+                isReproductive(
+                    object
+                )
+            ){
+
+                object.visible =
+                false;
+
+                object.userData.excluded =
+                true;
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD MODEL
+========================================================= */
+
+function loadModel(
+    system
+){
+
+    return new Promise(
+        (
+            resolve,
+            reject
+        ) => {
+
+            loader.load(
+
+                MODEL_BASE +
+                MODEL_FILES[
+                    system
+                ],
+
+                gltf => {
+
+                    const model =
+                    gltf.scene;
+
+
+                    model.userData.system =
+                    system;
+
+
+                    prepareModel(
+                        model,
+                        system
+                    );
+
+
+                    anatomyRoot.add(
+                        model
+                    );
+
+
+                    models[
+                        system
+                    ] =
+                    model;
+
+
+                    resolve(
+                        model
+                    );
+
+                },
+
+
+                progress => {
+
+                    if(
+                        progress.total
+                    ){
+
+                        const percent =
+                        Math.round(
+                            progress.loaded /
+                            progress.total *
+                            100
+                        );
+
+
+                        loadText.textContent =
+                        "Loading " +
+                        system +
+                        " " +
+                        percent +
+                        "%";
+
+
+                        fill.style.width =
+                        percent +
+                        "%";
+
+                    }
+
+                },
+
+
+                error => {
+
+                    reject(
+                        error
+                    );
+
+                }
+
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD ALL
+========================================================= */
+
+async function loadAll(){
+
+    try{
+
+        for(
+            const system
+            of Object.keys(
+                MODEL_FILES
+            )
+        ){
+
+            status.textContent =
+            "Loading " +
+            system +
+            "…";
+
+
+            await loadModel(
+                system
+            );
+
+        }
+
+
+        /*
+         * Only skeleton starts visible.
+         */
+
+        Object
+        .entries(
+            models
+        )
+        .forEach(
+            (
+                [name,model]
+            ) => {
+
+                model.visible =
+                name ===
+                "skeleton";
+
+            }
+        );
+
+
+        loading.style.display =
+        "none";
+
+
+        status.textContent =
+        "REAL ANATOMY • READY";
+
+
+        fitCamera();
+
+    }
+
+    catch(error){
+
+        console.error(
+            error
+        );
+
+
+        loading.innerHTML =
+
+        "<b>Unable to load anatomy</b>" +
+
+        "<br><br>" +
+
+        "Use GitHub Pages or VS Code Live Server " +
+
+        "and make sure internet is available.";
+
+    }
+
+}
+
+
+/* =========================================================
+   SYSTEM VISIBILITY
+========================================================= */
+
+function showSystem(
+    system
+){
+
+    activeSystem =
+    system;
+
+    Object
+    .entries(
+        models
+    )
+    .forEach(
+        (
+            [name,model]
+        ) => {
+
+            model.visible =
+            name ===
+            system;
+
+        }
+    );
+
+
+    document
+    .querySelectorAll(
+        ".layer"
+    )
+    .forEach(
+        button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.system ===
+                system
+            );
+
+        }
+    );
+
+
+    status.textContent =
+    system.toUpperCase();
+
+
+    const activeSystemLabel =
+    document.getElementById(
+        "mobileActiveSystem"
+    );
+
+
+    if(activeSystemLabel){
+
+        activeSystemLabel.textContent =
+        system === "cardio"
+            ? "Cardiovascular"
+            : system.charAt(0).toUpperCase() +
+              system.slice(1);
+
+    }
+
+
+    syncMobileViewerMode();
+
+
+    clearSelection();
+    closeStructureInfo();
+
+    fitCamera();
+
+}
+
+
+function syncMobileViewerMode(){
+
+    const isMobileSkeleton =
+    window.matchMedia(
+        "(max-width: 768px)"
+    ).matches &&
+    activeSystem === "skeleton";
+
+
+    document.body.classList.toggle(
+        "mobile-skeleton-mode",
+        isMobileSkeleton
+    );
+
+
+    if(!isMobileSkeleton){
+
+        document.body.classList.remove(
+            "has-mobile-selection"
+        );
+
+
+        document
+        .getElementById(
+            "mobileSystemsMenu"
+        )
+        .classList.remove(
+            "open"
+        );
+
+
+        document
+        .getElementById(
+            "mobileSystemsToggle"
+        )
+        .setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+}
+
+
+syncMobileViewerMode();
+
+
+/* =========================================================
+   SYSTEM BUTTONS
+========================================================= */
+
+document
+.querySelectorAll(
+    ".layer"
+)
+.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                showSystem(
+                    button.dataset.system
+                );
+
+            }
+        );
+
+    }
+);
+
+
+document
+.getElementById(
+    "mobileSystemsToggle"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        const menu =
+        document.getElementById(
+            "mobileSystemsMenu"
+        );
+
+
+        const isOpen =
+        menu.classList.toggle(
+            "open"
+        );
+
+
+        document
+        .getElementById(
+            "mobileSystemsToggle"
+        )
+        .setAttribute(
+            "aria-expanded",
+            String(isOpen)
+        );
+
+    }
+);
+
+
+document
+.getElementById(
+    "mobileSystemsBack"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        document
+        .getElementById(
+            "mobileSystemsMenu"
+        )
+        .classList.remove(
+            "open"
+        );
+
+
+        document
+        .getElementById(
+            "mobileSystemsToggle"
+        )
+        .setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+);
+
+
+document
+.getElementById(
+    "mobileFit"
+)
+.addEventListener(
+    "click",
+    fitCamera
+);
+
+
+document
+.getElementById(
+    "mobileReset"
+)
+.addEventListener(
+    "click",
+    resetAll
+);
+
+
+document
+.getElementById(
+    "mobileRestore"
+)
+.addEventListener(
+    "click",
+    restoreAll
+);
+
+
+window
+.matchMedia(
+    "(max-width: 768px)"
+)
+.addEventListener(
+    "change",
+    syncMobileViewerMode
+);
+
+
+/* =========================================================
+   GET VISIBLE MESHES
+========================================================= */
+
+function getVisibleMeshes(){
+
+    return allAnatomicalMeshes.filter(
+        mesh => {
+
+            let current =
+            mesh;
+
+
+            while(current){
+
+                if(
+                    !current.visible
+                ){
+
+                    return false;
+
+                }
+
+
+                current =
+                current.parent;
+
+            }
+
+
+            return !mesh.userData.excluded;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FIT CAMERA
+========================================================= */
+
+function fitCamera(){
+
+    const box =
+    new THREE.Box3();
+
+
+    getVisibleMeshes()
+    .forEach(
+        mesh => {
+
+            box.expandByObject(
+                mesh
+            );
+
+        }
+    );
+
+
+    if(
+        box.isEmpty()
+    ){
+
+        return;
+
+    }
+
+
+    const size =
+    box.getSize(
+        new THREE.Vector3()
+    );
+
+
+    const center =
+    box.getCenter(
+        new THREE.Vector3()
+    );
+
+
+    const maxSize =
+    Math.max(
+        size.x,
+        size.y,
+        size.z
+    );
+
+
+    const distance =
+    maxSize /
+    (
+        2 *
+        Math.tan(
+            THREE.MathUtils.degToRad(
+                camera.fov / 2
+            )
+        )
+    );
+
+
+    camera.position.set(
+
+        center.x,
+
+        center.y,
+
+        center.z +
+        distance *
+        1.2
+
+    );
+
+
+    controls.target.copy(
+        center
+    );
+
+
+    controls.update();
+
+}
+
+
+/* =========================================================
+   FRONT
+========================================================= */
+
+function frontView(){
+
+    fitCamera();
+
+}
+
+
+/* =========================================================
+   RESTORE ALL HIDDEN
+========================================================= */
+
+function restoreAll(){
+
+    hiddenStructures
+    .forEach(
+        object => {
+
+            if(
+                object &&
+                !object.userData.excluded
+            ){
+
+                object.visible =
+                true;
+
+            }
+
+        }
+    );
+
+
+    hiddenStructures.clear();
+
+
+    toast(
+        "All hidden structures restored"
+    );
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetAll(){
+
+    restoreAll();
+
+    fitCamera();
+
+}
+
+
+/* =========================================================
+   RAYCASTING
+========================================================= */
+
+const raycaster =
+new THREE.Raycaster();
+
+
+const mouse =
+new THREE.Vector2();
+
+
+function getObjectAt(
+    event
+){
+
+    const rect =
+    renderer
+    .domElement
+    .getBoundingClientRect();
+
+
+    mouse.x =
+
+    (
+        (
+            event.clientX -
+            rect.left
+        )
+        /
+        rect.width
+    ) * 2 - 1;
+
+
+    mouse.y =
+
+    -(
+        (
+            event.clientY -
+            rect.top
+        )
+        /
+        rect.height
+    ) * 2 + 1;
+
+
+    raycaster.setFromCamera(
+        mouse,
+        camera
+    );
+
+
+    const allAnatomicalMeshes =
+    getVisibleMeshes();
+
+
+    const intersects =
+    raycaster.intersectObjects(
+        allAnatomicalMeshes,
+        true
+    );
+
+
+    if(
+        intersects.length
+    ){
+
+        return intersects[0].object;
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   STRUCTURE INFORMATION + SELECT
+========================================================= */
+
+const anatomyDescriptions={
+ femur:"The femur is the only bone of the thigh and is classified as a long bone. Its proximal end forms the hip joint with the acetabulum of the pelvis, while its distal end participates in the knee joint with the tibia and patella. It has a shaft (diaphysis) and two expanded ends (epiphyses), with important landmarks such as the head, neck, greater and lesser trochanters, linea aspera, condyles and epicondyles. It provides major attachment sites for muscles and transmits body weight between the hip and knee.",
+ tibia:"The tibia is the larger and medial bone of the leg, between the knee and ankle. It is a long bone with a shaft and proximal and distal epiphyses. Its upper end contributes to the knee joint and its lower end contributes to the ankle joint; the fibula lies laterally beside it. The tibia is a major weight-bearing bone and has prominent features including the tibial tuberosity and medial malleolus.",
+ fibula:"The fibula is the slender lateral bone of the leg. It runs parallel to the tibia and participates in the structure and stability of the ankle, particularly through its distal lateral malleolus. It has a proximal head and neck, a shaft and a distal end, and provides attachment sites for muscles and ligaments. Unlike the tibia, it carries relatively little of the body's vertical load.",
+ humerus:"The humerus is the long bone of the upper arm, extending from the shoulder to the elbow. Its proximal end has a rounded head that articulates with the scapula, along with the anatomical neck and greater and lesser tubercles. The shaft contains important muscle attachment areas, including the deltoid tuberosity. Distally, the humerus forms the elbow region through the trochlea and capitulum and has medial and lateral epicondyles plus fossae that accommodate forearm structures during movement.",
+ radius:"The radius is one of the two bones of the forearm and lies on the thumb side in anatomical position. It has a proximal head that participates in the elbow joint and a distal end that contributes substantially to the wrist joint. The radius can rotate around the ulna during pronation and supination of the forearm. Its shaft and distal end provide attachment sites for muscles and ligaments.",
+ ulna:"The ulna is the medial forearm bone in anatomical position. Its proximal end forms a major part of the elbow joint, especially through the trochlear notch and olecranon. The ulna has a shaft and a smaller distal end near the wrist, where it participates indirectly in wrist mechanics through surrounding structures. It provides attachment sites for muscles and ligaments of the forearm.",
+ scapula:"The scapula, or shoulder blade, is a flat triangular bone on the posterior thoracic wall. It has important landmarks including the spine, acromion, coracoid process and glenoid cavity. The glenoid cavity articulates with the head of the humerus to form the shoulder joint. The scapula also provides broad surfaces and processes for attachment of muscles that control the shoulder and upper limb.",
+ clavicle:"The clavicle is the S-shaped collarbone that connects the upper limb to the axial skeleton. Medially it articulates with the sternum at the sternoclavicular joint, while laterally it articulates with the acromion of the scapula. It acts as a strut that holds the shoulder laterally and transmits forces between the upper limb and trunk. It also provides attachment sites for several muscles and ligaments.",
+ sternum:"The sternum is a flat bone in the midline of the anterior thorax. It consists mainly of the manubrium, body and xiphoid process. The sternum articulates with the clavicles and with costal cartilages of several ribs, forming the anterior part of the thoracic cage. Together with the ribs and thoracic vertebrae, it helps protect the heart, lungs and other thoracic structures.",
+ vertebra:"A vertebra is a bone of the vertebral column. Typical vertebrae have a vertebral body and a vertebral arch surrounding the vertebral foramen, plus processes that provide attachment and leverage for muscles and ligaments. Vertebrae are regionally specialized as cervical, thoracic and lumbar vertebrae, with the sacrum and coccyx forming the lower parts of the column. The vertebral column supports the trunk, permits controlled movement and encloses the spinal cord.",
+ skull:"The skull is the bony framework of the head and consists of the cranial and facial skeleton. The cranium encloses and protects the brain, while facial bones form the framework of the face and contribute to the oral, nasal and orbital cavities. Skull bones are joined mainly by immovable fibrous joints called sutures, with the mandible forming the major movable bone of the skull. Numerous openings allow nerves and blood vessels to pass through.",
+ pelvis:"The pelvis forms the bony connection between the vertebral column and the lower limbs. Each hip bone is formed from the ilium, ischium and pubis, which meet at the acetabulum. Together with the sacrum and coccyx, the pelvic skeleton supports the trunk, transfers body weight to the lower limbs and forms a protective framework around pelvic structures. The acetabulum also forms the socket of the hip joint.",
+ heart:"The heart is a muscular organ in the thorax that drives pulmonary and systemic blood circulation. It has four chambers: right and left atria and right and left ventricles. Valves help keep blood moving in one direction, while the right side pumps blood toward the lungs and the left side pumps oxygenated blood into the systemic circulation. Its wall includes the myocardium and specialized conduction tissue coordinates the heartbeat.",
+ lung:"The lungs are the principal organs of respiration and gas exchange. They are located in the thoracic cavity on either side of the mediastinum and are covered by pleural membranes. Air travels through the conducting airways into progressively smaller passages ending in alveoli, where oxygen and carbon dioxide are exchanged between air and blood. The right lung has three lobes and the left lung has two, with the cardiac impression contributing to the asymmetry.",
+ liver:"The liver is a large metabolic and digestive organ located mainly in the right upper abdomen beneath the diaphragm. It produces bile and performs many functions involving nutrient processing, storage, protein synthesis and biochemical regulation. Grossly it has right, left, caudate and quadrate lobes, while its internal organization includes hepatic tissue arranged around vessels and bile channels. Blood reaches it through both the hepatic artery and hepatic portal vein, and leaves through hepatic veins.",
+ stomach:"The stomach is a muscular digestive organ between the esophagus and duodenum. It has regions including the cardia, fundus, body and pyloric part, with the pylorus regulating passage of gastric contents into the duodenum. Its muscular wall mixes food while its mucosa produces acid, enzymes and protective secretions. The stomach therefore acts as both a temporary reservoir and an important site of digestion.",
+ brain:"The brain is the central organ of the human nervous system and, with the spinal cord, forms the central nervous system. Major anatomical divisions include the cerebrum, cerebellum and brainstem. The cerebrum is divided into two hemispheres and its cerebral cortex participates in sensory processing, voluntary movement, language, memory and other higher functions. The brainstem connects the brain with the spinal cord and contains important pathways and nuclei involved in vital functions.",
+ pancreas:"The pancreas is an elongated gland behind the stomach with both digestive and endocrine roles. Its exocrine tissue releases digestive enzymes into the pancreatic duct, while endocrine islets release hormones such as insulin and glucagon into the blood. It extends from the duodenum toward the spleen and is divided anatomically into the head, neck, body and tail.",
+ spleen:"The spleen is a lymphoid organ located in the upper left abdomen near the stomach. It filters blood, participates in immune responses and is involved in the removal and processing of aged blood cells. Its tissue is organized into white pulp associated with immune activity and red pulp associated with blood filtration. It is supplied by the splenic artery and drained by the splenic vein.",
+ kidney:"The kidneys are paired organs of the urinary system located toward the posterior abdominal wall. They filter blood and form urine while contributing to regulation of water, electrolytes, acid-base balance and blood pressure. Each kidney has an outer cortex and inner medulla, with functional units called nephrons. Urine collects in the renal pelvis and passes through the ureter to the bladder.",
+ bladder:"The urinary bladder is a muscular hollow organ that stores urine before it is expelled through the urethra. Its wall contains smooth muscle called the detrusor muscle and its internal lining allows it to expand as urine accumulates. The two ureters deliver urine to the bladder, while the urethra provides the outlet. Its position and shape change with filling and emptying.",
+ esophagus:"The esophagus is a muscular tube connecting the pharynx to the stomach. Swallowed material is transported by coordinated muscular contractions called peristalsis. Its wall contains mucosa, connective tissue and muscle layers adapted for propulsion rather than significant digestion. It passes through the thorax and diaphragm before joining the stomach.",
+ trachea:"The trachea is the airway connecting the larynx with the main bronchi. Its wall is supported by incomplete rings of cartilage that help keep the airway open while allowing flexibility. The trachea divides at its lower end into the right and left main bronchi, which continue into the lungs. Its lining contains ciliated respiratory epithelium that helps move mucus and trapped particles upward.",
+ spinal:"The spinal cord is a long component of the central nervous system extending through the vertebral canal. It carries ascending sensory and descending motor pathways between the brain and body and contains neural circuits involved in reflexes. Spinal nerves arise from it and connect the central nervous system with peripheral tissues.",
+ muscle:"Skeletal muscle is contractile tissue attached to bones or other connective structures. Its contraction produces movement, contributes to posture and helps stabilize joints. Individual muscles contain bundles of muscle fibers, and their attachments and line of pull determine the movements they can produce. The muscular model contains many individual muscles and muscle groups.",
+};
+
+
+function getAnatomyDescription(name){
+ const key=cleanName(name).toLowerCase();
+ for(const [term,description] of Object.entries(anatomyDescriptions)){
+  if(key.includes(term)) return description;
+ }
+ return "This structure belongs to the selected anatomical system. Open the information card for its detailed explanation.";
+}
+
+function updateStructureInfo(object){
+ const name=cleanName(object.userData.displayName);
+ const system=object.userData.system||"anatomy";
+ document.getElementById("structureInfoName").textContent=name;
+ document.getElementById("structureInfoSystem").textContent=system==="cardio"?"CARDIOVASCULAR":system.toUpperCase();
+ document.getElementById("structureInfoSummaryText").textContent="Tap here for detailed information about "+name+".";
+ document.getElementById("structureInfoDetails").innerHTML="<b>"+name+"</b><br><br>"+getAnatomyDescription(name);
+ document.body.classList.add("structure-info-open");
+ requestAnimationFrame(()=>{resizeViewer();fitCamera();});
+}
+
+function closeStructureInfo(){
+ document.body.classList.remove("structure-info-open");
+ const details=document.getElementById("structureInfoDetails");
+ if(details) details.hidden=true;
+ resizeViewer();
+}
+
+document.getElementById("structureInfoSummary").addEventListener("click",()=>{
+ const details=document.getElementById("structureInfoDetails");
+ details.hidden=!details.hidden;
+});
+
+document.getElementById("structureInfoClose").addEventListener("click",()=>{
+ clearSelection();
+ closeStructureInfo();
+});
+
+function selectObject(object){
+ clearSelection();
+ selectedObject=object;
+
+ const originalMaterials=object.material;
+ const materials=Array.isArray(originalMaterials)?originalMaterials:[originalMaterials];
+
+ const highlightedMaterials=materials.map(material=>{
+  if(!material) return material;
+  const highlightedMaterial=material.clone();
+  if(highlightedMaterial.color) highlightedMaterial.color.set(0xffd21f);
+  if(highlightedMaterial.emissive){
+   highlightedMaterial.emissive.set(0xff8c00);
+   highlightedMaterial.emissiveIntensity=1.35;
+  }
+  return highlightedMaterial;
+ });
+
+ object.userData.originalMaterials=originalMaterials;
+ object.material=Array.isArray(originalMaterials)?highlightedMaterials:highlightedMaterials[0];
+
+ updateStructureInfo(object);
+
+ document.getElementById("mobileSelectionLabel").textContent=
+  cleanName(object.userData.displayName)+" • "+
+  (object.userData.system==="cardio"?"Cardiovascular":object.userData.system);
+}
+
+/* =========================================================
+   CLEAR SELECTION
+========================================================= */
+
+function clearSelection(){
+ if(selectedObject&&selectedObject.userData.originalMaterials){
+  const highlightedMaterials=Array.isArray(selectedObject.material)?selectedObject.material:[selectedObject.material];
+  const originalMaterials=selectedObject.userData.originalMaterials;
+  selectedObject.material=originalMaterials;
+
+  highlightedMaterials.forEach((material,index)=>{
+   const originalMaterial=Array.isArray(originalMaterials)?originalMaterials[index]:originalMaterials;
+   if(material&&material!==originalMaterial) material.dispose();
+  });
+
+  delete selectedObject.userData.originalMaterials;
+ }
+
+ selectedObject=null;
+ document.body.classList.remove("has-mobile-selection");
+ document.body.classList.remove("structure-info-open");
+
+ const details=document.getElementById("structureInfoDetails");
+ if(details) details.hidden=true;
+
+ requestAnimationFrame(resizeViewer);
+}
+
+/* =========================================================
+   LEFT CLICK
+========================================================= */
+
+renderer.domElement.addEventListener("click",event=>{
+ if(event.button!==0) return;
+ closeContextMenu();
+
+ const object=getObjectAt(event);
+ if(object&&object.isMesh&&!object.userData.excluded) selectObject(object);
+});
+
+/* =========================================================
+   LEFT CLICK
+========================================================= */
+
+renderer
+.domElement
+.addEventListener(
+    "click",
+    event => {
+
+        /*
+         * Left click only.
+         */
+
+        if(
+            event.button !== 0
+        ){
+
+            return;
+
+        }
+
+
+        const object =
+        getObjectAt(
+            event
+        );
+
+
+        if(
+            object
+        ){
+
+            selectObject(
+                object
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RIGHT CLICK
+========================================================= */
+
+renderer
+.domElement
+.addEventListener(
+    "contextmenu",
+    event => {
+
+        event.preventDefault();
+
+
+        const object =
+        getObjectAt(
+            event
+        );
+
+
+        if(
+            !object
+        ){
+
+            return;
+
+        }
+
+
+        selectObject(
+            object
+        );
+
+
+        const menu =
+        document.getElementById(
+            "contextMenu"
+        );
+
+
+        document
+        .getElementById(
+            "contextName"
+        )
+        .textContent =
+        selectedObject.userData.displayName;
+
+
+        menu.style.display =
+        "block";
+
+
+        let x =
+        event.clientX;
+
+
+        let y =
+        event.clientY;
+
+
+        if(
+            x + 220 >
+            window.innerWidth
+        ){
+
+            x =
+            window.innerWidth -
+            225;
+
+        }
+
+
+        if(
+            y + 150 >
+            window.innerHeight
+        ){
+
+            y =
+            window.innerHeight -
+            155;
+
+        }
+
+
+        menu.style.left =
+        x + "px";
+
+
+        menu.style.top =
+        y + "px";
+
+    }
+);
+
+
+/* =========================================================
+   HIDE SPECIFIC STRUCTURE
+========================================================= */
+
+document
+.getElementById(
+    "hideStructure"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        if(
+            selectedObject
+        ){
+
+            const object =
+            selectedObject;
+
+
+            object.visible =
+            false;
+
+
+            hiddenStructures.add(
+                object
+            );
+
+
+            toast(
+                object.userData.displayName +
+                " hidden"
+            );
+
+
+            clearSelection();
+
+        }
+
+
+        closeContextMenu();
+
+    }
+);
+
+
+/* =========================================================
+   FOCUS SPECIFIC STRUCTURE
+========================================================= */
+
+document
+.getElementById(
+    "focusStructure"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        if(
+            selectedObject
+        ){
+
+            const box =
+            new THREE.Box3()
+            .setFromObject(
+                selectedObject
+            );
+
+
+            const center =
+            box.getCenter(
+                new THREE.Vector3()
+            );
+
+
+            const size =
+            box.getSize(
+                new THREE.Vector3()
+            );
+
+
+            const distance =
+            Math.max(
+                size.x,
+                size.y,
+                size.z
+            ) * 3 +
+            0.3;
+
+
+            camera.position.copy(
+                center
+            );
+
+
+            camera.position.z +=
+            distance;
+
+
+            controls.target.copy(
+                center
+            );
+
+
+            controls.update();
+
+        }
+
+
+        closeContextMenu();
+
+    }
+);
+
+
+/* =========================================================
+   CLOSE CONTEXT MENU
+========================================================= */
+
+function closeContextMenu(){
+
+    document
+    .getElementById(
+        "contextMenu"
+    )
+    .style.display =
+    "none";
+}
+
+
+
+
+/* =========================================================
+   CANCEL
+========================================================= */
+
+document
+.getElementById(
+    "cancelMenu"
+)
+.addEventListener(
+    "click",
+    closeContextMenu
+);
+
+
+/* =========================================================
+   CLICK OUTSIDE MENU
+========================================================= */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const menu =
+        document.getElementById(
+            "contextMenu"
+        );
+
+
+        if(
+            !menu.contains(
+                event.target
+            )
+        ){
+
+            closeContextMenu();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+document
+.getElementById(
+    "restore"
+)
+.onclick =
+restoreAll;
+
+
+document
+.getElementById(
+    "reset"
+)
+.onclick =
+resetAll;
+
+
+document
+.getElementById(
+    "fit"
+)
+.onclick =
+fitCamera;
+
+
+document
+.getElementById(
+    "front"
+)
+.onclick =
+frontView;
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function toast(
+    message
+){
+
+    const element =
+    document.getElementById(
+        "toast"
+    );
+
+
+    element.textContent =
+    message;
+
+
+    element.style.display =
+    "block";
+
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+
+    window.toastTimer =
+    setTimeout(
+        () => {
+
+            element.style.display =
+            "none";
+
+        },
+        1700
+    );
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+window.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            closeContextMenu();
+
+        }
+
+
+        if(
+            event.key.toLowerCase() ===
+            "r"
+        ){
+
+            restoreAll();
+
+        }
+
+
+        if(
+            event.key.toLowerCase() ===
+            "f"
+        ){
+
+            fitCamera();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   VIEWER RESIZE
+========================================================= */
+
+function resizeViewer(){
+ const viewer=document.getElementById("viewer");
+ const rect=viewer.getBoundingClientRect();
+ const width=Math.max(1,rect.width);
+ const height=Math.max(1,rect.height);
+ camera.aspect=width/height;
+ camera.updateProjectionMatrix();
+ renderer.setSize(width,height,false);
+}
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener("resize",()=>{
+ syncMobileViewerMode();
+ resizeViewer();
+});
+
+/* =========================================================
+   START
+========================================================= */
+
+loadAll();
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    controls.update();
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+}
+
+
+animate();
+
+</script>
+
+</body>
+</html>
