@@ -1,0 +1,5 @@
+
+User-agent: *
+Allow: /
+
+Sitemap: https://husain-farooqui-bio.pages.dev/sitemap.xml
